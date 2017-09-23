@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include<stdio.h>
 #include <string.h>
-#include "hidrante.h"
+#include "Hidrante.h"
 
 typedef struct hidrante0{
   double x, y;

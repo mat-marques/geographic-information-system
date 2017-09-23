@@ -15,10 +15,10 @@ int lengthStack(Stack stack);
 int insertTop(Stack stack, int id, Item item);
 
 
-int removeTop1(Stack stack, eraseItemS func);
+int removeTop(Stack stack, eraseItemS func);
 
 
-Item removeTop2(Stack stack);
+Item removeTopI(Stack stack);
 
 
 Item getItemTop(Stack stack);

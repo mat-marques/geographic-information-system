@@ -1,8 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-
-#include "quadra.h"
+#include "Quadra.h"
 
 typedef struct Quadra0{
    double x, y, larg, alt;

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include<stdio.h>
 #include <string.h>
-#include "torre.h"
+#include "Torre.h"
 
 /**
   Estrutura que representa uma torre

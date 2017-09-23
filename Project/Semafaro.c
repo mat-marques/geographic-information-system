@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include<stdio.h>
 #include <string.h>
-#include "semafaro.h"
+#include "Semafaro.h"
 
 typedef struct semafaro0{
   double x, y;

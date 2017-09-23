@@ -59,7 +59,7 @@ int insertTop(Stack stack, int id, Item item){
 }
 
 
-int removeTop1(Stack stack, eraseItemS func){
+int removeTop(Stack stack, eraseItemS func){
   Base *base = (Base*) stack;
   Element *aux = NULL;
   if(base!=NULL){
@@ -82,27 +82,28 @@ int removeTop1(Stack stack, eraseItemS func){
   return 0;
 }
 
-Item removeTop2(Stack stack){
+
+Item removeTopI(Stack stack){
   Base *base = (Base*) stack;
   Element *aux = NULL;
-  Item item = NULL;
+  Item info = NULL;
   if(base!=NULL){
     if(base->top!=NULL && base->top->down!=NULL){
         aux = base->top->down;
-        item = base->top->info;
+        info = base->top->info;
         free(base->top);
         base->top = aux;
         aux->up = NULL;
         base->size = base->size - 1;
     }
     if(base->top!=NULL && base->top->down==NULL){
-        item = base->top->info;
+        info = base->top->info;
         free(base->top);
         base->top = NULL;
         base->size = base->size - 1;
     }
   }
-  return item;
+  return info;
 }
 
 
@@ -110,7 +111,6 @@ Item getItemTop(Stack stack){
   Base *base = (Base*) stack;
   return (Item) base->top->info;
 }
-
 
 
 Item compareIdTop(Stack stack, int id){
