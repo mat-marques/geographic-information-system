@@ -43,4 +43,6 @@ Retorna a altura de Quadra element.
 */
 double getAltQ(Quadra element);
 
+void removeQuadra(Quadra element);
+
 #endif

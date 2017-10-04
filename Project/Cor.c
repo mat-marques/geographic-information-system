@@ -77,3 +77,16 @@ void resetarCores(Cor cor){
     corAux->corP = NULL;
   }
 }
+
+void removeCor(Cor cor){
+  cores *corAux = (cores*) cor;
+  if(corAux != NULL){
+    free(corAux->corC);
+    free(corAux->corP);
+    free(corAux);
+  }
+}
+
+int compareCores(Cor corA, Cor corB) {
+  
+}

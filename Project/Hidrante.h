@@ -38,4 +38,10 @@ Esse id será do hidrante passado como parâmetro.
 */
 char *getIdH(Hidrante element);
 
+double getVazao(Hidrante element);
+
+void setVazao(Hidrante element, double vazao);
+
+void removeHidrante(Hidrante element);
+
 #endif

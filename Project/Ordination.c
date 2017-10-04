@@ -3,12 +3,7 @@
 #include <math.h>
 #include "Ordination.h"
 
-typedef int(*compareTo)(void*, int, void*, int);
-typedef void*(*allocateData)(int);
-typedef void(*deallocateData)(void*);
-typedef void(*attribution)(void*, int, void*, int);
-
-void merge(void *vector, int begin, int middle, int end, allocateData func1, deallocateData func2, compareTo func3, attribution func4){
+void merge(void *vector, int begin, int middle, int end, allocateData func1, deallocateData func2, compareToOrd func3, attribution func4){
     int p1, p2, sizeV, i, j, k;
     void *vectorAux;
     int end1 = 0, end2 = 0;
@@ -57,7 +52,7 @@ void merge(void *vector, int begin, int middle, int end, allocateData func1, dea
 }
 
 
-void mergeSort(void *vector, int begin, int end, allocateData func1, deallocateData func2, compareTo func3, attribution func4){
+void mergeSort(void *vector, int begin, int end, allocateData func1, deallocateData func2, compareToOrd func3, attribution func4){
     int middle;
     if(begin < end){
         middle = ((begin+end)/2);
@@ -68,7 +63,7 @@ void mergeSort(void *vector, int begin, int end, allocateData func1, deallocateD
 }
 
 
-int partition(void *vector, int begin, int end, allocateData  func1, deallocateData  func2, compareTo func3, attribution func4)
+int partition(void *vector, int begin, int end, allocateData  func1, deallocateData  func2, compareToOrd func3, attribution func4)
 {
     int right, left;
     void *pivot = NULL, *aux = NULL;
@@ -100,7 +95,7 @@ int partition(void *vector, int begin, int end, allocateData  func1, deallocateD
 }
 
 
-void quickSort(void *vector, int begin, int end, allocateData  func1, deallocateData  func2, compareTo func3, attribution func4)
+void quickSort(void *vector, int begin, int end, allocateData  func1, deallocateData  func2, compareToOrd func3, attribution func4)
 {
     int pivot;
     if(end > begin){
@@ -111,7 +106,7 @@ void quickSort(void *vector, int begin, int end, allocateData  func1, deallocate
 }
 
 
-void createHeap(void *vector, int begin, int end, allocateData  func1, deallocateData  func2, compareTo func3, attribution func4)
+void createHeap(void *vector, int begin, int end, allocateData  func1, deallocateData  func2, compareToOrd func3, attribution func4)
 {
     void *aux = func1(1);
     func4(aux, 0, vector, begin);
@@ -136,7 +131,7 @@ void createHeap(void *vector, int begin, int end, allocateData  func1, deallocat
 
 
 void heapSort(void *vector, int N, allocateData  func1, deallocateData  func2,
-compareTo func3, attribution func4){
+compareToOrd func3, attribution func4){
     int i;
     void *aux;
     for(i=(N-1)/2; i>=0; i--){

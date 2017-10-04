@@ -172,6 +172,29 @@ void pontos(FILE *arqSvg, double x, double y, char *cor){
     fprintf(arqSvg, "%s\n", " />");
 }
 
+void linha(FILE *arqSvg, double x1, double y1, double x2, double y2, char *cor){
+  fprintf(arqSvg, "%s\n", "<line");
+
+  fprintf(arqSvg, " %s", "x1=");
+  fprintf(arqSvg, "\"%.5f\"\n", x1);
+
+  fprintf(arqSvg, " %s", "y1=");
+  fprintf(arqSvg, "\"%f\"\n", y1);
+
+  fprintf(arqSvg, " %s", "x2=");
+  fprintf(arqSvg, "\"%.5f\"\n", x2);
+
+  fprintf(arqSvg, " %s", "y2=");
+  fprintf(arqSvg, "\"%f\"\n", y2);
+
+  fprintf(arqSvg, " %s", "style=");
+  fprintf(arqSvg, "\"%s", "stroke: ");
+  fprintf(arqSvg, " %s;", cor);
+  fprintf(arqSvg, " %s\"\n", "stroke-width: 2");
+
+  fprintf(arqSvg, "%s\n", "/>");
+}
+
 void tagFechamento(FILE *arqSvg){
     fprintf(arqSvg, "%s\n", "</svg>" );
 }

@@ -3,13 +3,13 @@
 #include <string.h>
 
 #include "Cidade.h"
-#include "hidrante.h"
-#include "semafaro.h"
-#include "torre.h"
-
+#include "Hidrante.h"
+#include "Semafaro.h"
+#include "Torre.h"
+#include "QuadTree.h"
 
 typedef struct City{
-   Lista listaQ, listaS, listaT, listaH;
+   QuadTree listaQ, listaS, listaT, listaH;
    char *nome;
 }City;
 
@@ -17,62 +17,42 @@ Cidade criaCidade(char *name){
       City *city = NULL;
       city = (City*) malloc(sizeof(City));
       city->nome = name;
-      city->listaQ = createLista();
-      city->listaS = createLista();
-      city->listaT = createLista();
-      city->listaH = createLista();
+      city->listaQ = createQuadTree();
+      city->listaS = createQuadTree();
+      city->listaT = createQuadTree();
+      city->listaH = createQuadTree();
       return city;
 }
 
 void insertQuadra(Cidade cidade, ElementoUrbano item){
      City *city = (City*) cidade;
-     insert(city->listaQ, item);
+     insertQuadTree(city->listaQ, item, getXQ(item), getYQ(item));
 }
 
 void removeQuadra(Cidade cidade, Posic p){
     City *city = (City*) cidade;
-    char *string0 = NULL;
-    Item item = get(city->listaQ, p);
-    if(item!=NULL){
-      string0 = getCepQ(item);
-      free(string0);
-      free(item);
-    }
-    removeItem(city->listaQ, p);
+
+
 }
 
 void insertSemafaro(Cidade cidade, ElementoUrbano item){
    City *city = (City*) cidade;
-   insert(city->listaS, item);
+        insertQuadTree(city->listaQ, item, getXS(item), getYS(item));
 }
 
 void removeSemafaro(Cidade cidade, Posic p){
    City *city = (City*) cidade;
-   char *string0 = NULL;
-   Item item = get(city->listaS, p);
-   if(item!=NULL){
-     string0 = getIdS(item);
-     free(string0);
-     free(item);
-   }
-   removeItem(city->listaS, p);
+
 }
 
 void insertTorre(Cidade cidade, ElementoUrbano item){
    City *city = (City*) cidade;
-   insert(city->listaT, item);
+    insertQuadTree(city->listaQ, item, getXT(item), getYT(item));
 }
 
 void removeTorre(Cidade cidade, Posic p){
    City *city = (City*) cidade;
-   char *string0 = NULL;
-   Item item = get(city->listaT, p);
-   if(item!=NULL){
-     string0 = getIdT(item);
-     free(string0);
-     free(item);
-   }
-   removeItem(city->listaT, p);
+
 }
 
 void insertHidrante(Cidade cidade, ElementoUrbano item){

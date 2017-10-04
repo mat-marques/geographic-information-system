@@ -36,4 +36,12 @@ Retorna o número de identificação da Torre element.
 */
 char *getIdT(Torre element);
 
+
+double getRaio(Torre element);
+
+
+void setRaio(Torre element, double raio);
+
+void removeTorr(Torre element);
+
 #endif

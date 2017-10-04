@@ -2,7 +2,7 @@
 #define CIDADE_H
 
 #include "Lista.h"
-#include "quadra.h"
+#include "Quadra.h"
 typedef void* ElementoUrbano;
 typedef void* Cidade;
 

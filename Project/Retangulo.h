@@ -43,9 +43,13 @@ Retorna um número real que representa a coordenada y de Retangulo element.
 */
 double getRy(Retangulo element);
 
-/**
+/*
 Retorna uma string que representa a cor de preenchimento de Retangulo element.
 */
 char *getRcor(Retangulo element);
+
+void removeRetangulo(Retangulo element);
+
+int compareR(Retangulo element, void* item);
 
 #endif

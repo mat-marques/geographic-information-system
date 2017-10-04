@@ -6,6 +6,7 @@
 typedef struct hidrante0{
   double x, y;
   char *id;
+  double vazao;
 }hidrante0;
 
 Hidrante criaHidrante(double x, double y, char *id){
@@ -15,6 +16,7 @@ Hidrante criaHidrante(double x, double y, char *id){
    newElement->x = x;
    newElement->y = y;
    i = strlen(id);
+   newElement->vazao = 0;
    newElement->id = (char*) malloc((i+1)*sizeof(char));
    strcpy(newElement->id, id);
    return (Hidrante) newElement;
@@ -33,4 +35,23 @@ double getYH(Hidrante element){
 char *getIdH(Hidrante element){
   hidrante0 *newElement = (hidrante0*) element;
   return newElement->id;
+}
+
+double getVazao(Hidrante element){
+  hidrante0 *newElement = (hidrante0*) element;
+  return newElement->vazao;
+}
+
+void setVazao(Hidrante element, double vazao){
+  hidrante0 *newElement = (hidrante0*) element;
+  newElement->vazao = vazao;
+}
+
+
+void removeHidrante(Hidrante element){
+  hidrante0 *newElement = (hidrante0*) element;
+  if(newElement != NULL){
+    free(newElement->id);
+    free(newElement);
+  }
 }

@@ -3,7 +3,8 @@
 #include <stdio.h>
 typedef void* List;
 typedef void* Item;
-typedef void(*eraseItemDLL)(Item item);
+typedef void(*eraseItemDLL)(Item);
+typedef int(*compareToDLL)(Item, Item);
 
 List createDLL();
 
@@ -11,25 +12,37 @@ List createDLL();
 int lengthDLL(List list);
 
 
-int insertBeginDLL(List list, int id, Item item);
+int insertBeginDLL(List list, Item item);
 
 
-int insertEndDLL(List list, int id, Item item);
+int insertEndDLL(List list, Item item);
 
 
-int insertMiddleDLL(List list, int id, int p, Item item);
+int insertMiddleDLL(List list, int p, Item item);
 
 
-int removeBeginDLL(List list, eraseItemDLL func);
+Item searchItemDLL(List list, Item item, compareToDLL func);
 
 
-int removeEndDLL(List list, eraseItemDLL func);
+Item removeItemDLL(List list, Item item, compareToDLL func);
 
 
-int removeMiddleDLL(List list, int p, eraseItemDLL func);
+int removeBeginDLLOne(List list, eraseItemDLL func);
 
 
-Item searchItemDLL(List list, int id);
+int removeEndDLLOne(List list, eraseItemDLL func);
+
+
+int removeMiddleDLLOne(List list, int p, eraseItemDLL func);
+
+
+Item removeBeginDLLTwo(List list);
+
+
+Item removeEndDLLTwo(List list);
+
+
+Item removeMiddleDLLTwo(List list, int p);
 
 
 Item getBeginItemDLL(List list);
@@ -41,6 +54,9 @@ Item getEndItemDLL(List list);
 Item getItemDLL(List list, int p);
 
 
-int eraseListDLL(List list, eraseItemDLL func);
+int eraseListDLLOne(List list, eraseItemDLL func);
+
+
+int eraseListDLLTwo(List list);
 
 #endif

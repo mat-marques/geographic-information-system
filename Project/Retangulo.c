@@ -52,3 +52,19 @@ char *getRcor(Retangulo element){
   Rectangle *element2 = (Rectangle *) element;
   return element2->cor;
 }
+
+void removeRetangulo(Retangulo element){
+  Rectangle *element2 = (Rectangle *) element;
+  if(element2 != NULL){
+    free(element2);
+  }
+}
+
+int compareR(Retangulo element, void* item){
+  Rectangle *element2 = (Rectangle *) element;
+  int *item2 = (int *) item;
+  if(element2->i == *item2){
+    return 1;
+  }
+  return 0;
+}

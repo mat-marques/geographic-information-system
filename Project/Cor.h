@@ -45,4 +45,7 @@ Reseta os componentes de uma cor para vazio.
 */
 void resetarCores(Cor cor);
 
+void removeCor(Cor cor);
+
+int compareCores(Cor corA, Cor corB);
 #endif

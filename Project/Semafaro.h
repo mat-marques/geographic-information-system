@@ -33,4 +33,10 @@ Retorna o número de identificação do Semafaro element.
 */
 char *getIdS(Semafaro element);
 
+double getTempo(Semafaro element);
+
+void setTempo(Semafaro element, double tempo);
+
+void removeSemafaro(Semafaro element);
+
 #endif

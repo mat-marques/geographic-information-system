@@ -3,7 +3,7 @@
 
 #include "Circulo.h"
 #include "Retangulo.h"
-#include "Lista.h"
+#include "DoubleLinkedList.h"
 #include "Cidade.h"
 #include "Cor.h"
 
@@ -96,7 +96,7 @@ void setCidade(Canvas canvas, Cidade cidade);
 /*
 Retorna o número de identificação de um canvas.
 */
-int getIdC(Canvas canvas);
+int getIdCanvas(Canvas canvas);
 
 /*
 Retorna um lista contendo todos os retângulos genéricos presentes em um canvas.

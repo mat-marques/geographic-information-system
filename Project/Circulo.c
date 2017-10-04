@@ -63,3 +63,19 @@ char *getCcor(Circulo element){
   Circle *element2 = (Circle *) element;
   return element2->cor;
 }
+
+void removeCirculo(Circulo element){
+  Circle *element2 = (Circle *) element;
+  if(element2 != NULL){
+    free(element2);
+  }
+}
+
+int compareC(Circulo element, void* item){
+  Circle *element2 = (Circle *) element;
+  int *item2 = (int *) item;
+  if(element2->i == *item2){
+    return 1;
+  }
+  return 0;
+}

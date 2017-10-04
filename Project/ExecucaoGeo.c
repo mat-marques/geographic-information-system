@@ -442,6 +442,20 @@ void executarCs(FILE *arqEntradaGeo, Canvas canvas){
   setCorC(cor, stringB);
 }
 
+
+void executarHI(){
+
+}
+
+void executarSI(){
+  
+}
+
+
+void executarTI(){
+    
+}
+
 char comandoOrr(FILE *arqSaidaT, double w1, double h1, double x1, double y1, double w2, double h2, double x2, double y2){
     char palavra[]="SIM";
      if(verificarSobreposicaoRR(w1,h1,x1,y1,w2,h2,x2,y2)=='t'){

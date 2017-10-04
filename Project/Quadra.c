@@ -56,3 +56,11 @@ double getAltQ(Quadra element){
    Quadra0 *newElement = (Quadra0*) element;
    return newElement->alt;
 }
+
+void removeQuadra(Quadra element){
+    Quadra0 *newElement = (Quadra0*) element;
+    if(newElement != NULL){
+        free(newElement->cep);
+        free(newElement);
+    }
+}

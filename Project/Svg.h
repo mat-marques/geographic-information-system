@@ -59,6 +59,8 @@ Escreve no arquivo arqSvg uma string referente a um comando para criação de um
 */
 void pontos(FILE *arqSvg, double x, double y, char *cor);
 
+void linha(FILE *arqSvg, double x1, double y1, double x2, double y2, char *cor);
+
 /**
 Escreve no arquivo arqSvg uma string referente a uma tag utilizada para fechamento de um arquivos svg.
 */

@@ -12,7 +12,7 @@ Stack createStack();
 int lengthStack(Stack stack);
 
 
-int insertTop(Stack stack, int id, Item item);
+int insertTop(Stack stack, Item item);
 
 
 int removeTop(Stack stack, eraseItemS func);
@@ -24,10 +24,13 @@ Item removeTopI(Stack stack);
 Item getItemTop(Stack stack);
 
 
-Item compareIdTop(Stack stack, int id);
+Stack concatStacks(Stack stack1, Stack stack2);
 
 
-int eraseStack(Stack stack, eraseItemS func);
+int eraseStackOne(Stack stack, eraseItemS func);
+
+
+int eraseStackTwo(Stack stack);
 
 
 #endif
