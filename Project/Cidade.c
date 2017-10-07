@@ -29,7 +29,7 @@ void insertQuadra(Cidade cidade, ElementoUrbano item){
      insertQuadTree(city->listaQ, item, getXQ(item), getYQ(item));
 }
 
-void removeQuadra(Cidade cidade, Posic p){
+void removeQuadra(Cidade cidade, char *cep){
     City *city = (City*) cidade;
 
 
@@ -40,7 +40,7 @@ void insertSemafaro(Cidade cidade, ElementoUrbano item){
         insertQuadTree(city->listaQ, item, getXS(item), getYS(item));
 }
 
-void removeSemafaro(Cidade cidade, Posic p){
+void removeSemafaro(Cidade cidade, char *id){
    City *city = (City*) cidade;
 
 }
@@ -50,7 +50,7 @@ void insertTorre(Cidade cidade, ElementoUrbano item){
     insertQuadTree(city->listaQ, item, getXT(item), getYT(item));
 }
 
-void removeTorre(Cidade cidade, Posic p){
+void removeTorre(Cidade cidade, char *id){
    City *city = (City*) cidade;
 
 }
@@ -60,16 +60,9 @@ void insertHidrante(Cidade cidade, ElementoUrbano item){
    insert(city->listaH, item);
 }
 
-void removeHidrante(Cidade cidade, Posic p){
+void removeHidrante(Cidade cidade, char *id){
    City *city = (City*) cidade;
-   char *string0 = NULL;
-   Item item = get(city->listaH, p);
-   if(item!=NULL){
-     string0 = getIdH(item);
-     free(string0);
-     free(item);
-   }
-   removeItem(city->listaH, p);
+
 }
 
 char *getNome(Cidade cidade){
@@ -83,22 +76,22 @@ void setNome(Cidade cidade, char *nome){
       city->nome = nome;
 }
 
-Lista getListaQ(Cidade cidade){
+QuadTree getListaQ(Cidade cidade){
    City *city = (City*) cidade;
    return city->listaQ;
 }
 
-Lista getListaS(Cidade cidade){
+QuadTree getListaS(Cidade cidade){
    City *city = (City*) cidade;
    return city->listaS;
 }
 
-Lista getListaT(Cidade cidade){
+QuadTree getListaT(Cidade cidade){
    City *city = (City*) cidade;
    return city->listaT;
 }
 
-Lista getListaH(Cidade cidade){
+QuadTree getListaH(Cidade cidade){
    City *city = (City*) cidade;
    return city->listaH;
 }
@@ -180,105 +173,38 @@ ElementoUrbano getHidrante(Cidade cidade, char *id){
 }
 
 void eraseListaQ(Cidade cidade){
-  Posic p1, p2;
-  int n, i;
-  char *cep;
+
   City *city = (City*) cidade;
 
-  Lista lista;
-  lista = city->listaQ;
-  n = lenght(lista);
-  p1 = getFirst(lista);
-  for(i=0; i<n; i++){
-    p2 = get(lista, p1);
-    if(p2!=NULL){
-      cep = getCepQ(p2);
-      if(cep!=NULL){
-        free(cep);
-        cep = NULL;
-      }
-      free(p2);
-    }
-    p2 = getNext(lista, p1);
-    free(p1);
-    p1 = p2;
-  }
-  free(lista);
+  //eraseQuadTree(city->listaQ, );
+
   city->listaQ = NULL;
 }
 
 void eraseListaS(Cidade cidade){
-  Posic p1, p2;
-  int n, i;
-  char *string=NULL;
+
   City *city = (City*) cidade;
 
-  Lista lista;
-  lista = city->listaS;
-  n = lenght(lista);
-  p1 = getFirst(lista);
-  for(i=0; i<n; i++){
-    p2 = get(lista, p1);
-    if(p2!=NULL){
-      string = getIdS(p2);
-      free(string);
-      free(p2);
-    }
-    p2 = getNext(lista, p1);
-    free(p1);
-    p1 = p2;
-  }
-  free(lista);
+  //eraseQuadTree(city->listaS, );
+
   city->listaS = NULL;
 }
 
 void eraseListaT(Cidade cidade){
-  Posic p1, p2;
-  int n, i;
-  char *string=NULL;
+
   City *city = (City*) cidade;
 
-  Lista lista;
-  lista = city->listaT;
-  n = lenght(lista);
-  p1 = getFirst(lista);
-  for(i=0; i<n; i++){
-    p2 = get(lista, p1);
-    if(p2!=NULL){
-      string = getIdT(p2);
-      free(string);
-      free(p2);
-    }
-    p2 = getNext(lista, p1);
-    free(p1);
-    p1 = p2;
-  }
-  free(lista);
+  //eraseQuadTree(city->listaT, );
+
   city->listaT = NULL;
 }
 
 void eraseListaH(Cidade cidade){
-  Posic p1, p2;
-  int n, i;
-  char *string=NULL;
+
   City *city = (City*) cidade;
 
-  Lista lista;
-  lista = city->listaH;
-  n = lenght(lista);
-  p1 = getFirst(lista);
-  for(i=0; i<n; i++){
-    p2 = get(lista, p1);
-    if(p2!=NULL){
-      string = getIdH(p2);
-      free(string);
-      free(p2);
-    }
-    p2 = getNext(lista, p1);
-    free(p1);
-    p1 = p2;
-  }
-  free(lista);
+  //eraseQuadTree(city->listaH, );
+
   city->listaH = NULL;
 }
 

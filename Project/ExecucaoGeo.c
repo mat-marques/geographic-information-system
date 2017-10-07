@@ -4,15 +4,15 @@
 
 #include "Circulo.h"
 #include "Retangulo.h"
-#include "torre.h"
-#include "semafaro.h"
-#include "hidrante.h"
-#include "quadra.h"
+#include "Torre.h"
+#include "Semafaro.h"
+#include "Hidrante.h"
+#include "Quadra.h"
 #include "Cidade.h"
 #include "Arquivo.h"
 
 #include "Cor.h"
-#include "Lista.h"
+#include "DoubleLinkedList.h"
 #include "Svg.h"
 
 #include "StringO.h"
@@ -240,10 +240,11 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome,char *dirPath, 
   int i, m, k, n;
   double width, height, x , y;
   FILE *arqSaidaSvg2=NULL;
-  Lista lista=NULL;
-  void *voidPointer1=NULL, *voidPointer2=NULL;
+  List lista=NULL;
+  void *voidPointer1=NULL;
     m = lenght(getListaR(canvas));
     k = lenght(getListaC(canvas));
+    /* Acrescimo do sufixo no nome do arquivo de saida. */
   if(m!=0 || k!=0){
       i = qtdCaracteres(arqEntradaGeo);
       string1 = alocarString(i);
@@ -271,41 +272,30 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome,char *dirPath, 
       string3 = NULL;
   }
 
+  /* Escreve no arquivo de saida os retângulos. */
   lista = getListaR(canvas);
-  voidPointer1 = getFirst(lista);
-  if(voidPointer1!=NULL){
-    voidPointer2 = get(lista, voidPointer1);
-  }
+
   for(i=0;i<m;i++){
-    width = getRw(voidPointer2);
-    height = getRh(voidPointer2);
-    x = getRx(voidPointer2);
-    y = getRy(voidPointer2);
+    voidPointer1 = getItemDLL(lista, i);
+    width = getRw(voidPointer1);
+    height = getRh(voidPointer1);
+    x = getRx(voidPointer1);
+    y = getRy(voidPointer1);
     pontos(arqSaidaSvg2, x, y, cor);
     pontos(arqSaidaSvg2, x+width, y, cor);
     pontos(arqSaidaSvg2, x, y+height, cor);
     pontos(arqSaidaSvg2, x+width, y+height, cor);
-    voidPointer1 = getNext(lista, voidPointer1);
-    if(voidPointer1!=NULL){
-      voidPointer2 = get(lista, voidPointer1);
-    }
   }
 
-
+  /* Escreve no arquivo de saida os círculos. */
   lista = getListaC(canvas);
-  voidPointer1 = getFirst(lista);
-  if(voidPointer1!=NULL){
-    voidPointer2 = get(lista, voidPointer1);
-  }
 
   for(i=0;i<k;i++){
-    x = getCx(voidPointer2);
-    y = getCy(voidPointer2);
+    voidPointer1 = getItemDLL(lista, i);
+    x = getCx(voidPointer1);
+    y = getCy(voidPointer1);
     pontos(arqSaidaSvg2, x, y, cor);
     voidPointer1 = getNext(lista, voidPointer1);
-    if(voidPointer1!=NULL){
-      voidPointer2 = get(lista, voidPointer1);
-    }
   }
   if(arqSaidaSvg2!=NULL){
     tagFechamento(arqSaidaSvg2);
@@ -448,12 +438,12 @@ void executarHI(){
 }
 
 void executarSI(){
-  
+
 }
 
 
 void executarTI(){
-    
+
 }
 
 char comandoOrr(FILE *arqSaidaT, double w1, double h1, double x1, double y1, double w2, double h2, double x2, double y2){

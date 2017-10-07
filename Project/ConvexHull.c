@@ -9,14 +9,15 @@
 #include "Stack.h"
 #include "Svg.h"
 #include "Torre.h"
+#include "OperacoesF.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+typedef void (*eraseElement)(void*);
 typedef struct Dots {
   void *info;
   double x, y;
-}S;
+} S;
 
 S *p0;
 
@@ -93,7 +94,7 @@ int orientation(S *p, S *q, S *r) {
   }
   /*caso curve > 0 os pontos fazem uma curva para a esquerda.*/
   /*caso curve < 0 os pontos fazem uma curva para a direita.*/
-  return (curve > 0) ? 1 : 2;
+  return (curve > 0) ? 1 : -1;
 }
 
 /*Função utilizada para ordenar o vetor de pontos. Função necessária para o
@@ -105,7 +106,7 @@ int compare(void *valor1, int i, void *valor2, int j) {
   if (o == 0) {
     return (dist(p0, s2 + j) >= dist(p0, s1 + i)) ? -1 : 1;
   }
-  return (o == 2) ? -1 : 1;
+  return (o == -1) ? -1 : 1;
 }
 
 Vector listToVector(List list, int typeOfList) {
@@ -167,8 +168,8 @@ Vector listToVector(List list, int typeOfList) {
   return newVector;
 }
 
-/* Converte uma lista para um vetor */
-Stack convexHullOfElements(List list, int typeOfList) {
+/* Calcula a envoltória convexa */
+Stack convexHullOfAll(List list, int typeOfList) {
   int i, j;
   S *newVector = NULL;
   List listConvex, listPi;
@@ -177,7 +178,7 @@ Stack convexHullOfElements(List list, int typeOfList) {
   Stack stack = createStack();
 
   /* Configura o primeiro vetor de pontos   */
-  newVector = (S*)listToVector(list, typeOfList);
+  newVector = (S *)listToVector(list, typeOfList);
   listConvex =
       createDLL(); /* Cria a lista de elementos que formam a envoltória convexa
                       */
@@ -185,7 +186,8 @@ Stack convexHullOfElements(List list, int typeOfList) {
                            convexa */
   while (j > 2) {
 
-    convexHull(newVector, j, listConvex, listPi); /* Calcula a envoltória convexa */
+    convexHull(newVector, j, listConvex,
+               listPi); /* Calcula a envoltória convexa */
 
     j = lengthDLL(listConvex);
     for (i = 0; i < j; i++) {
@@ -197,7 +199,7 @@ Stack convexHullOfElements(List list, int typeOfList) {
     j = lengthDLL(listPi);
     if (j > 2) {
       free(newVector);
-      newVector =  (S*) listToVector(listPi, typeOfList);
+      newVector = (S *)listToVector(listPi, typeOfList);
       eraseListDLLTwo(listPi);
       listPi = createDLL();
       listConvex = createDLL();
@@ -216,10 +218,10 @@ Stack convexHullOfElements(List list, int typeOfList) {
   return stack;
 }
 
-/*Calcula os vertices do polígono convexo.*/
+/* Calcula os vertices do polígono convexo. */
 void convexHull(void *vetor, int n, List listConvex, List listPi) {
   int i;
-  S *vetorA = (S*) vetor;
+  S *vetorA = (S *)vetor;
   Item elementOne = NULL;
   /*Encontra o menor y no conjunto de pontos*/
   p0 = smallerDot(vetorA, n);
@@ -257,7 +259,6 @@ void convexHull(void *vetor, int n, List listConvex, List listPi) {
     assign(elementOne, 0, vetorA, i);
     insertBeginDLL(listConvex, elementOne);
   }
-
 }
 
 void inserInQuadTree(QuadTree quadTree, Stack stack) {
@@ -269,4 +270,54 @@ void inserInQuadTree(QuadTree quadTree, Stack stack) {
     insertQuadTree(quadTree, item->info, item->x, item->y);
     free(item);
   }
+}
+
+List createListPoints(double x, double y, double r) {
+  S *item;
+  List list;
+  int i;
+  double L, A;
+  list = createDLL();
+  L = (r * sqrt(2.0)) / 2;
+  A = (r * sqrt(2.0)) / 2;
+  for (i = 0; i < 8; i++) {
+    item = (S *)malloc(sizeof(S));
+    item->info = NULL;
+    switch (i) {
+    case 0:
+      item->x = x;
+      item->y = y - r;
+      break;
+    case 1:
+      item->x = x;
+      item->y = y + r;
+      break;
+    case 2:
+      item->x = x + r;
+      item->y = y;
+      break;
+    case 3:
+      item->x = x - r;
+      item->y = y;
+      break;
+    case 4:
+      item->x = x - A;
+      item->y = y - L;
+      break;
+    case 5:
+      item->x = x - A;
+      item->y = y + L;
+      break;
+    case 6:
+      item->x = x + A;
+      item->y = y - L;
+      break;
+    case 7:
+      item->x = x + A;
+      item->y = y + L;
+      break;
+    }
+    insertEndDLL(list, item);
+  }
+  return list;
 }

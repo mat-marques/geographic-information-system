@@ -102,25 +102,25 @@ int getIdCanvas(Canvas canvas);
 Retorna um lista contendo todos os retângulos genéricos presentes em um canvas.
 Retorna null caso não exista nenhum retângulo genérico no canvas.
 */
-Lista getListaR(Canvas canvas);
+List getListaR(Canvas canvas);
 
 /*
 Retorna um lista contendo todos os retângulos com bordas tracejadas presentes em um canvas.
 Retorna null caso não exista nenhum retângulo com bordas tracejadas no canvas.
 */
-Lista getListaR2(Canvas canvas);
+List getListaR2(Canvas canvas);
 
 /*
 Retorna um lista contendo todos os círculos presentes em um canvas.
 Retorna null caso não exista nenhum círculo no canvas.
 */
-Lista getListaC(Canvas canvas);
+List getListaC(Canvas canvas);
 
 /*
 Retorna um lista contendo todos as cores presentes em um canvas.
 Retorna null caso não exista cores no canvas.
 */
-Lista getListaCores(Canvas canvas);
+List getListaCores(Canvas canvas);
 
 /*
 Retorna um retângulo (Figura geométrica) com  número de identificação definido pelo parâmetro id. O retângulo retornado está dentro de um canvas.

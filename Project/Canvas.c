@@ -76,7 +76,7 @@ void removeCor(Canvas canvas, int id)
 {
     Item item;
     CanvasP *canvasP = (CanvasP *)canvas;
-    item = removeItemDLL(CanvasP->listaCores, &id, compareCores);
+    item = removeItemDLL(canvasP->listaCores, &id, compareCores);
     free(item);
 }
 
@@ -151,17 +151,39 @@ List getListaCores(Canvas canvas)
     return canvasP->listaCores;
 }
 
+
+
+
+
+/*****/
+List getElementsListInsideR (Canvas canvas, double x, double y, double w, double h, int typeElement) {
+
+}
+
+
+List getElementsListInsideC(Canvas canvas, double x, double y, double r, int typeElement) {
+
+}
+
+/*****/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 figuraGeometrica getRetangulo(Canvas canvas, int id)
 {
     CanvasP *canvasP = (CanvasP *)canvas;
     return searchQuadTreeItem(canvasP->listaR, &id, compareC);
-}
-
-figuraGeometrica getRetangulo2(Canvas canvas, double x, double y, double w, double h)
-{
-    CanvasP *canvasP = (CanvasP *)canvas;
-    //searchQuadTreeItem(canvasP->listaR, &config, compareC);
-    return NULL;
 }
 
 figuraGeometrica getCirculo(Canvas canvas, int id)
@@ -170,16 +192,10 @@ figuraGeometrica getCirculo(Canvas canvas, int id)
     return searchQuadTreeItem(canvasP->listaR, &id, compareR);
 }
 
-figuraGeometrica getCirculo2(Canvas canvas, double x, double y, double r)
-{
-    CanvasP *canvasP = (CanvasP *)canvas;
-    return NULL;
-}
-
 Cor getCor(Canvas canvas, int id)
 {
     CanvasP *canvasP = (CanvasP *)canvas;
-    return searchItemDLL(CanvasP->listaCores, &id, compareCores);
+    return searchItemDLL(canvasP->listaCores, &id, compareCores);
 }
 
 void eraseListaR(Canvas canvas)

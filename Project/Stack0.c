@@ -3,7 +3,6 @@
 
 typedef struct Element{
   Item info;
-  int id;
   struct Element *up, *down;
 }Element;
 
@@ -32,7 +31,7 @@ int lengthStack(Stack stack){
 }
 
 
-int insertTop(Stack stack, int id, Item item){
+int insertTop(Stack stack, Item item){
   Base *base = (Base*) stack;
   Element *element = NULL;
   if(base!=NULL){
@@ -41,7 +40,6 @@ int insertTop(Stack stack, int id, Item item){
       return 0;
     }
     element->info = item;
-    element->id = id;
     if(base->top!=NULL){
       element->down = base->top;
       element->up = NULL;
@@ -83,29 +81,82 @@ int removeTop(Stack stack, eraseItemS func){
 }
 
 
+Item removeTopI(Stack stack){
+  Base *base = (Base*) stack;
+  Element *aux = NULL;
+  Item info = NULL;
+  if(base!=NULL){
+    if(base->top!=NULL && base->top->down!=NULL){
+        aux = base->top->down;
+        info = base->top->info;
+        free(base->top);
+        base->top = aux;
+        aux->up = NULL;
+        base->size = base->size - 1;
+    }
+    if(base->top!=NULL && base->top->down==NULL){
+        info = base->top->info;
+        free(base->top);
+        base->top = NULL;
+        base->size = base->size - 1;
+    }
+  }
+  return info;
+}
+
+
 Item getItemTop(Stack stack){
   Base *base = (Base*) stack;
   return (Item) base->top->info;
 }
 
 
+Stack concatStacks(Stack stack1, Stack stack2){
+  Base *newStack;
+  int i, j;
+  Item info;
 
-Item compareIdTop(Stack stack, int id){
-  Base *base = (Base*) stack;
-  if(base->top->id == id){
-    return (Item) base->top->info;
+  newStack = (Base*) createStack();
+
+  j = lengthStack(stack1);
+  for(i = 0; i < j; i++) {
+    info = removeTopI(stack1);
+    insertTop(newStack, info);
   }
-  return NULL;
+
+  j = lengthStack(stack2);
+  for(i = 0; i < j; i++) {
+    info = removeTopI(stack2);
+    insertTop(newStack, info);
+  }
+
+
+  return newStack;
 }
 
 
-int eraseStack(Stack stack, eraseItemS func){
+int eraseStackOne(Stack stack, eraseItemS func){
   Base *base = (Base*) stack;
   int i, j;
   if(base!=NULL){
     j = lengthStack(stack);
     for(i=0; i<j; i++){
       removeTop(stack, func);
+    }
+    free(base);
+    return 1;
+ }
+ return 0;
+}
+
+
+int eraseStackTwo(Stack stack){
+  Base *base = (Base*) stack;
+  int i, j;
+  if(base!=NULL){
+    j = lengthStack(stack);
+    for(i=0; i<j; i++){
+      removeTopI(stack);
     }
     free(base);
     return 1;

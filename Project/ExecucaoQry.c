@@ -4,15 +4,15 @@
 
 #include "Circulo.h"
 #include "Retangulo.h"
-#include "torre.h"
-#include "semafaro.h"
-#include "hidrante.h"
-#include "quadra.h"
+#include "Torre.h"
+#include "Semafaro.h"
+#include "Hidrante.h"
+#include "Quadra.h"
 #include "Cidade.h"
 #include "Arquivo.h"
 
 #include "Cor.h"
-#include "Lista.h"
+#include "DoubleLinkedList.h"
 #include "StringO.h"
 
 void executardq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas, int *qtdQuadrasRemovidas){
@@ -22,13 +22,13 @@ void executardq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas
   int i, n;
   char *cep = NULL;
   Cidade cidade;
-  Lista lista = NULL;
+  List lista = NULL;
 
   fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
 
     cidade = getCidade(canvas);
     lista = getListaQ(cidade);
-    n = lenght(lista);
+    n = lengthDLL(lista);
     elemento = getFirst(lista);
     for(i=0;i<n;i++){
       elemento2 = get(lista, elemento);
