@@ -42,6 +42,8 @@ double getRaio(Torre element);
 
 void setRaio(Torre element, double raio);
 
-void removeTorr(Torre element);
+void removeT(Torre element);
+
+int compareT(Torre element, void *item);
 
 #endif

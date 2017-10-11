@@ -48,10 +48,19 @@ void setVazao(Hidrante element, double vazao){
 }
 
 
-void removeHidrante(Hidrante element){
+void removeH(Hidrante element){
   hidrante0 *newElement = (hidrante0*) element;
   if(newElement != NULL){
     free(newElement->id);
     free(newElement);
   }
+}
+
+int compareH(Hidrante element, void *item){
+  hidrante0 *newElement = (hidrante0*) element;
+  char *item2 = (char *) item;
+  if(strcmp(newElement->id, item2) == 0){
+    return 1;
+  }
+  return 0;
 }

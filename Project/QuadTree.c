@@ -2,16 +2,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct no {
+typedef struct node {
   ItemQt info;
   double x, y;
-  struct no *direction[4];
+  struct node *direction[4];
+  struct node *father;
 } node;
 
 typedef struct Base {
   int size;
   node *root;
 } Base;
+
+void eraseTree(node *tree, eraseItem function);
 
 QuadTree createQuadTree() {
   Base *base = NULL;
@@ -24,6 +27,7 @@ QuadTree createQuadTree() {
   return base;
 }
 
+/* Função interna. */
 void insert(node *element, node *newElement) {
   node *aux = NULL, *aux2 = NULL;
   aux = element;
@@ -53,18 +57,22 @@ void insert(node *element, node *newElement) {
 
   if (newElement->x < aux2->x && newElement->y < aux2->y) {
     aux2->direction[0] = newElement;
+    newElement->father = aux2->direction[0];
   } else
       /* SW */
       if (newElement->x > aux2->x && newElement->y < aux2->y) {
     aux2->direction[1] = newElement;
+    newElement->father = aux2->direction[1];
   } else
       /* NE */
       if (newElement->x < aux2->x && newElement->y > aux2->y) {
     aux2->direction[2] = newElement;
+    newElement->father = aux2->direction[2];
   } else {
     /* NW */
     if (newElement->x > aux2->x && newElement->y > aux2->y) {
       aux2->direction[3] = newElement;
+      newElement->father = aux2->direction[3];
     }
   }
 }
@@ -84,12 +92,14 @@ void insertQuadTree(QuadTree tree, ItemQt item, double x, double y) {
     base->size = base->size + 1;
     if (base->root == NULL) {
       base->root = newElement;
+      newElement->father = NULL;
     } else {
       insert(base->root, newElement);
     }
   }
 }
 
+/* Função interna. */
 void show(node *tree, showItem function) {
   node *aux = tree;
   if (aux != NULL) {
@@ -106,131 +116,102 @@ void showQuadTree(QuadTree tree, showItem function) {
   show(base->root, function);
 }
 
+
+
+/* Função interna. */
 void reInsertSubTree(node *tree, node *subTree) {
+  /* Reinsere nó a nó da sub-árvore subTree na árvore tree. */
   node *aux = subTree;
   if (aux != NULL) {
+    insertQuadTree(tree, aux->direction[0]->info, aux->direction[0]->x,
+                   aux->direction[0]->y);
     reInsertSubTree(aux->direction[0], subTree);
-    insert(tree, subTree);
-    aux->direction[0] = NULL;
     reInsertSubTree(aux->direction[1], subTree);
     reInsertSubTree(aux->direction[2], subTree);
     reInsertSubTree(aux->direction[3], subTree);
   }
 }
 
-ItemQt removeItem(Base *tree, double x, double y) {
+/* Função interna. */
+void removeItem(node *tree, ItemQt item, node **r, compareToQt function) {
+  /* Encontra o nó que deve ser removido da árvore. */
+  node *aux = tree;
+  if (aux != NULL && *r == NULL) {
+    if (function(item, aux->info) == 1) {
+      *r = aux;
+    } else {
+      removeItem(aux->direction[0], item, r, function);
+
+      removeItem(aux->direction[1], item, r, function);
+
+      removeItem(aux->direction[2], item, r, function);
+
+      removeItem(aux->direction[3], item, r, function);
+    }
+  }
+}
+
+ItemQt removeQuadTreeItem(QuadTree tree, ItemQt item, compareToQt function) {
+  Base *base = (Base *)tree;
+  node *r = NULL;
+  node *f = NULL;
+  int i;
   ItemQt info = NULL;
-  node *aux = tree->root;
-  node *vectorAux[4];
-  node *aux2;
-  int i, j = 0;
-  int region = 0;
-  while (aux != NULL) {
-    if (x == aux->x && y == aux->y) {
-      for (i = 0; i < 4; i++) {
-        vectorAux[i] = aux->direction[i];
-        if (aux->direction[i] != NULL) {
-          j++;
-        }
-      }
-      info = aux->info;
-      tree->size = tree->size + 1;
-      free(aux);
-      /* Possui filhos */
-      if (j > 0) {
-        /* Elimina a raiz da árvore */
-        if (region == 0) {
-          j = -1;
-          for (i = 0; i < 4; i++) {
-            /* Torna o primeiro filho a esquerda a raiz da árvore. */
-            if ((vectorAux[i] != NULL) && (j == -1)) {
-              tree->root = vectorAux[i];
-              j = 0;
-            } else {
-              /* Reinsere os demais filhos na árvore. */
-              if ((vectorAux[i] != NULL) && (j == 0)) {
-                reInsertSubTree(tree->root, vectorAux[i]);
-              }
-            }
-          }
+
+  if (function(base->root, item) == 1) { /* Raiz da árvore. */
+    base->root = NULL;
+    info = r->info;
+    for (i = 0; i < 4; i++) {
+      reInsertSubTree(base->root, r->direction[i]);
+    }
+    free(r);
+    base->size = base->size - 1;
+  } else { /* Nó qualquer da árvore. */
+    removeItem(base->root, item, &r, function);
+    if (r != NULL) {
+      f = r->father;
+      for (i = 0; i < 4; i++) { /* Direção do father. */
+        if (f->direction[i] == r) {
+          f->direction[i] = NULL;
           break;
-        } else if (region == 1) { /* Reseta o pai */
-          aux2->direction[0] = NULL;
-        } else if (region == 2) { /* Reseta o pai */
-          aux2->direction[1] = NULL;
-        } else if (region == 3) { /* Reseta o pai */
-          aux2->direction[2] = NULL;
-        } else {
-          if (region == 4) { /* Reseta o pai */
-            aux2->direction[3] = NULL;
-          }
-        }
-
-        for (i = 0; i < 4; i++) {
-          if (vectorAux[i] != NULL) {
-            reInsertSubTree(tree->root, vectorAux[i]);
-          }
-        }
-
-      } else {
-        if (region == 0) { /*  Raiz */
-          tree->root = NULL;
-        } else if (region == 1) { /* Reseta o pai */
-          aux2->direction[0] = NULL;
-        } else if (region == 2) { /* Reseta o pai */
-          aux2->direction[1] = NULL;
-        } else if (region == 3) { /* Reseta o pai */
-          aux2->direction[2] = NULL;
-        } else {
-          if (region == 4) { /* Reseta o pai */
-            aux2->direction[3] = NULL;
-          }
         }
       }
-      break;
-    }
-    /* SE */
-    if (x < aux->x && y < aux->y) {
-      region = 1;
-      aux2 = aux;
-      aux = aux->direction[0];
-      continue;
-    }
-    /* SW */
-    if (x > aux->x && y < aux->y) {
-      region = 2;
-      aux2 = aux;
-      aux = aux->direction[1];
-      continue;
-    }
-    /* NE */
-    if (x < aux->x && y > aux->y) {
-      region = 3;
-      aux2 = aux;
-      aux = aux->direction[2];
-      continue;
-    }
-    /* NW */
-    if (x > aux->x && y > aux->y) {
-      region = 4;
-      aux2 = aux;
-      aux = aux->direction[3];
-      continue;
+      info = r->info;
+      for (i = 0; i < 4; i++) {
+        reInsertSubTree(base->root, r->direction[i]);
+      }
+      free(r);
+      base->size = base->size - 1;
+      eraseTree(r, NULL);
     }
   }
 
   return info;
 }
 
-ItemQt removeQuadTreeItem(QuadTree tree, double x, double y) {
-  Base *base = (Base *)tree;
-  ItemQt info = NULL;
-
-  info = removeItem(base, x, y);
-
-  return info;
+/* Função interna. */
+void getByRegion(List list, node *tree, Region region, compareToQt function) {
+  node *aux = tree;
+  if (aux != NULL) {
+    getByRegion(list, aux->direction[0], region, function);
+    if (function(aux->info, region) == 1) {
+      insertEndDLL(list, aux->info);
+    }
+    getByRegion(list, aux->direction[1], region, function);
+    getByRegion(list, aux->direction[2], region, function);
+    getByRegion(list, aux->direction[3], region, function);
+  }
 }
 
+List getElementsByRegion(QuadTree tree, Region region, compareToQt function) {
+  List list;
+  Base *base = (Base *)tree;
+  list = createDLL();
+  getByRegion(list, base->root, region, function);
+  return list;
+}
+
+/* Função interna. */
 void searchItem(node *tree, ItemQt item, void **info, compareToQt function) {
   node *aux = tree;
   if (aux != NULL && *info == NULL) {
@@ -257,6 +238,7 @@ ItemQt searchQuadTreeItem(QuadTree tree, ItemQt item, compareToQt function) {
   return info;
 }
 
+/* Função interna. */
 ItemQt searchByCoordinate(node *tree, double x, double y) {
   ItemQt info = NULL;
   node *aux = tree;
@@ -294,11 +276,15 @@ ItemQt searchQuadTreeByCoordinate(QuadTree tree, double x, double y) {
   return info;
 }
 
+/* Função interna. */
 void eraseTree(node *tree, eraseItem function) {
+  /* Recursão para eliminar nó a nó da ávore. */
   node *aux = tree;
   if (aux != NULL) {
     eraseTree(aux->direction[0], function);
-    function(aux->info);
+    if (function != NULL) {
+      function(aux->info);
+    }
     free(aux);
     eraseTree(aux->direction[1], function);
     eraseTree(aux->direction[2], function);
@@ -306,8 +292,14 @@ void eraseTree(node *tree, eraseItem function) {
   }
 }
 
-void eraseQuadTree(QuadTree tree, eraseItem function) {
+void eraseQuadTreeNode(QuadTree tree, eraseItem function) {
+  /* Elimina os nós da árvore. */
   Base *base = (Base *)tree;
   eraseTree(base->root, function);
+}
+
+void eraseQuadTreeBase(QuadTree tree) {
+  /* Elimina a base da árvore. */
+  Base *base = (Base *)tree;
   free(base);
 }

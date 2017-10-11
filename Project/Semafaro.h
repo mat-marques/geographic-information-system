@@ -37,6 +37,7 @@ double getTempo(Semafaro element);
 
 void setTempo(Semafaro element, double tempo);
 
-void removeSemafaro(Semafaro element);
+void removeS(Semafaro element);
 
+int compareS(Semafaro element, void *item);
 #endif

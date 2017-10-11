@@ -54,6 +54,12 @@ Item getEndItemDLL(List list);
 Item getItemDLL(List list, int p);
 
 
+void concatDLL(List listOne, List listTwo);
+
+
+void eraseBase(List list);
+
+
 int eraseListDLLOne(List list, eraseItemDLL func);
 
 

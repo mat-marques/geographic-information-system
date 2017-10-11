@@ -40,7 +40,7 @@ char *getIdS(Semafaro element){
 
 double getTempo(Semafaro element){
   semafaro0 *newElement = (semafaro0*) element;
-  return newElemen->tempo;
+  return newElement->tempo;
 }
 
 void setTempo(Semafaro element, double tempo){
@@ -48,10 +48,19 @@ void setTempo(Semafaro element, double tempo){
   newElement->tempo = tempo;
 }
 
-void removeSemafaro(Semafaro element){
+void removeS(Semafaro element){
   semafaro0 *newElement = (semafaro0*) element;
-  if(newElemen != NULL){
+  if(newElement != NULL){
     free(newElement->id);
     free(newElement);
   }
+}
+
+int compareS(Semafaro element, void *item){
+  semafaro0 *newElement = (semafaro0*) element;
+  char *id = (char*) item;
+  if(strcmp(newElement->id, id) == 0){
+    return 1;
+  }
+  return 0;
 }

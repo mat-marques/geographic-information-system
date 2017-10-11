@@ -24,9 +24,6 @@ Item removeTopI(Stack stack);
 Item getItemTop(Stack stack);
 
 
-Stack concatStacks(Stack stack1, Stack stack2);
-
-
 int eraseStackOne(Stack stack, eraseItemS func);
 
 

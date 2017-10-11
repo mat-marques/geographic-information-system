@@ -111,30 +111,6 @@ Item getItemTop(Stack stack){
 }
 
 
-Stack concatStacks(Stack stack1, Stack stack2){
-  Base *newStack;
-  int i, j;
-  Item info;
-
-  newStack = (Base*) createStack();
-
-  j = lengthStack(stack1);
-  for(i = 0; i < j; i++) {
-    info = removeTopI(stack1);
-    insertTop(newStack, info);
-  }
-
-  j = lengthStack(stack2);
-  for(i = 0; i < j; i++) {
-    info = removeTopI(stack2);
-    insertTop(newStack, info);
-  }
-
-
-  return newStack;
-}
-
-
 int eraseStackOne(Stack stack, eraseItemS func){
   Base *base = (Base*) stack;
   int i, j;

@@ -15,14 +15,14 @@ typedef struct Circle{
 */
 Circulo createCircle(int i, double r, double x, double y, char cor[30]){
 
-    Circle *new = (Circle*) malloc(sizeof(Circle));
-    new->i = i;
-    new->r = r;
-    new->x = x;
-    new->y = y;
+    Circle *newC = (Circle*) malloc(sizeof(Circle));
+    newC->i = i;
+    newC->r = r;
+    newC->x = x;
+    newC->y = y;
 
-    strcpy(new->cor,cor);
-    return new;
+    strcpy(newC->cor,cor);
+    return newC;
 }
 /**
  Retorna o número de identificação do círculo.
@@ -64,7 +64,7 @@ char *getCcor(Circulo element){
   return element2->cor;
 }
 
-void removeCirculo(Circulo element){
+void removeC(Circulo element){
   Circle *element2 = (Circle *) element;
   if(element2 != NULL){
     free(element2);

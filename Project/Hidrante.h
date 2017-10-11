@@ -42,6 +42,7 @@ double getVazao(Hidrante element);
 
 void setVazao(Hidrante element, double vazao);
 
-void removeHidrante(Hidrante element);
+void removeH(Hidrante element);
 
+int compareH(Hidrante element, void *item);
 #endif

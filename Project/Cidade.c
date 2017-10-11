@@ -32,7 +32,6 @@ void insertQuadra(Cidade cidade, ElementoUrbano item){
 void removeQuadra(Cidade cidade, char *cep){
     City *city = (City*) cidade;
 
-
 }
 
 void insertSemafaro(Cidade cidade, ElementoUrbano item){
@@ -100,18 +99,7 @@ Quadra getQuadra(Cidade cidade, char *cep){
    void* elemento=NULL;
    Quadra quadra = NULL;
    City *city = (City*) cidade;
-   int sizelist, i;
-   char *cepOriginal;
-   sizelist = lenght(city->listaQ);
-   elemento = getFirst(city->listaQ);
-   for(i=0; i<sizelist; i++){
-       quadra = get(city->listaQ, elemento);
-       cepOriginal = getCepQ(quadra);
-       if(strcmp(cepOriginal, cep)==0){
-            return quadra;
-       }
-       elemento = getNext(city->listaQ, elemento);
-   }
+
    return NULL;
 }
 
@@ -119,18 +107,7 @@ ElementoUrbano getTorre(Cidade cidade, char *id){
   void* elemento=NULL;
   Torre torre = NULL;
   City *city = (City*) cidade;
-  int sizelist, i;
-  char *idOriginal;
-  sizelist = lenght(city->listaT);
-  elemento = getFirst(city->listaT);
-  for(i=0; i<sizelist; i++){
-      torre = get(city->listaT, elemento);
-      idOriginal = getIdT(torre);
-      if(strcmp(idOriginal, id)==0){
-           return torre;
-      }
-      elemento = getNext(city->listaT, elemento);
-  }
+
   return NULL;
 }
 
@@ -138,18 +115,7 @@ ElementoUrbano getSemafaro(Cidade cidade, char *id){
    void* elemento=NULL;
    Semafaro semafaro = NULL;
    City *city = (City*) cidade;
-   int sizelist, i;
-   char *idOriginal;
-   sizelist = lenght(city->listaS);
-   elemento = getFirst(city->listaS);
-   for(i=0; i<sizelist; i++){
-      semafaro = get(city->listaS, elemento);
-      idOriginal = getIdS(semafaro);
-       if(strcmp(idOriginal, id)==0){
-            return semafaro;
-       }
-       elemento = getNext(city->listaS, elemento);
-   }
+
    return NULL;
 }
 
@@ -157,18 +123,7 @@ ElementoUrbano getHidrante(Cidade cidade, char *id){
    void* elemento=NULL;
    Hidrante hidrante = NULL;
    City *city = (City*) cidade;
-   int sizelist, i;
-   char *idOriginal;
-   sizelist = lenght(city->listaH);
-   elemento = getFirst(city->listaH);
-   for(i=0; i<sizelist; i++){
-       hidrante = get(city->listaH, elemento);
-       idOriginal = getIdH(hidrante);
-       if(strcmp(idOriginal, id)==0){
-            return hidrante;
-       }
-       elemento = getNext(city->listaH, elemento);
-   }
+
    return NULL;
 }
 

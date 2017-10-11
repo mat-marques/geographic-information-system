@@ -57,10 +57,19 @@ double getAltQ(Quadra element){
    return newElement->alt;
 }
 
-void removeQuadra(Quadra element){
+void removeQ(Quadra element){
     Quadra0 *newElement = (Quadra0*) element;
     if(newElement != NULL){
         free(newElement->cep);
         free(newElement);
     }
+}
+
+int compareQ(Quadra element, void *item){
+  Quadra0 *newElement = (Quadra0*) element;
+  char *item2 = (char *) item;
+  if(strcmp(newElement->cep, item2) == 0){
+    return 1;
+  }
+  return 0;
 }

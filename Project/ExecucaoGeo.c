@@ -14,7 +14,7 @@
 #include "Cor.h"
 #include "DoubleLinkedList.h"
 #include "Svg.h"
-
+#include "QuadTree.h"
 #include "StringO.h"
 
 void executarC(FILE *arqEntradaGeo, Canvas canvas){
@@ -233,17 +233,24 @@ void executarO(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas){
 
 }
 
+/* Funções internas. */
+void showR(Retangulo retangulo){
+
+}
+
+/* Funções internas. */
+void showC(Circulo circulo){
+
+}
+
 void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome,char *dirPath, char *extensao2){
   char *string1=NULL, *string2=NULL, *string3=NULL;
   char cor[60];
   char stringAux[] = "-";
   int i, m, k, n;
-  double width, height, x , y;
+  double width, height;
   FILE *arqSaidaSvg2=NULL;
-  List lista=NULL;
-  void *voidPointer1=NULL;
-    m = lenght(getListaR(canvas));
-    k = lenght(getListaC(canvas));
+
     /* Acrescimo do sufixo no nome do arquivo de saida. */
   if(m!=0 || k!=0){
       i = qtdCaracteres(arqEntradaGeo);
@@ -273,34 +280,10 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome,char *dirPath, 
   }
 
   /* Escreve no arquivo de saida os retângulos. */
-  lista = getListaR(canvas);
 
-  for(i=0;i<m;i++){
-    voidPointer1 = getItemDLL(lista, i);
-    width = getRw(voidPointer1);
-    height = getRh(voidPointer1);
-    x = getRx(voidPointer1);
-    y = getRy(voidPointer1);
-    pontos(arqSaidaSvg2, x, y, cor);
-    pontos(arqSaidaSvg2, x+width, y, cor);
-    pontos(arqSaidaSvg2, x, y+height, cor);
-    pontos(arqSaidaSvg2, x+width, y+height, cor);
-  }
 
   /* Escreve no arquivo de saida os círculos. */
-  lista = getListaC(canvas);
 
-  for(i=0;i<k;i++){
-    voidPointer1 = getItemDLL(lista, i);
-    x = getCx(voidPointer1);
-    y = getCy(voidPointer1);
-    pontos(arqSaidaSvg2, x, y, cor);
-    voidPointer1 = getNext(lista, voidPointer1);
-  }
-  if(arqSaidaSvg2!=NULL){
-    tagFechamento(arqSaidaSvg2);
-    fclose(arqSaidaSvg2);
-  }
 }
 
 void executarQ(FILE *arqEntradaGeo,  Canvas canvas, int *qtdQuadrasInseridas){
@@ -433,16 +416,57 @@ void executarCs(FILE *arqEntradaGeo, Canvas canvas){
 }
 
 
-void executarHI(){
+void executarHI(FILE *arqEntradaGeo, Canvas canvas){
+
+  Hidrante hidrante;
+  char *id;
+  double vazao;
+  int i;
+  i = qtdCaracteres(arqEntradaGeo);
+  id = alocarString(i);
+  fscanf(arqEntradaGeo, "%s %lf\n", id, &vazao);
+
+  QuadTree quadT = getListaH(getCidade(canvas));
+
+  hidrante = searchQuadTreeItem(quadT, id, compareH);
+
+  setVazao(hidrante, vazao);
 
 }
 
-void executarSI(){
+void executarSI(FILE *arqEntradaGeo, Canvas canvas){
+
+  Torre torre;
+  char *id;
+  double raio;
+  int i;
+  i = qtdCaracteres(arqEntradaGeo);
+  id = alocarString(i);
+  fscanf(arqEntradaGeo, "%s %lf\n", id, &raio);
+
+  QuadTree quadT = getListaT(getCidade(canvas));
+
+  torre = searchQuadTreeItem(quadT, id, compareT);
+
+  setRaio(torre, raio);
 
 }
 
+void executarTI(FILE *arqEntradaGeo, Canvas canvas){
 
-void executarTI(){
+  Semafaro semafaro;
+  char *id;
+  double tempo;
+  int i;
+  i = qtdCaracteres(arqEntradaGeo);
+  id = alocarString(i);
+  fscanf(arqEntradaGeo, "%s %lf\n", id, &tempo);
+
+  QuadTree quadT = getListaS(getCidade(canvas));
+
+  semafaro = searchQuadTreeItem(quadT, id, compareT);
+
+  setTempo(semafaro, tempo);
 
 }
 

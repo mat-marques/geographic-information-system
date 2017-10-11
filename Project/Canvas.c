@@ -41,7 +41,10 @@ void insertRetangulo(Canvas canvas, Retangulo retangulo)
 
 void removeRetangulo(Canvas canvas, int id)
 {
+    //figuraGeometrica f;
     CanvasP *canvasP = (CanvasP *)canvas;
+    //f = removeQuadTreeItem(canvasP->listaR, &id, );
+    //free(f);
 }
 
 void insertRetangulo2(Canvas canvas, Retangulo retangulo)
