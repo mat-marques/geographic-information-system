@@ -62,6 +62,13 @@ Executa o comando Crd? presente no arquivo arqEntradaQry. Caso for necessário �
 */
 void executarCrd(FILE *arqEntradaQry , FILE **arqSaidaT, char *path, Canvas canvas);
 
+
+void executarPc(FILE *arqEntradaQry, char *arqNome, char *dirPath, char *extensao2, Canvas canvas);
+
+
+void executarAc(FILE *arqEntradaQry , FILE **arqSaidaT, char *path, Canvas canvas);
+
+
 /*
 Executa o comando -acc0. Nesse procedimento é gerado um arquivo chamado 'resumo.txt' e esse arquivo estará no diretório dirPath. No arquivo resumo.txt será escrito em uma linha os dados arqNome, qtdQuadrasInseridas, qtdCompararacoesI, qtdQuadrasRemovidas e qtdCompararacoesR.
 */

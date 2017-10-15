@@ -129,6 +129,22 @@ int insertMiddleDLL(List list, int p, Item item) {
   return 0;
 }
 
+void showDLL(List list, showDLLI func){
+  Base *base = (Base *)list;
+  Element *aux = NULL;
+  int i=0, j=0;
+  if (base != NULL) {
+    if (base->first != NULL) {
+      j = base->size;
+      aux = base->first;
+      for (i = 1; i <= j; i++) {
+        func(aux->info);
+        aux = aux->next;
+      }
+    }
+  }
+}
+
 Item searchItemDLL(List list, Item item, compareToDLL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
@@ -136,6 +152,7 @@ Item searchItemDLL(List list, Item item, compareToDLL func) {
   int i=0, j=0;
   if (base != NULL) {
     if (base->first != NULL) {
+      j = base->size;
       aux = base->first;
       for (i = 1; i <= j; i++) {
         if (func(item ,aux->info) == 1){
@@ -358,6 +375,7 @@ void concatDLL(List listOne, List listTwo){
       Base *base2 = (Base *)listTwo;
       base1->last->next = base2->first;
       base2->first->previous = base1->last;
+      base1->size = base1->size + base2->size;
   }
 }
 

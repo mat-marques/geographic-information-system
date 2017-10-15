@@ -31,37 +31,45 @@ void insertQuadra(Cidade cidade, ElementoUrbano item){
 
 void removeQuadra(Cidade cidade, char *cep){
     City *city = (City*) cidade;
-
+    Quadra quadra;
+    quadra = removeQuadTreeItem(city->listaQ, cep, compareQ);
+    removeQ(quadra);
 }
 
 void insertSemafaro(Cidade cidade, ElementoUrbano item){
    City *city = (City*) cidade;
-        insertQuadTree(city->listaQ, item, getXS(item), getYS(item));
+  insertQuadTree(city->listaS, item, getXS(item), getYS(item));
 }
 
 void removeSemafaro(Cidade cidade, char *id){
    City *city = (City*) cidade;
-
+   Semafaro semafaro;
+   semafaro = removeQuadTreeItem(city->listaS, id, compareS);
+   removeS(semafaro);
 }
 
 void insertTorre(Cidade cidade, ElementoUrbano item){
    City *city = (City*) cidade;
-    insertQuadTree(city->listaQ, item, getXT(item), getYT(item));
+  insertQuadTree(city->listaT, item, getXT(item), getYT(item));
 }
 
 void removeTorre(Cidade cidade, char *id){
    City *city = (City*) cidade;
-
+   Torre torre;
+   torre = removeQuadTreeItem(city->listaT, id, compareT);
+   removeT(torre);
 }
 
 void insertHidrante(Cidade cidade, ElementoUrbano item){
    City *city = (City*) cidade;
-   insert(city->listaH, item);
+  insertQuadTree(city->listaH, item, getXH(item), getYH(item));
 }
 
 void removeHidrante(Cidade cidade, char *id){
    City *city = (City*) cidade;
-
+   Hidrante hidrante;
+   hidrante = removeQuadTreeItem(city->listaH, id, compareH);
+   removeH(hidrante);
 }
 
 char *getNome(Cidade cidade){
@@ -96,42 +104,39 @@ QuadTree getListaH(Cidade cidade){
 }
 
 Quadra getQuadra(Cidade cidade, char *cep){
-   void* elemento=NULL;
    Quadra quadra = NULL;
    City *city = (City*) cidade;
-
-   return NULL;
+   quadra = searchQuadTreeItem(city->listaQ, cep, compareQ);
+   return quadra;
 }
 
 ElementoUrbano getTorre(Cidade cidade, char *id){
-  void* elemento=NULL;
   Torre torre = NULL;
   City *city = (City*) cidade;
-
-  return NULL;
+  torre = searchQuadTreeItem(city->listaT, id, compareT);
+  return torre;
 }
 
 ElementoUrbano getSemafaro(Cidade cidade, char *id){
-   void* elemento=NULL;
    Semafaro semafaro = NULL;
    City *city = (City*) cidade;
-
-   return NULL;
+   semafaro = searchQuadTreeItem(city->listaS, id, compareS);
+   return semafaro;
 }
 
 ElementoUrbano getHidrante(Cidade cidade, char *id){
-   void* elemento=NULL;
    Hidrante hidrante = NULL;
    City *city = (City*) cidade;
-
-   return NULL;
+   hidrante = searchQuadTreeItem(city->listaH, id, compareH);
+   return hidrante;
 }
 
 void eraseListaQ(Cidade cidade){
 
   City *city = (City*) cidade;
 
-  //eraseQuadTree(city->listaQ, );
+  eraseQuadTreeNode(city->listaQ, removeQ);
+  eraseQuadTreeBase(city->listaQ);
 
   city->listaQ = NULL;
 }
@@ -140,7 +145,8 @@ void eraseListaS(Cidade cidade){
 
   City *city = (City*) cidade;
 
-  //eraseQuadTree(city->listaS, );
+  eraseQuadTreeNode(city->listaS, removeS);
+  eraseQuadTreeBase(city->listaS);
 
   city->listaS = NULL;
 }
@@ -149,7 +155,8 @@ void eraseListaT(Cidade cidade){
 
   City *city = (City*) cidade;
 
-  //eraseQuadTree(city->listaT, );
+  eraseQuadTreeNode(city->listaT, removeT);
+  eraseQuadTreeBase(city->listaT);
 
   city->listaT = NULL;
 }
@@ -158,7 +165,8 @@ void eraseListaH(Cidade cidade){
 
   City *city = (City*) cidade;
 
-  //eraseQuadTree(city->listaH, );
+  eraseQuadTreeNode(city->listaH, removeH);
+  eraseQuadTreeBase(city->listaH);
 
   city->listaH = NULL;
 }

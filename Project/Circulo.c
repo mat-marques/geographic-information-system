@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Circulo.h"
+#include "Cor.h"
 /**
   Define as propriedades de um círculo.
 */
@@ -20,8 +21,8 @@ Circulo createCircle(int i, double r, double x, double y, char cor[30]){
     newC->r = r;
     newC->x = x;
     newC->y = y;
-
-    strcpy(newC->cor,cor);
+    newC->cor[0] = '\0';
+    strcpy(newC->cor, cor);
     return newC;
 }
 /**
@@ -59,7 +60,7 @@ double getCy(Circulo element){
 /**
   Retorna a cor do círculo.
 */
-char *getCcor(Circulo element){
+char* getCcor(Circulo element){
   Circle *element2 = (Circle *) element;
   return element2->cor;
 }

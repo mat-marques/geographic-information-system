@@ -11,4 +11,9 @@ Stack convexHullOfAll(List list, int typeOfList) ;
 void convexHull(void *vetor, int n, List listConvex, List listPi);
 
 List createListPoints(double x, double y, double r);
+
+void generateConvexHullT(List list, FILE *file);
+
+double areaConvexHull(List list);
+
 #endif

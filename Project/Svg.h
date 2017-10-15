@@ -38,6 +38,8 @@ Escreve no arquivo arqSvg uma string referente a tag svg de criação de um cír
 */
 void tagCirculo2(FILE *arqSvg,double r, double x, double y, char corB[60], char corS[60]);
 
+void tagCirculoOpacity(FILE *arqSvg, double r, double x, double y, char *cor);
+
 /**
 Escreve no arquivo arqSvg uma string referente a tag svg de criação de um círculo. As configurações do círculo são dadas por r (raio), x (Coordenada x), y (Coordenada y) e uma cor de preenchimento (cor).
 */
