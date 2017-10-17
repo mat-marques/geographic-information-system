@@ -1,5 +1,6 @@
 #include "Canvas.h"
 #include "Circulo.h"
+#include "ConvexHull.h"
 #include "Exibicao.h"
 #include "OperacoesF.h"
 #include "QuadTree.h"
@@ -12,7 +13,7 @@ typedef struct reg { double w, h, x, y; } Reg;
 
 typedef struct CanvasP {
   QuadTree listaC, listaR;
-  List listaCores, listaR2;
+  List listaR2;
   Cidade cidade;
   double width, height;
   int id;
@@ -25,7 +26,6 @@ Canvas criaCanvas(int id) {
   canvas->listaC = createQuadTree();
   canvas->listaR = createQuadTree();
   canvas->listaR2 = createDLL();
-  canvas->listaCores = createDLL();
   canvas->width = 100;
   canvas->height = 100;
   canvas->id = id;
@@ -70,18 +70,6 @@ void removeCirculo(Canvas canvas, int id) {
   CanvasP *canvasP = (CanvasP *)canvas;
   f = removeQuadTreeItem(canvasP->listaC, &id, compareC);
   free(f);
-}
-
-void insertCor(Canvas canvas, Cor cor) {
-  CanvasP *canvasP = (CanvasP *)canvas;
-  insertEndDLL(canvasP->listaCores, cor);
-}
-
-void removeCor(Canvas canvas, int id) {
-  Item item;
-  CanvasP *canvasP = (CanvasP *)canvas;
-  item = removeItemDLL(canvasP->listaCores, &id, compareCores);
-  free(item);
 }
 
 void showCanvasR(Canvas canvas, FILE *file) {
@@ -150,9 +138,28 @@ QuadTree getListaC(Canvas canvas) {
   return canvasP->listaC;
 }
 
-List getListaCores(Canvas canvas) {
-  CanvasP *canvasP = (CanvasP *)canvas;
-  return canvasP->listaCores;
+void calcConvexHull(Canvas canvas, List list, int type) {
+
+  switch (type) {
+  case 1: /* Retângulo */
+
+    break;
+  case 2: /* Círculo */
+
+    break;
+  case 3: /* Quadra */
+
+    break;
+  case 4: /* Torre */
+
+    break;
+  case 5: /* Hidrante */
+
+    break;
+  case 6: /* Semafáro */
+
+    break;
+  }
 }
 
 /****************************************************/
@@ -347,7 +354,8 @@ List getElementsListInsideR(Canvas canvas, int type, double x, double y,
   return list;
 }
 
-List getElementsListInsideC(Canvas canvas, int type, double x, double y, double r) {
+List getElementsListInsideC(Canvas canvas, int type, double x, double y,
+                            double r) {
   CanvasP *canvasP = (CanvasP *)canvas;
   Reg *newReg;
   List list = NULL;
@@ -399,10 +407,6 @@ figuraGeometrica getCirculo(Canvas canvas, int id) {
   return searchQuadTreeItem(canvasP->listaR, &id, compareR);
 }
 
-Cor getCor(Canvas canvas, int id) {
-  CanvasP *canvasP = (CanvasP *)canvas;
-  return searchItemDLL(canvasP->listaCores, &id, compareCores);
-}
 
 void eraseListaR(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
@@ -419,33 +423,10 @@ void eraseListaR2(Canvas canvas) {
   eraseListDLLOne(canvasP->listaR2, removeR);
 }
 
-void eraseListaCores(Canvas canvas) {
-  CanvasP *canvasP = (CanvasP *)canvas;
-  eraseListDLLOne(canvasP->listaCores, removeCor);
-}
-
-void setarCores(Canvas canvas) {
-  Cor cor = NULL;
-  char corContorno[] = "black";
-  char corA[] = "blue";
-  char corB[] = "red";
-  char corC[] = "yellow";
-  char corD[] = "orange";
-  cor = criaCor(corA, corContorno, 1);
-  insertCor(canvas, cor);
-  cor = criaCor(corB, corContorno, 2);
-  insertCor(canvas, cor);
-  cor = criaCor(corC, corContorno, 3);
-  insertCor(canvas, cor);
-  cor = criaCor(corD, corContorno, 4);
-  insertCor(canvas, cor);
-}
-
 void eraseCanvas(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   eraseListaR(canvas);
   eraseListaR2(canvas);
-  eraseListaCores(canvas);
   eraseListaC(canvas);
   eraseCidade(canvasP->cidade);
   free(canvas);

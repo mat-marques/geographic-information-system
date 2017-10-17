@@ -263,17 +263,6 @@ void convexHull(void *vetor, int n, List listConvex, List listPi) {
   }
 }
 
-void inserInQuadTree(QuadTree quadTree, Stack stack) {
-  int i, j;
-  S *item;
-  j = lengthStack(stack);
-  for (i = 0; i < j; i++) {
-    item = (S *)removeTopI(stack);
-    insertQuadTree(quadTree, item->info, item->x, item->y);
-    free(item);
-  }
-}
-
 List createListPoints(double x, double y, double r) {
   S *item;
   List list;

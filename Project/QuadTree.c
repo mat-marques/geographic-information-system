@@ -86,6 +86,7 @@ void insertQuadTree(QuadTree tree, ItemQt item, double x, double y) {
     newElement->info = item;
     newElement->x = x;
     newElement->y = y;
+    base->size = base->size + 1;
     for (i = 0; i < 4; i++) {
       newElement->direction[i] = NULL;
     }
@@ -97,6 +98,11 @@ void insertQuadTree(QuadTree tree, ItemQt item, double x, double y) {
       insert(base->root, newElement);
     }
   }
+}
+
+int lenghtQuadTree(QuadTree tree){
+  Base *base = (Base *)tree;
+  return base->size;
 }
 
 /* Função interna. */
@@ -157,7 +163,7 @@ ItemQt removeQuadTreeItem(QuadTree tree, ItemQt item, compareToQt function) {
   node *f = NULL;
   int i;
   ItemQt info = NULL;
-
+  base->size = base->size - 1;
   if (function(base->root, item) == 1) { /* Raiz da árvore. */
     base->root = NULL;
     info = r->info;

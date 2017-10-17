@@ -110,6 +110,12 @@ Item getItemTop(Stack stack){
   return (Item) base->top->info;
 }
 
+void eraseBaseStack(Stack stack){
+  Base *base = (Base*) stack;
+  if(base->top==NULL){
+    free(base);
+  }
+}
 
 int eraseStackOne(Stack stack, eraseItemS func){
   Base *base = (Base*) stack;
@@ -119,7 +125,7 @@ int eraseStackOne(Stack stack, eraseItemS func){
     for(i=0; i<j; i++){
       removeTop(stack, func);
     }
-    free(base);
+    base->top = NULL;
     return 1;
  }
  return 0;
@@ -134,7 +140,7 @@ int eraseStackTwo(Stack stack){
     for(i=0; i<j; i++){
       removeTopI(stack);
     }
-    free(base);
+    base->top = NULL;
     return 1;
  }
  return 0;

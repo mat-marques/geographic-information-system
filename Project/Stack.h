@@ -23,6 +23,8 @@ Item removeTopI(Stack stack);
 
 Item getItemTop(Stack stack);
 
+void eraseBaseStack(Stack stack);
+
 
 int eraseStackOne(Stack stack, eraseItemS func);
 
