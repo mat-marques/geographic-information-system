@@ -16,7 +16,7 @@ Tad: Canvas
 Definição:
 Um canvas é um plano bidimensional composto por um comprimento e uma altura e que aloja dentro de si componentes específicos. Os componentes que podem compor um canvas são retângulos, círculos , uma lista de cores e uma cidade.
 */
-
+void executarConvexHull(List list, Canvas canvas, int type);
 
 /*
 Cria um canvas vazio e com comprimento e altura iguais a 100.

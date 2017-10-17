@@ -7,11 +7,16 @@
 #include "Semafaro.h"
 #include "Torre.h"
 #include "QuadTree.h"
+#include "DoubleLinkedList.h"
+#include "Stack.h"
+#include "ConvexHull.h"
 
 typedef struct City{
    QuadTree listaQ, listaS, listaT, listaH;
    char *nome;
 }City;
+
+void ConvexHullAuxC(Stack stack, Cidade cidade, int type);
 
 Cidade criaCidade(char *name){
       City *city = NULL;
@@ -32,8 +37,14 @@ void insertQuadra(Cidade cidade, ElementoUrbano item){
 void removeQuadra(Cidade cidade, char *cep){
     City *city = (City*) cidade;
     Quadra quadra;
-    quadra = removeQuadTreeItem(city->listaQ, cep, compareQ);
+    Stack stack = NULL;
+    List list = createDLL();
+    quadra = removeQuadTreeItem(city->listaQ, cep, compareQ, list);
     removeQ(quadra);
+    stack = convexHullOfAll(list, 1);
+    ConvexHullAuxC(stack, cidade, 2);
+    eraseStackTwo(stack);
+    eraseBaseStack(stack);
 }
 
 void insertSemafaro(Cidade cidade, ElementoUrbano item){
@@ -44,8 +55,14 @@ void insertSemafaro(Cidade cidade, ElementoUrbano item){
 void removeSemafaro(Cidade cidade, char *id){
    City *city = (City*) cidade;
    Semafaro semafaro;
-   semafaro = removeQuadTreeItem(city->listaS, id, compareS);
+   Stack stack = NULL;
+   List list = createDLL();
+   semafaro = removeQuadTreeItem(city->listaS, id, compareS, list);
    removeS(semafaro);
+   stack = convexHullOfAll(list, 3);
+   ConvexHullAuxC(stack, cidade, 3);
+   eraseStackTwo(stack);
+   eraseBaseStack(stack);
 }
 
 void insertTorre(Cidade cidade, ElementoUrbano item){
@@ -56,8 +73,14 @@ void insertTorre(Cidade cidade, ElementoUrbano item){
 void removeTorre(Cidade cidade, char *id){
    City *city = (City*) cidade;
    Torre torre;
-   torre = removeQuadTreeItem(city->listaT, id, compareT);
+   Stack stack = NULL;
+   List list = createDLL();
+   torre = removeQuadTreeItem(city->listaT, id, compareT, list);
    removeT(torre);
+   stack = convexHullOfAll(list, 4);
+   ConvexHullAuxC(stack, cidade, 4);
+   eraseStackTwo(stack);
+   eraseBaseStack(stack);
 }
 
 void insertHidrante(Cidade cidade, ElementoUrbano item){
@@ -68,8 +91,14 @@ void insertHidrante(Cidade cidade, ElementoUrbano item){
 void removeHidrante(Cidade cidade, char *id){
    City *city = (City*) cidade;
    Hidrante hidrante;
-   hidrante = removeQuadTreeItem(city->listaH, id, compareH);
-   removeH(hidrante);
+   Stack stack = NULL;
+   List list = createDLL();
+   hidrante = removeQuadTreeItem(city->listaH, id, compareH, list);
+   removeQ(hidrante);
+   stack = convexHullOfAll(list, 2);
+   ConvexHullAuxC(stack, cidade, 2);
+   eraseStackTwo(stack);
+   eraseBaseStack(stack);
 }
 
 char *getNome(Cidade cidade){
@@ -135,7 +164,7 @@ void eraseListaQ(Cidade cidade){
 
   City *city = (City*) cidade;
 
-  eraseQuadTreeNode(city->listaQ, removeQ);
+  eraseQuadTreeNodeOne(city->listaQ, removeQ);
   eraseQuadTreeBase(city->listaQ);
 
   city->listaQ = NULL;
@@ -145,7 +174,7 @@ void eraseListaS(Cidade cidade){
 
   City *city = (City*) cidade;
 
-  eraseQuadTreeNode(city->listaS, removeS);
+  eraseQuadTreeNodeOne(city->listaS, removeS);
   eraseQuadTreeBase(city->listaS);
 
   city->listaS = NULL;
@@ -155,7 +184,7 @@ void eraseListaT(Cidade cidade){
 
   City *city = (City*) cidade;
 
-  eraseQuadTreeNode(city->listaT, removeT);
+  eraseQuadTreeNodeOne(city->listaT, removeT);
   eraseQuadTreeBase(city->listaT);
 
   city->listaT = NULL;
@@ -165,7 +194,7 @@ void eraseListaH(Cidade cidade){
 
   City *city = (City*) cidade;
 
-  eraseQuadTreeNode(city->listaH, removeH);
+  eraseQuadTreeNodeOne(city->listaH, removeH);
   eraseQuadTreeBase(city->listaH);
 
   city->listaH = NULL;
@@ -181,4 +210,40 @@ void eraseCidade(Cidade cidade){
     free(city->nome);
   }
   free(cidade);
+}
+
+void ConvexHullAuxC(Stack stack, Cidade cidade, int type) {
+  int i, n;
+  void *element = NULL;
+
+  switch (type) {
+  case 1: /* Quadra. */
+    n = lengthStack(stack);
+    for (i = 0; i < n; i++) {
+      element = removeTopI(stack);
+      insertQuadra(cidade, element);
+    }
+    break;
+  case 2: /* Hidrante. */
+    n = lengthStack(stack);
+    for (i = 0; i < n; i++) {
+      element = removeTopI(stack);
+      insertHidrante(cidade, element);
+    }
+    break;
+  case 3: /* semafaro. */
+    n = lengthStack(stack);
+    for (i = 0; i < n; i++) {
+      element = removeTopI(stack);
+      insertSemafaro(cidade, element);
+    }
+    break;
+  case 4: /* Torre. */
+    n = lengthStack(stack);
+    for (i = 0; i < n; i++) {
+      element = removeTopI(stack);
+      insertTorre(cidade, element);
+    }
+    break;
+  }
 }

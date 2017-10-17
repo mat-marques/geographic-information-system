@@ -15,9 +15,7 @@ Definição:
 O módulo ExecucaoGeo tem por objetivo abrigar todos os procedimentos necessários para execução dos comandos presentes em um arquivo '.geo'.
 
 */
-
 void executarConvexHull(List list, Canvas canvas, int type);
-
 
 /*
 Executa o comando C. Faz a leitura dos parâmetros do comando C no arquivo arqEntradaGeo e cria um círculo e o armazena no canvas.

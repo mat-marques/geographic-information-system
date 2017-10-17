@@ -19,6 +19,8 @@ typedef struct CanvasP {
   int id;
 } CanvasP;
 
+void ConvexHullAux(Stack stack, Canvas canvas, int type);
+
 Canvas criaCanvas(int id) {
   char *nome;
   CanvasP *canvas;
@@ -44,8 +46,14 @@ void insertRetangulo(Canvas canvas, Retangulo retangulo) {
 void removeRetangulo(Canvas canvas, int id) {
   figuraGeometrica f;
   CanvasP *canvasP = (CanvasP *)canvas;
-  f = removeQuadTreeItem(canvasP->listaR, &id, compareR);
-  free(f);
+  List list = createDLL();
+  Stack stack;
+  f = removeQuadTreeItem(canvasP->listaR, &id, compareR, list);
+  removeR(f);
+  stack = convexHullOfAll(list, 5);
+  ConvexHullAux(stack, canvas, 1);
+  eraseStackTwo(stack);
+  eraseBaseStack(stack);
 }
 
 void insertRetangulo2(Canvas canvas, Retangulo retangulo) {
@@ -68,8 +76,14 @@ void insertCirculo(Canvas canvas, Circulo circulo) {
 void removeCirculo(Canvas canvas, int id) {
   figuraGeometrica f;
   CanvasP *canvasP = (CanvasP *)canvas;
-  f = removeQuadTreeItem(canvasP->listaC, &id, compareC);
-  free(f);
+  Stack stack = NULL;
+  List list = createDLL();
+  f = removeQuadTreeItem(canvasP->listaC, &id, compareC, list);
+  removeC(f);
+  stack = convexHullOfAll(list, 6);
+  ConvexHullAux(stack, canvas, 2);
+  eraseStackTwo(stack);
+  eraseBaseStack(stack);
 }
 
 void showCanvasR(Canvas canvas, FILE *file) {
@@ -138,29 +152,6 @@ QuadTree getListaC(Canvas canvas) {
   return canvasP->listaC;
 }
 
-void calcConvexHull(Canvas canvas, List list, int type) {
-
-  switch (type) {
-  case 1: /* Retângulo */
-
-    break;
-  case 2: /* Círculo */
-
-    break;
-  case 3: /* Quadra */
-
-    break;
-  case 4: /* Torre */
-
-    break;
-  case 5: /* Hidrante */
-
-    break;
-  case 6: /* Semafáro */
-
-    break;
-  }
-}
 
 /****************************************************/
 int compareRR(Item item1, Region item2) {
@@ -410,12 +401,12 @@ figuraGeometrica getCirculo(Canvas canvas, int id) {
 
 void eraseListaR(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  eraseQuadTreeNode(canvasP->listaR, removeR);
+  eraseQuadTreeNodeOne(canvasP->listaR, removeR);
 }
 
 void eraseListaC(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  eraseQuadTreeNode(canvasP->listaC, removeC);
+  eraseQuadTreeNodeOne(canvasP->listaC, removeC);
 }
 
 void eraseListaR2(Canvas canvas) {
@@ -430,4 +421,25 @@ void eraseCanvas(Canvas canvas) {
   eraseListaC(canvas);
   eraseCidade(canvasP->cidade);
   free(canvas);
+}
+
+void ConvexHullAux(Stack stack, Canvas canvas, int type) {
+  int i, n;
+  void *element = NULL;
+  switch (type) {
+  case 1: /* Retângulo. */
+    n = lengthStack(stack);
+    for (i = 0; i < n; i++) {
+      element = removeTopI(stack);
+      insertRetangulo(canvas, element);
+    }
+    break;
+  case 2: /* Círculo. */
+    n = lengthStack(stack);
+    for (i = 0; i < n; i++) {
+      element = removeTopI(stack);
+      insertCirculo(canvas, element);
+    }
+    break;
+  }
 }

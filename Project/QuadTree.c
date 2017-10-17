@@ -14,7 +14,8 @@ typedef struct Base {
   node *root;
 } Base;
 
-void eraseTree(node *tree, eraseItem function);
+void eraseTreeOne(node *tree, eraseItem function);
+void eraseTreeTwo(node *tree);
 
 QuadTree createQuadTree() {
   Base *base = NULL;
@@ -138,6 +139,15 @@ void reInsertSubTree(node *tree, node *subTree) {
   }
 }
 
+/* Função interna. Coloca os elementos em uma lista. */
+void listQAux(List list, node *subTree){
+  listQAux(list, subTree->direction[0]);
+  insertEndDLL(list, subTree->info);
+  listQAux(list, subTree->direction[1]);
+  listQAux(list, subTree->direction[2]);
+  listQAux(list, subTree->direction[3]);
+}
+
 /* Função interna. */
 void removeItem(node *tree, ItemQt item, node **r, compareToQt function) {
   /* Encontra o nó que deve ser removido da árvore. */
@@ -157,7 +167,7 @@ void removeItem(node *tree, ItemQt item, node **r, compareToQt function) {
   }
 }
 
-ItemQt removeQuadTreeItem(QuadTree tree, ItemQt item, compareToQt function) {
+ItemQt removeQuadTreeItem(QuadTree tree, ItemQt item, compareToQt function, List list) {
   Base *base = (Base *)tree;
   node *r = NULL;
   node *f = NULL;
@@ -165,13 +175,14 @@ ItemQt removeQuadTreeItem(QuadTree tree, ItemQt item, compareToQt function) {
   ItemQt info = NULL;
   base->size = base->size - 1;
   if (function(base->root, item) == 1) { /* Raiz da árvore. */
+    info = base->root->info;
+    r = base->root;
     base->root = NULL;
-    info = r->info;
     for (i = 0; i < 4; i++) {
-      reInsertSubTree(base->root, r->direction[i]);
+      listQAux(list, r->direction[i]);
     }
-    free(r);
-    base->size = base->size - 1;
+    eraseTreeTwo(r);
+    base->size = 0;
   } else { /* Nó qualquer da árvore. */
     removeItem(base->root, item, &r, function);
     if (r != NULL) {
@@ -184,16 +195,16 @@ ItemQt removeQuadTreeItem(QuadTree tree, ItemQt item, compareToQt function) {
       }
       info = r->info;
       for (i = 0; i < 4; i++) {
-        reInsertSubTree(base->root, r->direction[i]);
+        listQAux(list, r->direction[i]);
       }
-      free(r);
-      base->size = base->size - 1;
-      eraseTree(r, NULL);
+      eraseTreeTwo(r);
+      base->size = base->size - lengthDLL(list);
     }
   }
 
   return info;
 }
+
 
 /* Função interna. */
 void getByRegion(List list, node *tree, Region region, compareToQt function) {
@@ -283,25 +294,44 @@ ItemQt searchQuadTreeByCoordinate(QuadTree tree, double x, double y) {
 }
 
 /* Função interna. */
-void eraseTree(node *tree, eraseItem function) {
+void eraseTreeOne(node *tree, eraseItem function) {
   /* Recursão para eliminar nó a nó da ávore. */
   node *aux = tree;
   if (aux != NULL) {
-    eraseTree(aux->direction[0], function);
+    eraseTreeOne(aux->direction[0], function);
     if (function != NULL) {
       function(aux->info);
     }
     free(aux);
-    eraseTree(aux->direction[1], function);
-    eraseTree(aux->direction[2], function);
-    eraseTree(aux->direction[3], function);
+    eraseTreeOne(aux->direction[1], function);
+    eraseTreeOne(aux->direction[2], function);
+    eraseTreeOne(aux->direction[3], function);
   }
 }
 
-void eraseQuadTreeNode(QuadTree tree, eraseItem function) {
+void eraseQuadTreeNodeOne(QuadTree tree, eraseItem function) {
   /* Elimina os nós da árvore. */
   Base *base = (Base *)tree;
-  eraseTree(base->root, function);
+  eraseTreeOne(base->root, function);
+}
+
+/* Função interna. */
+void eraseTreeTwo(node *tree) {
+  /* Recursão para eliminar nó a nó da ávore. */
+  node *aux = tree;
+  if (aux != NULL) {
+    eraseTreeTwo(aux->direction[0]);
+    free(aux);
+    eraseTreeTwo(aux->direction[1]);
+    eraseTreeTwo(aux->direction[2]);
+    eraseTreeTwo(aux->direction[3]);
+  }
+}
+
+void eraseQuadTreeNodeTwo(QuadTree tree) {
+  /* Elimina os nós da árvore. */
+  Base *base = (Base *)tree;
+  eraseTreeTwo(base->root);
 }
 
 void eraseQuadTreeBase(QuadTree tree) {
