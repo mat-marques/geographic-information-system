@@ -1,8 +1,14 @@
+#include "Circulo.h"
+#include "Hidrante.h"
+#include "Quadra.h"
+#include "Retangulo.h"
+#include "Semafaro.h"
+#include "Cor.h"
+#include "Svg.h"
 #include "Torre.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Svg.h"
 
 FILE *createSvg(char *arqName) {
   FILE *file;
@@ -23,31 +29,6 @@ void tagAbertura(FILE *arqSvg, double w, double h) {
 }
 
 void tagRetangulo(FILE *arqSvg, double w, double h, double x, double y, char *cor) {
-  fprintf(arqSvg, "%s\n", "<rect");
-
-  fprintf(arqSvg, " %s", "x=");
-  fprintf(arqSvg, "\"%f\"\n", x);
-
-  fprintf(arqSvg, " %s", "y=");
-  fprintf(arqSvg, "\"%f\"\n", y);
-
-  fprintf(arqSvg, " %s", "width=");
-  fprintf(arqSvg, "\"%f\"\n", w);
-
-  fprintf(arqSvg, " %s", "height=");
-  fprintf(arqSvg, "\"%f\"\n", h);
-
-  fprintf(arqSvg, " %s", "fill=");
-  fprintf(arqSvg, "\"%s\"\n", cor);
-
-  fprintf(arqSvg, " %s\n", "stroke=\"black\"");
-  fprintf(arqSvg, " %s\n", "stroke-width=\"1\"");
-
-  fprintf(arqSvg, "%s\n", " />");
-}
-
-void tagRetangulo2(FILE *arqSvg,double w, double h, double x, double y, char *corB, char *corS) {
-
   fprintf(arqSvg, "%s\n", "<rect");
 
   fprintf(arqSvg, " %s", "x=");
@@ -114,6 +95,28 @@ void tagCirculo(FILE *arqSvg, double r, double x, double y, char *cor) {
   fprintf(arqSvg, " %s\n", "stroke=\"black\"");
   fprintf(arqSvg, " %s\n", "stroke-width=\"1\"");
 
+  fprintf(arqSvg, "%s\n", " />");
+}
+
+void tagCirculoOpacity(FILE *arqSvg, double r, double x, double y, char *cor) {
+
+  fprintf(arqSvg, "%s\n", "<circle");
+
+  fprintf(arqSvg, " %s", "cx=");
+  fprintf(arqSvg, "\"%f\"\n", x);
+
+  fprintf(arqSvg, " %s", "cy=");
+  fprintf(arqSvg, "\"%f\"\n", y);
+
+  fprintf(arqSvg, " %s", "r=");
+  fprintf(arqSvg, "\"%f\"\n", r);
+
+  fprintf(arqSvg, " %s", "fill=");
+  fprintf(arqSvg, "\"%s\"\n", cor);
+
+  fprintf(arqSvg, " %s\n", "stroke=\"black\"");
+  fprintf(arqSvg, " %s\n", "stroke-width=\"1\"");
+  fprintf(arqSvg, " %s\n", "fill-opacity=\"0.5\"");
   fprintf(arqSvg, "%s\n", " />");
 }
 

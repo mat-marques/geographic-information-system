@@ -16,11 +16,15 @@ Tad: Canvas
 Definição:
 Um canvas é um plano bidimensional composto por um comprimento e uma altura e que aloja dentro de si componentes específicos. Os componentes que podem compor um canvas são retângulos, círculos , uma lista de cores e uma cidade.
 */
+<<<<<<< HEAD
 
 <<<<<<< Updated upstream
 =======
 
 >>>>>>> Stashed changes
+=======
+void executarConvexHull(List list, Canvas canvas, int type);
+>>>>>>> recover-branch
 
 /*
 Cria um canvas vazio e com comprimento e altura iguais a 100.
@@ -38,11 +42,9 @@ void insertRetangulo(Canvas canvas, Retangulo retangulo);
 Remove do canvas passado como parâmetro um retângulo com uma posição específica.
 */
 void removeRetangulo(Canvas canvas, int id);
-<<<<<<< Updated upstream
 
 =======
->>>>>>> Stashed changes
-
+>>>>>>> recover-branch
 
 /*
 Insere no canvas passado como parâmetro um retângulo com bordas tracejadas e sem cor de preenchimento.
@@ -54,11 +56,9 @@ void insertRetangulo2(Canvas canvas, Retangulo retangulo);
 Remove do canvas passado como parâmetro um retângulo com bordas tracejadas em uma posição indicada por p.
 */
 void removeRetangulo2(Canvas canvas, int id);
-<<<<<<< Updated upstream
 
 =======
->>>>>>> Stashed changes
-
+>>>>>>> recover-branch
 
 /*
 Insere no canvas passado como parâmetro um círculo.
@@ -70,6 +70,7 @@ void insertCirculo(Canvas canvas, Circulo circulo);
 Remove do canvas passado como parâmetro um círculo em uma posição indicada por p.
 */
 void removeCirculo(Canvas canvas, int id);
+<<<<<<< HEAD
 
 
 /*A funcão escreve as propriedades de um retângulo em um arquivo no formato svg.
@@ -134,6 +135,17 @@ void showCanvasC(Canvas canvas, FILE *file);
 =======
 >>>>>>> Stashed changes
 
+=======
+
+
+List getElementsListInsideR(Canvas canvas, int type, double x, double y, double w, double h);
+
+List getElementsListInsideC(Canvas canvas, int type, double x, double y, double r);
+
+void showCanvasR(Canvas canvas, FILE *file);
+
+void showCanvasC(Canvas canvas, FILE *file);
+>>>>>>> recover-branch
 
 /*
 Retorna o comprimento do canvas passado como parâmetro.
@@ -180,9 +192,13 @@ int getIdCanvas(Canvas canvas);
 Retorna um lista contendo todos os retângulos genéricos presentes em um canvas.
 Retorna null caso não exista nenhum retângulo genérico no canvas.
 */
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 Lista getListaR(Canvas canvas);
+=======
+QuadTree getListaR(Canvas canvas);
+>>>>>>> recover-branch
 
 =======
 QuadTree getListaR(Canvas canvas);
@@ -196,7 +212,7 @@ QuadTree getListaR(Canvas canvas);
 Retorna um lista contendo todos os retângulos com bordas tracejadas presentes em um canvas.
 Retorna null caso não exista nenhum retângulo com bordas tracejadas no canvas.
 */
-Lista getListaR2(Canvas canvas);
+List getListaR2(Canvas canvas);
 
 
 
@@ -204,6 +220,7 @@ Lista getListaR2(Canvas canvas);
 Retorna um lista contendo todos os círculos presentes em um canvas.
 Retorna null caso não exista nenhum círculo no canvas.
 */
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 Lista getListaC(Canvas canvas);
@@ -222,6 +239,10 @@ Retorna null caso não exista cores no canvas.
 Lista getListaCores(Canvas canvas);
 =======
 >>>>>>> Stashed changes
+=======
+QuadTree getListaC(Canvas canvas);
+
+>>>>>>> recover-branch
 
 /*
 Retorna um retângulo (Figura geométrica) com  número de identificação definido pelo parâmetro id. O retângulo retornado está dentro de um canvas.
@@ -268,6 +289,7 @@ Apaga todos os retângulos com bordas tracejadas presentes em um canvas.
 */
 void eraseListaR2(Canvas canvas);
 
+<<<<<<< HEAD
 
 <<<<<<< Updated upstream
 /*
@@ -277,6 +299,8 @@ void setarCores(Canvas canvas);
 
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> recover-branch
 /*
 Apaga o canvas e todos os seus componentes.
 */

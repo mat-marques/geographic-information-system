@@ -43,6 +43,10 @@ O parâmetro -q deve ser valido.
 */
 char *parametroQ(char **argv, int argc);
 
+
+void parametroId(char **argv, int argc);
+
+
 /**
 Retorna uma String referente ao nome do arquivo de entrada na string parametro.
 */

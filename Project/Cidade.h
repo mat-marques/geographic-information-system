@@ -1,6 +1,7 @@
 #ifndef CIDADE_H
 #define CIDADE_H
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 #include "Lista.h"
 #include "Quadra.h"
@@ -11,6 +12,11 @@
 #include "Torre.h"
 #include "QuadTree.h"
 >>>>>>> Stashed changes
+=======
+#include "DoubleLinkedList.h"
+#include "Quadra.h"
+#include "QuadTree.h"
+>>>>>>> recover-branch
 typedef void* ElementoUrbano;
 typedef void* Cidade;
 
@@ -39,7 +45,7 @@ void insertQuadra(Cidade cidade, ElementoUrbano item);
 /*
 Remove uma quadra presente em uma cidade em uma posição indicada por p.
 */
-void removeQuadra(Cidade cidade,  Posic p);
+void removeQuadra(Cidade cidade, char *cep);
 
 
 
@@ -52,7 +58,7 @@ void insertSemafaro(Cidade cidade, ElementoUrbano item);
 /*
 Remove um semafaro presente em uma cidade em uma posição indicada por p.
 */
-void removeSemafaro(Cidade cidade, Posic p);
+void removeSemafaro(Cidade cidade, char *id);
 
 
 
@@ -65,7 +71,7 @@ void insertTorre(Cidade cidade, ElementoUrbano item);
 /*
 Remove uma torre celular presente em uma cidade em uma posição indicada por p.
 */
-void removeTorre(Cidade cidade, Posic p);
+void removeTorre(Cidade cidade, char *id);
 
 
 
@@ -78,7 +84,7 @@ void insertHidrante(Cidade cidade, ElementoUrbano item);
 /*
 Remove um hidrante de uma cidade em uma posição indicada por p.
 */
-void removeHidrante(Cidade cidade, Posic p);
+void removeHidrante(Cidade cidade, char *id);
 
 
 
@@ -98,7 +104,7 @@ void setNome(Cidade cidade, char *nome);
 Retorna um lista contendo todas as quadras de uma cidade.
 Retorna null caso não exista quadras na cidade.
 */
-Lista getListaQ(Cidade cidade);
+QuadTree getListaQ(Cidade cidade);
 
 
 
@@ -106,7 +112,7 @@ Lista getListaQ(Cidade cidade);
 Retorna um lista contendo todos os semafaros de uma cidade.
 Retorna null caso não exista semafaros na cidade.
 */
-Lista getListaS(Cidade cidade);
+QuadTree getListaS(Cidade cidade);
 
 
 
@@ -114,7 +120,7 @@ Lista getListaS(Cidade cidade);
 Retorna um lista contendo todas as torres celulares de uma cidade.
 Retorna null caso não exista torres celulares na cidade.
 */
-Lista getListaT(Cidade cidade);
+QuadTree getListaT(Cidade cidade);
 
 
 
@@ -122,7 +128,7 @@ Lista getListaT(Cidade cidade);
 Retorna um lista contendo todos os hidrantes de uma cidade.
 Retorna null caso não exista hidrantes na cidade.
 */
-Lista getListaH(Cidade cidade);
+QuadTree getListaH(Cidade cidade);
 
 
 /*

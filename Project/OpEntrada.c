@@ -91,6 +91,18 @@ char *parametroQ(char **argv, int argc){
   return new0;
 }
 
+void parametroId(char **argv, int argc){
+  int i;
+  for(i=1; i<argc; i++){
+    if(strcmp(argv[i],"-id")==0)
+    {
+      printf("Nome: Matheus Augusto Marques.\n");
+      printf("Numero de matricula: 201600560273.\n");
+    }
+  }
+}
+
+
 char *nomeArquivo(char *parametro){
   char *newString0=NULL;
   int tamanho;

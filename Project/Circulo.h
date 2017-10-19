@@ -40,7 +40,7 @@ RETORNA A COR DE PREENCHIMENTO DE UM CÍRCULO.
 */
 char* getCcor(Circulo element);
 
-void removeCirculo(Circulo element);
+void removeC(Circulo element);
 
 int compareC(Circulo element, void* item);
 

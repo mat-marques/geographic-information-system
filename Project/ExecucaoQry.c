@@ -4,19 +4,20 @@
 
 #include "Circulo.h"
 #include "Retangulo.h"
-#include "torre.h"
-#include "semafaro.h"
-#include "hidrante.h"
-#include "quadra.h"
+#include "Torre.h"
+#include "Semafaro.h"
+#include "Hidrante.h"
+#include "Quadra.h"
 #include "Cidade.h"
 #include "Arquivo.h"
-#include "Cor.h"
-<<<<<<< Updated upstream
-#include "Lista.h"
-=======
 #include "Svg.h"
 #include "DoubleLinkedList.h"
->>>>>>> Stashed changes
+
+#include "Exibicao.h"
+#include "Cor.h"
+#include "Svg.h"
+#include "DoubleLinkedList.h"
+
 #include "StringO.h"
 #include "ConvexHull.h"
 
@@ -25,49 +26,10 @@ void executardq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas
   void *elemento = NULL;
   int i, n;
   char *cep = NULL;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-  Cidade cidade;
-  Lista lista = NULL;
-
-  fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
-
-    cidade = getCidade(canvas);
-    lista = getListaQ(cidade);
-    n = lenght(lista);
-    elemento = getFirst(lista);
-    for(i=0;i<n;i++){
-      elemento2 = get(lista, elemento);
-      if(elemento2!=NULL){
-        w1 = getLargQ(elemento2);
-        h1 = getAltQ(elemento2);
-        x1 = getXQ(elemento2);
-        y1 = getYQ(elemento2);
-        cep = getCepQ(elemento2);
-        if(verificarInteiramenteSobrepostoRR(w, h, x, y, w1, h1, x1, y1) == 't'){
-          if(*arqSaidaT==NULL){
-            *arqSaidaT = createArqA(path);
-          }
-          fillArq1(*arqSaidaT, cep);
-          fillBreakLine(*arqSaidaT);
-          elemento2 = getNext(lista, elemento);
-          removeQuadra(cidade, elemento);
-          *qtdQuadrasRemovidas = *qtdQuadrasRemovidas+1;
-          elemento = elemento2;
-        }else{
-          elemento = getNext(lista, elemento);
-        }
-=======
   List lista = NULL;
 
   fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
 
-=======
-  List lista = NULL;
-
-  fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
-
->>>>>>> Stashed changes
   lista = getElementsListInsideR(canvas, 3, x, y, w,  h);
   if(*arqSaidaT==NULL){
     *arqSaidaT = createArqA(path);
@@ -85,10 +47,7 @@ void executardq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas
         *qtdQuadrasRemovidas = *qtdQuadrasRemovidas+1;
       }
       cep = NULL;
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
     }
     eraseListDLLTwo(lista);
     eraseBase(lista);
@@ -101,17 +60,15 @@ void executardh(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas
   double w=0, h=0, x=0, y=0;
   void *elemento = NULL;
   int i, n;
-<<<<<<< Updated upstream
-  Lista lista = NULL;
-=======
   List lista = NULL;
->>>>>>> Stashed changes
+
+  List lista = NULL;
+
   char *id = NULL;
   fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
   lista = getElementsListInsideR(canvas, 5, x, y, w,  h);
   if(*arqSaidaT==NULL){
     *arqSaidaT = createArqA(path);
-<<<<<<< Updated upstream
   }
 
   if(lista != NULL){
@@ -128,8 +85,8 @@ void executardh(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas
     }
     eraseListDLLTwo(lista);
     eraseBase(lista);
-=======
->>>>>>> Stashed changes
+  }
+
   }
 
   if(lista != NULL){
@@ -415,7 +372,7 @@ void executarCrd(FILE *arqEntradaQry , FILE **arqSaidaT, char *path, Canvas canv
   string = NULL;
 }
 
-void executarPc(FILE *arqEntradaQry, Canvas canvas, char *arqNome, char *dirPath, char *extensao2){
+void executarPc(FILE *arqEntradaQry, char *arqNome, char *dirPath, char *extensao2, Canvas canvas){
   char *string1 = NULL, *string2 = NULL, *string3 = NULL;
   char stringAux[] = "-";
   int i, n;
@@ -455,12 +412,34 @@ void executarPc(FILE *arqEntradaQry, Canvas canvas, char *arqNome, char *dirPath
 
   lista = getElementsListInsideR(canvas, 4, x, y,  w, h);
 
+  generateConvexHullT(lista, arqSaidaSvg2);
 
+  eraseListDLLTwo(lista);
+  eraseBase(lista);
 
   tagFechamento(arqSaidaSvg2);
 }
 
 void executarAc(FILE *arqEntradaQry , FILE **arqSaidaT, char *path, Canvas canvas){
+  double x, y, w, h;
+  double area;
+  List lista;
+  char texto[] = "Area";
+  fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
+
+  lista = getElementsListInsideR(canvas, 4, x, y,  w, h);
+  if(lengthDLL(lista) > 0){
+    if(*arqSaidaT==NULL){
+      *arqSaidaT = createArqA(path);
+    }
+    area = areaConvexHull(lista);
+    fillArq1(*arqSaidaT, texto);
+    fillSpace(*arqSaidaT);
+    fillArq4(*arqSaidaT, area);
+    fillBreakLine(*arqSaidaT);
+  }
+  eraseListDLLTwo(lista);
+  eraseBase(lista);
 
 }
 

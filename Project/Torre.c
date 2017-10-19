@@ -72,7 +72,7 @@ void setRaio(Torre element, double raio){
   newElement->raio = raio;
 }
 
-void removeTorr(Torre element){
+void removeT(Torre element){
   torre0 *newElement = (torre0*) element;
   if(newElement != NULL){
     free(newElement->id);
@@ -80,4 +80,13 @@ void removeTorr(Torre element){
     free(newElement->corB);
     free(newElement);
   }
+}
+
+int compareT(Torre element, void *item){
+  torre0 *newElement = (torre0*) element;
+  char *id = (char*) item;
+  if(strcmp(newElement->id, id) == 0){
+    return 1;
+  }
+  return 0;
 }

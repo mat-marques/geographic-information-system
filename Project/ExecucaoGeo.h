@@ -6,6 +6,8 @@
 #include <math.h>
 
 #include "Canvas.h"
+#include "Cor.h"
+
 /**
 Autor:Matheus Augusto Marques.
 Módulo: ExecucaoGeo
@@ -13,6 +15,7 @@ Definição:
 O módulo ExecucaoGeo tem por objetivo abrigar todos os procedimentos necessários para execução dos comandos presentes em um arquivo '.geo'.
 
 */
+void executarConvexHull(List list, Canvas canvas, int type);
 
 void executarConvexHull(List list, Canvas canvas, int type);
 
@@ -73,22 +76,29 @@ void executarAuxT(FILE *arqEntradaGeo, List list);
 /*
 Executa o comando Cq. Faz a leitura dos parâmetros do comando Cq no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarCq(FILE *arqEntradaGeo, Canvas canvas);
+Cor executarCq(FILE *arqEntradaGeo);
 
 /*
 Executa o comando Ch. Faz a leitura dos parâmetros do comando Ch no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarCh(FILE *arqEntradaGeo, Canvas canvas);
+Cor executarCh(FILE *arqEntradaGeo);
 
 /*
 Executa o comando Ct. Faz a leitura dos parâmetros do comando Ct no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarCt(FILE *arqEntradaGeo, Canvas canvas);
+Cor executarCt(FILE *arqEntradaGeo);
 
 /*
 Executa o comando Cs. Faz a leitura dos parâmetros do comando Cs no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarCs(FILE *arqEntradaGeo, Canvas canvas);
+Cor executarCs(FILE *arqEntradaGeo);
+
+
+void executarHI(FILE *arqEntradaGeo, Canvas canvas);
+
+void executarTI(FILE *arqEntradaGeo, Canvas canvas);
+
+void executarSI(FILE *arqEntradaGeo, Canvas canvas);
 
 
 void executarHI(FILE *arqEntradaGeo, Canvas canvas);
@@ -132,5 +142,7 @@ Verifica se um ponto qualquer é interno a um retângulo.
 Utiliza procedimentos do módulo OperacoesF e procedimentos do Tad Arquivo.
 */
 void comandoIr(FILE *arqSaidaT,double w, double h, double x1, double y1,double x2,double y2);
+
+Cor setCores(int type);
 
 #endif

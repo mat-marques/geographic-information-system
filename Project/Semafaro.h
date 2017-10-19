@@ -45,15 +45,16 @@ double getTempo(Semafaro element);
 
 void setTempo(Semafaro element, double tempo);
 
-<<<<<<< Updated upstream
-void removeSemafaro(Semafaro element);
-
-=======
 
 void removeS(Semafaro element);
 
 
 int compareS(Semafaro element, void *item);
 
->>>>>>> Stashed changes
+
+void removeS(Semafaro element);
+
+
+int compareS(Semafaro element, void *item);
+
 #endif

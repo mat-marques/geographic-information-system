@@ -189,7 +189,6 @@ Item removeItemDLL(List list, Item item, compareToDLL func){
   return info;
 }
 
-
 int removeBeginDLLOne(List list, eraseItemDLL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
@@ -370,6 +369,23 @@ Item getItemDLL(List list, int p) {
   return NULL;
 }
 
+void concatDLL(List listOne, List listTwo){
+  if(listOne!=NULL && listTwo!=NULL){
+      Base *base1 = (Base *)listOne;
+      Base *base2 = (Base *)listTwo;
+      base1->last->next = base2->first;
+      base2->first->previous = base1->last;
+      base1->size = base1->size + base2->size;
+  }
+}
+
+void eraseBase(List list){
+  Base *base = (Base *)list;
+  if(base!=NULL){
+    free(base);
+  }
+}
+
 int eraseListDLLOne(List list, eraseItemDLL func) {
   Base *base = (Base *)list;
   Element *aux, *aux2;
@@ -384,7 +400,6 @@ int eraseListDLLOne(List list, eraseItemDLL func) {
         func(aux2->info);
         free(aux2);
       }
-      free(base);
       return 1;
     }
   }
@@ -404,7 +419,6 @@ int eraseListDLLTwo(List list) {
         aux = aux->next;
         free(aux2);
       }
-      free(base);
       return 1;
     }
   }

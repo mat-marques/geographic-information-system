@@ -48,14 +48,10 @@ double getRaio(Torre element);
 
 void setRaio(Torre element, double raio);
 
-<<<<<<< Updated upstream
-void removeTorr(Torre element);
-=======
 
 void removeT(Torre element);
 
 
 int compareT(Torre element, void *item);
->>>>>>> Stashed changes
 
 #endif

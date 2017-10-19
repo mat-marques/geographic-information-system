@@ -15,13 +15,11 @@
 
 #include "DoubleLinkedList.h"
 #include "QuadTree.h"
-<<<<<<< Updated upstream
 #include "Cor.h"
-=======
->>>>>>> Stashed changes
 #include "Processamento.h"
 #include "ExecucaoGeo.h"
 #include "ExecucaoQry.h"
+#include "Exibicao.h"
 
 
 
@@ -31,6 +29,7 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry, char **arqNome, c
   char extensao2[] = ".svg";
   char travessao[] = "-";
 
+  parametroId(argv, argc);
   string0 = parametroE(argv, argc);
   string1 = parametroF(argv, argc);
 
@@ -88,32 +87,26 @@ void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas){
 
   newArqCanvas = arqSaidaSvg;
 
+  int n, i;
+
+  List lista;
+
+  void *element;
   tagAbertura(arqSaidaSvg, getWidth(canvas)+50, getHeight(canvas)+50);
 
-  /* Retângulos */
-    showCanvasElements(canvas, 5);
+  showCanvasElements(canvas, 7);
 
-  /* Círculos */
-    showCanvasElements(canvas, 6);
+/* Quadra */
+  showCanvasElements(canvas, 1);
 
-  /* Retângulos de sobreposição. */
-<<<<<<< Updated upstream
+/* Semafaro */
+  showCanvasElements(canvas, 4);
 
-=======
-    showCanvasElements(canvas, 7);
->>>>>>> Stashed changes
+/* Torre */
+  showCanvasElements(canvas, 3);
 
-  /* Quadra */
-    showCanvasElements(canvas, 1);
-
-  /* Semafaro */
-    showCanvasElements(canvas, 4);
-
-  /* Torre */
-    showCanvasElements(canvas, 3);
-
-  /* Hidrante */
-    showCanvasElements(canvas, 2);
+/* Hidrante */
+  showCanvasElements(canvas, 2);
 
   tagFechamento(arqSaidaSvg);
 }
@@ -126,16 +119,14 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
   char extensao2[] = ".svg";
   int i, n;
   FILE *arqSaidaT = NULL;
-  List quadras, semafaros, torres, hidrantes, retangulos, circulos;
-<<<<<<< Updated upstream
-=======
   char *cq = NULL, *cs = NULL, *ct = NULL, *ct = NULL;
->>>>>>> Stashed changes
-  if(arqEntradaGeo==NULL){
-    printf("ERRO EM ABERTURA DE ARQUIVO GEO.\n");
-    exit(0);
-  }
-  /*  Lista de auxiliares. */
+
+  List quadras = NULL, semafaros = NULL, torres = NULL, hidrantes = NULL, retangulos = NULL, circulos = NULL;
+
+  Cor cq = NULL, cs = NULL, ct = NULL, ch = NULL;
+  int bool1 = 0, bool2 = 0, bool3 = 0, bool4 = 0;
+
+  /*  Listas auxiliares. */
   quadras = createDLL();
   semafaros = createDLL();
   torres = createDLL();
@@ -143,8 +134,6 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
   retangulos = createDLL();
   circulos = createDLL();
 
-<<<<<<< Updated upstream
-=======
   /*  Cores dos objetos. */
   cq = setCores(1);
   ct = setCores(2);
@@ -156,13 +145,13 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
     exit(0);
   }
 
->>>>>>> Stashed changes
   while(1){
     fscanf(arqEntradaGeo, "%s ", entradaA);
     if(entradaA[0]=='#'){
       break;
     }
     if(boolean=='t'&&(entradaA[0]=='o'||entradaA[0]=='i'||entradaA[0]=='d')){
+      /*  Abre o arquivo de saída .txt. */
       string1 = concatenarElementos(dirPath, arqNome, extensao1);
       arqSaidaT = createArqW(string1);
       desalocar(string1);
@@ -170,40 +159,48 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
       boolean = 'f';
     }
 
+    if((entradaA[0] == 'o' || entradaA[0] == 'i' || entradaA[0] == 'd' ||
+       entradaA[0] == 'a') && (bool1 == 0)){
+         executarConvexHull(retangulos, canvas, 5);
+         executarConvexHull(circulos, canvas, 6);
+         bool1 = 1;
+    }
+
     if(strcmp(entradaA, "cq")==0){
-      if(cq != NULL){
-        free(cq);
-      }
+      removeCor(cq);
       cq = executarCq(arqEntradaGeo);
     } else
     if(strcmp(entradaA, "ch")==0){
-      if(ch != NULL){
-        free(cq);
-      }
+      removeCor(ch);
       ch = executarCh(arqEntradaGeo);
     } else
     if(strcmp(entradaA, "ct")==0){
-      if(ct != NULL){
-        free(cq);
-      }
+      removeCor(ct);
       ct = executarCt(arqEntradaGeo);
     }else
     if(strcmp(entradaA, "cs")==0){
-      if(cs != NULL){
-        free(cq);
-      }
-      if(cq != NULL){
-        free(cq);
-      }
+      removeCor(cs);
       cs = executarCs(arqEntradaGeo);
     }else
     if(strcmp(entradaA, "hI")==0){
+      if(bool2 == 0){
+        executarConvexHull(hidrantes, canvas, 2);
+        bool2 = 1;
+      }
       executarHI(arqEntradaGeo, canvas);
     }else
     if(strcmp(entradaA, "tI")==0){
+      if(bool3 == 0){
+        executarConvexHull(torres, canvas, 4);
+        bool3 = 1;
+      }
       executarTI(arqEntradaGeo, canvas);
     }else
     if(strcmp(entradaA, "sI")==0){
+      if(bool4 == 0){
+        executarConvexHull(semafaros, canvas, 3);
+        bool4 = 1;
+      }
       executarSI(arqEntradaGeo, canvas);
     }else
     if(entradaA[0] == 'c'){
@@ -214,16 +211,16 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
     } else
     if(entradaA[0] == 'q'){
       qtdQuadrasInseridas++;
-      executarAuxQ(arqEntradaGeo, quadras);
+      executarAuxQ(arqEntradaGeo, quadras, cq);
     } else
     if(entradaA[0] == 'h'){
-      executarAuxH(arqEntradaGeo, hidrantes);
+      executarAuxH(arqEntradaGeo, hidrantes, ch);
     } else
     if(entradaA[0] == 't'){
-      executarAuxT(arqEntradaGeo, torres);
+      executarAuxT(arqEntradaGeo, torres, ct);
     } else
     if(entradaA[0] == 's'){
-      executarAuxS(arqEntradaGeo, semafaros);
+      executarAuxS(arqEntradaGeo, semafaros, cs);
     } else
     if(entradaA[0] == 'd'){
       executarD(arqEntradaGeo, arqSaidaT,canvas);
@@ -241,8 +238,6 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
     entradaA[0] = '\0';
   }
 
-<<<<<<< Updated upstream
-=======
   if(bool1 == 0){
     executarConvexHull(retangulos, canvas, 5);
     executarConvexHull(circulos, canvas, 6);
@@ -288,7 +283,7 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
   removeCor(cs);
   removeCor(ct);
   removeCor(ch);
->>>>>>> Stashed changes
+
   if(arqSaidaT!=NULL){
     fclose(arqSaidaT);
   }
@@ -298,6 +293,7 @@ void executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath, Canv
 {
   char *path = NULL, entradaA[6];
   char extensao1[] = ".txt";
+  char extensao2[] = ".svg";
   FILE *arqSaidaT = NULL;
 
   path = concatenarElementos(dirPath, arqNome, extensao1);
@@ -330,6 +326,12 @@ void executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath, Canv
       } else
       if(strcmp(entradaA, "Ds")==0){
         executarDs(arqEntradaQry, &arqSaidaT, path, canvas);
+      } else
+      if(strcmp(entradaA, "pc?")==0){
+        executarPc(arqEntradaQry, arqNome, dirPath, extensao2, canvas);
+      } else
+      if(strcmp(entradaA, "ac?")==0){
+        executarAc(arqEntradaQry, &arqSaidaT, path, canvas);
       } else
       if(strcmp(entradaA, "Dt")==0){
         executarDt(arqEntradaQry, &arqSaidaT, path, canvas);

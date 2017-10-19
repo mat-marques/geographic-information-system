@@ -56,12 +56,12 @@ double getYQ(Quadra element){
    return newElement->y;
 }
 
-char *getCorpQ(Quadra element){
+char* getCorpQ(Quadra element){
    Quadra0 *newElement = (Quadra0*) element;
    return newElement->corP;
 }
 
-char *getCorbQ(Quadra element){
+char* getCorbQ(Quadra element){
    Quadra0 *newElement = (Quadra0*) element;
    return newElement->corB;
 }
@@ -76,7 +76,7 @@ double getAltQ(Quadra element){
    return newElement->alt;
 }
 
-void removeQuadra(Quadra element){
+void removeQ(Quadra element){
     Quadra0 *newElement = (Quadra0*) element;
     if(newElement != NULL){
         free(newElement->cep);
@@ -84,4 +84,13 @@ void removeQuadra(Quadra element){
         free(newElement->corB);
         free(newElement);
     }
+}
+
+int compareQ(Quadra element, void *item){
+  Quadra0 *newElement = (Quadra0*) element;
+  char *item2 = (char *) item;
+  if(strcmp(newElement->cep, item2) == 0){
+    return 1;
+  }
+  return 0;
 }
