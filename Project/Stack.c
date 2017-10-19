@@ -110,6 +110,12 @@ ItemS getItemTop(Stack stack){
   return (ItemS) base->top->info;
 }
 
+void eraseBaseStack(Stack stack){
+  Base *base = (Base*) stack;
+  if(base->top==NULL){
+    free(base);
+  }
+}
 
 Stack concatStacks(Stack stack1, Stack stack2){
   Base *newStack;

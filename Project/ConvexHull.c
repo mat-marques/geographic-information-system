@@ -266,6 +266,7 @@ void convexHull(void *vetor, int n, List listConvex, List listPi) {
 }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 void inserInQuadTree(QuadTree quadTree, Stack stack) {
   int i, j;
   S *item;
@@ -276,6 +277,8 @@ void inserInQuadTree(QuadTree quadTree, Stack stack) {
     free(item);
   }
 =======
+=======
+>>>>>>> Stashed changes
 List createListPoints(double x, double y, double r) {
   S *item;
   List list;

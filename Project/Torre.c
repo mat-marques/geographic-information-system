@@ -10,19 +10,30 @@ typedef struct torre0{
   double x, y;
   char *id;
   double raio;
+  char *corP, *corB;
 }torre0;
 
 
-Torre criaTorre(double x, double y, char *id){
+Torre criaTorre(double x, double y, char *id, char *corP, char *corB){
    torre0 *newElement;
    int i;
    newElement = (torre0*) malloc(sizeof(torre0));
    newElement->x = x;
    newElement->y = y;
    newElement->raio = 0;
+
    i = strlen(id);
    newElement->id = (char*) malloc((i+1)*sizeof(char));
    strcpy(newElement->id, id);
+
+   i = strlen(corP);
+   newElement->corP = (char*) malloc(i * sizeof(char));
+   strcpy(newElement->corP, corP);
+
+   i = strlen(corB);
+   newElement->corB = (char*) malloc(i * sizeof(char));
+   strcpy(newElement->corB, corB);
+
    return (Torre) newElement;
 }
 
@@ -39,6 +50,16 @@ double getYT(Torre element){
 char *getIdT(Torre element){
   torre0 *newElement = (torre0*) element;
   return newElement->id;
+}
+
+char *getCorpT(Torre element){
+  torre0 *newElement = (torre0*) element;
+  return newElement->corP;
+}
+
+char *getCorbT(Torre element){
+  torre0 *newElement = (torre0*) element;
+  return newElement->corB;
 }
 
 double getRaio(Torre element){

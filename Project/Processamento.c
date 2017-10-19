@@ -15,7 +15,10 @@
 
 #include "DoubleLinkedList.h"
 #include "QuadTree.h"
+<<<<<<< Updated upstream
 #include "Cor.h"
+=======
+>>>>>>> Stashed changes
 #include "Processamento.h"
 #include "ExecucaoGeo.h"
 #include "ExecucaoQry.h"
@@ -127,6 +130,10 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
   int i, n;
   FILE *arqSaidaT = NULL;
   List quadras, semafaros, torres, hidrantes, retangulos, circulos;
+<<<<<<< Updated upstream
+=======
+  char *cq = NULL, *cs = NULL, *ct = NULL, *ct = NULL;
+>>>>>>> Stashed changes
   if(arqEntradaGeo==NULL){
     printf("ERRO EM ABERTURA DE ARQUIVO GEO.\n");
     exit(0);
@@ -153,16 +160,31 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
     }
 
     if(strcmp(entradaA, "cq")==0){
-      executarCq(arqEntradaGeo, canvas);
+      if(cq != NULL){
+        free(cq);
+      }
+      cq = executarCq(arqEntradaGeo);
     } else
     if(strcmp(entradaA, "ch")==0){
-      executarCh(arqEntradaGeo, canvas);
+      if(ch != NULL){
+        free(cq);
+      }
+      ch = executarCh(arqEntradaGeo);
     } else
     if(strcmp(entradaA, "ct")==0){
-      executarCt(arqEntradaGeo, canvas);
+      if(ct != NULL){
+        free(cq);
+      }
+      ct = executarCt(arqEntradaGeo);
     }else
     if(strcmp(entradaA, "cs")==0){
-      executarCs(arqEntradaGeo, canvas);
+      if(cs != NULL){
+        free(cq);
+      }
+      if(cq != NULL){
+        free(cq);
+      }
+      cs = executarCs(arqEntradaGeo);
     }else
     if(strcmp(entradaA, "hI")==0){
       executarHI(arqEntradaGeo, canvas);
@@ -278,7 +300,6 @@ void processarDados(char **argv, int argc){
   abrirArquivos(&arqEntradaGeo, &arqEntradaQry, &arqNome, &dirPath, &exitFileSvg, &acc0, &acc, argv, argc);
 
   canvas = criaCanvas(1);
-  setarCores(canvas);
 
   executarComandosGeo(arqEntradaGeo, arqNome, dirPath, canvas, &qtdQuadrasInseridas);
 

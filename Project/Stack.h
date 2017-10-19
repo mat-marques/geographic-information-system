@@ -28,6 +28,8 @@ Stack concatStacks(Stack stack1, Stack stack2);
 
 void eraseBaseStack(Stack stack);
 
+void eraseBaseStack(Stack stack);
+
 
 int eraseStackOne(Stack stack, eraseItemS func);
 

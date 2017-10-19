@@ -10,7 +10,7 @@ Definição:
 Uma quadra é composta por um cep, um par ordenado x e y, uma largura e uma altura. O cep diferencia uma quadra de outras quadras no plano. O cep é único para cada quadra. O par ordenado representa a posição no plano cartesiano onde a quadra esta. A largura e altura representa a largura e a altura da quadra.
 */
 
-Quadra criaQuadra(double x, double y, double larg, double alt, char *cep);
+Quadra criaQuadra(double x, double y, double larg, double alt, char *cep, char *corP, char *corB);
 
 
 /**
@@ -32,6 +32,10 @@ double getXQ(Quadra element);
 Retorna a coordenada y do par ordenado de Quadra element.
 */
 double getYQ(Quadra element);
+
+double getCorpQ(Quadra element);
+
+double getCorbQ(Quadra element);
 
 /**
 Retorna a largura de Quadra element.

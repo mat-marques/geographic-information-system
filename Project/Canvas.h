@@ -65,19 +65,10 @@ Remove do canvas passado como parâmetro um círculo em uma posição indicada p
 */
 void removeCirculo(Canvas canvas, int id);
 
-/*
-Insere no canvas passado como parâmetro uma cor.
-*/
-void insertCor(Canvas canvas, Cor cor);
 
 List getElementsListInsideR(Canvas canvas, int type, double x, double y, double w, double h);
 
 List getElementsListInsideC(Canvas canvas, int type, double x, double y, double r);
-
-/*
-Remove do canvas passado como parâmetro uma cor em uma posição indicada por p.
-*/
-void removeCor(Canvas canvas, int id);
 
 void showCanvasR(Canvas canvas, FILE *file);
 
@@ -164,11 +155,14 @@ QuadTree getListaC(Canvas canvas);
 QuadTree getListaC(Canvas canvas);
 >>>>>>> Stashed changes
 
+<<<<<<< Updated upstream
 /*
 Retorna um lista contendo todos as cores presentes em um canvas.
 Retorna null caso não exista cores no canvas.
 */
 Lista getListaCores(Canvas canvas);
+=======
+>>>>>>> Stashed changes
 
 /*
 Retorna um retângulo (Figura geométrica) com  número de identificação definido pelo parâmetro id. O retângulo retornado está dentro de um canvas.
@@ -197,10 +191,6 @@ Caso o círculo não for encontrado é retornado null.
 */
 figuraGeometrica getCirculo2(Canvas canvas, double x, double y, double r);
 
-/*
-Retorna uma cor especificada por um número de identificação chamado id presente no canvas passado como parâmetro.
-*/
-Cor getCor(Canvas canvas, int id);
 
 /*
 Apaga todos os retângulos genéricos presentes em um canvas.
@@ -219,11 +209,6 @@ Apaga todos os retângulos com bordas tracejadas presentes em um canvas.
 */
 void eraseListaR2(Canvas canvas);
 
-
-/*
-Apaga todas as cores presentes em um canvas.
-*/
-void eraseListaCores(Canvas canvas);
 
 /*
 Inicia o canvas com algumas cores padrões.

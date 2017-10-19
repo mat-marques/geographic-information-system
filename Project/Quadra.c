@@ -6,11 +6,12 @@
 typedef struct Quadra0{
    double x, y, larg, alt;
    char *cep;
+   char *corP, *corB;
 }Quadra0;
 
 typedef void (*eraseElement)(void*);
 
-Quadra criaQuadra(double x, double y, double larg, double alt, char* cep){
+Quadra criaQuadra(double x, double y, double larg, double alt, char* cep, char *corP, char* corB){
    int i;
    Quadra0 *newElement = (Quadra0*) malloc(sizeof(Quadra0));
    newElement->x = x;
@@ -21,6 +22,14 @@ Quadra criaQuadra(double x, double y, double larg, double alt, char* cep){
    i = strlen(cep);
    newElement->cep = (char*) malloc((i+1)*sizeof(char));
    strcpy(newElement->cep, cep);
+
+   i = strlen(corP);
+   newElement->corP = (char*) malloc((i+1)*sizeof(char));
+   strcpy(newElement->corP, corP);
+
+   i = strlen(corB);
+   newElement->corB = (char*) malloc((i+1)*sizeof(char));
+   strcpy(newElement->corB, corB);
    return (Quadra) newElement;
 }
 
@@ -45,6 +54,16 @@ double getXQ(Quadra element){
 double getYQ(Quadra element){
    Quadra0 *newElement = (Quadra0*) element;
    return newElement->y;
+}
+
+char* getCorpQ(Quadra element){
+   Quadra0 *newElement = (Quadra0*) element;
+   return newElement->corP;
+}
+
+char* getCorbQ(Quadra element){
+   Quadra0 *newElement = (Quadra0*) element;
+   return newElement->corB;
 }
 
 double getLargQ(Quadra element){
