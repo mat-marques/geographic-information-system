@@ -56,12 +56,12 @@ double getYQ(Quadra element){
    return newElement->y;
 }
 
-char* getCorpQ(Quadra element){
+char *getCorpQ(Quadra element){
    Quadra0 *newElement = (Quadra0*) element;
    return newElement->corP;
 }
 
-char* getCorbQ(Quadra element){
+char *getCorbQ(Quadra element){
    Quadra0 *newElement = (Quadra0*) element;
    return newElement->corB;
 }

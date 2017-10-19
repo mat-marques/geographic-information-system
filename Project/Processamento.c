@@ -22,7 +22,8 @@
 #include "Processamento.h"
 #include "ExecucaoGeo.h"
 #include "ExecucaoQry.h"
-#include "Exibicao.h"
+
+
 
 void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry, char **arqNome, char **dirPath, char **exitFileSvg, char *acc0, char *acc, char **argv, int argc)
 {
@@ -85,38 +86,34 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry, char **arqNome, c
 
 void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas){
 
-  QuadTree conjunto;
-
-  globalFile = arqSaidaSvg;
+  newArqCanvas = arqSaidaSvg;
 
   tagAbertura(arqSaidaSvg, getWidth(canvas)+50, getHeight(canvas)+50);
 
   /* Retângulos */
-  conjunto = getListaR(canvas);
-  showQuadTree(conjunto, showR);
+    showCanvasElements(canvas, 5);
 
   /* Círculos */
-  conjunto = getListaC(canvas);
-  showQuadTree(conjunto, showC);
+    showCanvasElements(canvas, 6);
 
   /* Retângulos de sobreposição. */
+<<<<<<< Updated upstream
 
+=======
+    showCanvasElements(canvas, 7);
+>>>>>>> Stashed changes
 
   /* Quadra */
-  conjunto = getListaQ(canvas);
-  showQuadTree(conjunto, showQ);
+    showCanvasElements(canvas, 1);
 
   /* Semafaro */
-  conjunto = getListaS(canvas);
-  showQuadTree(conjunto, showS);
+    showCanvasElements(canvas, 4);
 
   /* Torre */
-  conjunto = getListaT(canvas);
-  showQuadTree(conjunto, showT);
+    showCanvasElements(canvas, 3);
 
   /* Hidrante */
-  conjunto = getListaH(canvas);
-  showQuadTree(conjunto, showH);
+    showCanvasElements(canvas, 2);
 
   tagFechamento(arqSaidaSvg);
 }
@@ -146,6 +143,20 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
   retangulos = createDLL();
   circulos = createDLL();
 
+<<<<<<< Updated upstream
+=======
+  /*  Cores dos objetos. */
+  cq = setCores(1);
+  ct = setCores(2);
+  ch = setCores(3);
+  cs = setCores(4);
+
+  if(arqEntradaGeo==NULL){
+    printf("ERRO EM ABERTURA DE ARQUIVO GEO.\n");
+    exit(0);
+  }
+
+>>>>>>> Stashed changes
   while(1){
     fscanf(arqEntradaGeo, "%s ", entradaA);
     if(entradaA[0]=='#'){
@@ -230,6 +241,54 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
     entradaA[0] = '\0';
   }
 
+<<<<<<< Updated upstream
+=======
+  if(bool1 == 0){
+    executarConvexHull(retangulos, canvas, 5);
+    executarConvexHull(circulos, canvas, 6);
+    bool4 = 1;
+  }
+
+  if(bool2 == 0){
+    executarConvexHull(hidrantes, canvas, 2);
+    bool4 = 1;
+  }
+
+  if(bool3 == 0){
+    executarConvexHull(torres, canvas, 4);
+    bool4 = 1;
+  }
+
+  if(bool4 == 0){
+    executarConvexHull(semafaros, canvas, 3);
+    bool4 = 1;
+  }
+
+  executarConvexHull(quadras, canvas, 1);
+
+  eraseListDLLTwo(retangulos);
+  eraseBase(retangulos);
+
+  eraseListDLLTwo(circulos);
+  eraseBase(circulos);
+
+  eraseListDLLTwo(quadras);
+  eraseBase(quadras);
+
+    eraseListDLLTwo(torres);
+  eraseBase(torres);
+
+  eraseListDLLTwo(semafaros);
+  eraseBase(semafaros);
+
+  eraseListDLLTwo(hidrantes);
+  eraseBase(hidrantes);
+
+  removeCor(cq);
+  removeCor(cs);
+  removeCor(ct);
+  removeCor(ch);
+>>>>>>> Stashed changes
   if(arqSaidaT!=NULL){
     fclose(arqSaidaT);
   }

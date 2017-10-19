@@ -20,7 +20,6 @@
 =======
 >>>>>>> Stashed changes
 #include "DoubleLinkedList.h"
-#include "Exibicao.h"
 #include "QuadTree.h"
 #include "Stack.h"
 #include "StringO.h"
@@ -29,6 +28,9 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
 #include "Canvas.h"
 
 void executarConvexHull(List list, Canvas canvas, int type) {
@@ -313,6 +315,52 @@ void executarD(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
 >>>>>>> Stashed changes
 }
 
+void executarD(FILE *arqEntradaGeo,  FILE *arqSaidaT, Canvas canvas) {
+  void *voidPointer1 = NULL;
+  int i, j;
+  char caracter;
+  char stringAux[] = "Nao encontrados";
+  if (arqSaidaT != NULL) {
+    fscanf(arqEntradaGeo, "%d %d\n", &i, &j);
+    caracter = 'd';
+    fillArq(arqSaidaT, caracter);
+    fillSpace(arqSaidaT);
+
+    fillArq3(arqSaidaT, i);
+    fillSpace(arqSaidaT);
+
+    fillArq2(arqSaidaT, j);
+    fillSpace(arqSaidaT);
+
+    fillBreakLine(arqSaidaT);
+
+    caracter = 'r';
+    voidPointer1 = getRetangulo(canvas, i);
+    if (voidPointer1 == NULL) {
+      voidPointer1 = getCirculo(canvas, i);
+      caracter = 'c';
+    }
+    if (voidPointer1 != NULL) {
+      if (caracter == 'c') {
+        comandoIc(arqSaidaT, x, y, getCx(voidPointer1), getCy(voidPointer1),
+                  getCr(voidPointer1));
+      } else {
+        if (caracter == 'r') {
+          comandoIr(arqSaidaT, getRw(voidPointer1), getRh(voidPointer1),
+                    getRx(voidPointer1), getRy(voidPointer1), x, y);
+        }
+      }
+    } else {
+      printf("Poligono não encontrado.\n");
+      fillArq1(arqSaidaT, stringAux);
+      fillBreakLine(arqSaidaT);
+    }
+    voidPointer1 = NULL;
+  }
+}
+
+
+
 void executarI(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
   void *voidPointer1 = NULL;
   int i;
@@ -580,12 +628,16 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome, char *dirPath,
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   newArqCanvas = arqSaidaSvg2;
 =======
   globalFile = arqSaidaSvg2;
 >>>>>>> Stashed changes
 =======
   globalFile = arqSaidaSvg2;
+>>>>>>> Stashed changes
+=======
+  newArqCanvas = arqSaidaSvg2;
 >>>>>>> Stashed changes
   /* Escreve no arquivo de saida os retângulos. */
   showCanvasR(canvas, arqSaidaSvg2);

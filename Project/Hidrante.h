@@ -40,7 +40,7 @@ char *getIdH(Hidrante element);
 
 char *getCorpH(Hidrante element);
 
-char *getCorpH(Hidrante element);
+char *getCorbH(Hidrante element);
 
 double getVazao(Hidrante element);
 

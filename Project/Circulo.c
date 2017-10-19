@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Circulo.h"
-#include "Cor.h"
+
 /**
   Define as propriedades de um círculo.
 */

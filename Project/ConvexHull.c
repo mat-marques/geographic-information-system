@@ -17,6 +17,10 @@
 =======
 typedef void (*eraseElement)(void*);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+
 >>>>>>> Stashed changes
 typedef struct Dots {
   void *info;
@@ -414,7 +418,7 @@ void display(double **mat, int row, int col) {
   int i, j;
   for (i = 0; i < row; i++) {
     for (j = 0; j < col; j++)
-      printf("  %lf", mat[i][j]);
+      printf("  %f", mat[i][j]);
     printf("\n");
   }
 }

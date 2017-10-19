@@ -106,6 +106,7 @@ ItemS removeTopI(Stack stack){
 
 
 ItemS getItemTop(Stack stack){
+<<<<<<< Updated upstream
   Base *base = (Base*) stack;
   return (ItemS) base->top->info;
 }
@@ -138,6 +139,10 @@ Stack concatStacks(Stack stack1, Stack stack2){
 
 
   return newStack;
+=======
+  Base *base = (Base*) stack;
+  return (ItemS) base->top->info;
+>>>>>>> Stashed changes
 }
 
 void eraseBaseStack(Stack stack){

@@ -10,7 +10,6 @@
 #include "quadra.h"
 #include "Cidade.h"
 #include "Arquivo.h"
-#include "Exibicao.h"
 #include "Cor.h"
 <<<<<<< Updated upstream
 #include "Lista.h"

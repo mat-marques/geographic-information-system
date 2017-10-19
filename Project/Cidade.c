@@ -7,6 +7,14 @@
 #include "Semafaro.h"
 #include "Torre.h"
 #include "QuadTree.h"
+<<<<<<< Updated upstream
+=======
+#include "DoubleLinkedList.h"
+#include "Stack.h"
+#include "ConvexHull.h"
+#include "Svg.h"
+
+>>>>>>> Stashed changes
 
 typedef struct City{
    QuadTree listaQ, listaS, listaT, listaH;
@@ -164,6 +172,51 @@ void showT(Torre torre){
   tagCirculo2(newArqCity, 5, x, y, corP, corB);
 }
 
+<<<<<<< Updated upstream
+=======
+void showQ(Quadra quadra){
+  double x, y, w, h;
+  char *corP, *corB;
+  x = getXQ(quadra);
+  y = getYQ(quadra);
+  w = getLargQ(quadra);
+  h = getAltQ(quadra);
+  corP = getCorpQ(quadra);
+  corB = getCorbQ(quadra);
+  tagRetangulo2(newArqCity, w, h, x, y, corP, corB);
+}
+
+void showH(Hidrante hidrante){
+  double x, y;
+  char *corP, *corB;
+  x = getXH(hidrante);
+  y = getYH(hidrante);
+  corP = getCorpH(hidrante);
+  corB = getCorbH(hidrante);
+  tagCirculo2(newArqCity, 5, x, y, corP, corB);
+}
+
+void showS(Semafaro semafaro){
+  double x, y;
+  char *corP, *corB;
+  x = getXS(semafaro);
+  y = getYS(semafaro);
+  corP = getCorpS(semafaro);
+  corB = getCorbS(semafaro);
+  tagCirculo2(newArqCity, 5, x, y, corP, corB);
+}
+
+void showT(Torre torre){
+  double x, y;
+  char *corP, *corB;
+  x = getXT(torre);
+  y = getYT(torre);
+  corP = getCorpT(torre);
+  corB = getCorbT(torre);
+  tagCirculo2(newArqCity, 5, x, y, corP, corB);
+}
+
+>>>>>>> Stashed changes
 
 ElementoUrbano getTorre(Cidade cidade, char *id){
   void* elemento=NULL;

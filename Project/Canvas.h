@@ -17,6 +17,10 @@ Definição:
 Um canvas é um plano bidimensional composto por um comprimento e uma altura e que aloja dentro de si componentes específicos. Os componentes que podem compor um canvas são retângulos, círculos , uma lista de cores e uma cidade.
 */
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 /*
 Cria um canvas vazio e com comprimento e altura iguais a 100.
@@ -39,6 +43,7 @@ void removeRetangulo(Canvas canvas, int id);
 =======
 >>>>>>> Stashed changes
 
+
 /*
 Insere no canvas passado como parâmetro um retângulo com bordas tracejadas e sem cor de preenchimento.
 */
@@ -54,6 +59,7 @@ void removeRetangulo2(Canvas canvas, int id);
 =======
 >>>>>>> Stashed changes
 
+
 /*
 Insere no canvas passado como parâmetro um círculo.
 */
@@ -66,17 +72,68 @@ Remove do canvas passado como parâmetro um círculo em uma posição indicada p
 void removeCirculo(Canvas canvas, int id);
 
 
+/*A funcão escreve as propriedades de um retângulo em um arquivo no formato svg.
+O arquivo é expecificado pelo usúario através da variável newArqCanvas.
+O arquivo svg deve existir e estar aberto.*/
+void showR(Retangulo retangulo);
+
+/*A funcão escreve as propriedades de um retângulo de sobreposição em um arquivo no formato svg. O arquivo é expecificado pelo usúario através da variável newArqCanvas.
+O arquivo svg deve existir e estar aberto.*/
+void showR2(Retangulo retangulo);
+
+
+/*A funcão escreve as propriedades de um retângulo de sobreposição em um arquivo no formato svg. O arquivo é expecificado pelo usúario através da variável newArqCanvas.
+O arquivo svg deve existir e estar aberto.*/
+void showC(Circulo circulo);
+
+
+/*
+A função retorna uma lista de elementos do tipo especificado por type. Essa lista abriga um conjunto de elementos que estão dentro de uma região retangular. A região retangular é especificada por
+w : comprimento,
+h : altura,
+x : coordenada no espaço 2d,
+y : coordenada no espaço 2d.
+O argumento type pode receber os inteiros:
+1 : Retângulo;
+2 : Círculo;
+3 : Quadra;
+4 : Torre;
+5 : Hidrante;
+6 : Semáfaro.
+*/
 List getElementsListInsideR(Canvas canvas, int type, double x, double y, double w, double h);
 
+/*
+A função retorna uma lista de elementos do tipo especificado por type. Essa lista abriga um conjunto de elementos que estão dentro de uma região circular. A região retangular é especificada por
+r : raio,
+x : coordenada no espaço 2d,
+y : coordenada no espaço 2d.
+O argumento type pode receber os inteiros:
+1 : Retângulo;
+2 : Círculo;
+3 : Quadra;
+4 : Torre;
+5 : Hidrante;
+6 : Semáfaro.
+*/
 List getElementsListInsideC(Canvas canvas, int type, double x, double y, double r);
 
+
+/*
+Escreve no arquivo file o todos os retângulos dentro do canvas.
+*/
 void showCanvasR(Canvas canvas, FILE *file);
 
+
+/*
+Escreve no arquivo file o todos os retângulos dentro do canvas.
+*/
 void showCanvasC(Canvas canvas, FILE *file);
 <<<<<<< Updated upstream
 
 =======
 >>>>>>> Stashed changes
+
 
 /*
 Retorna o comprimento do canvas passado como parâmetro.
@@ -134,11 +191,13 @@ QuadTree getListaR(Canvas canvas);
 QuadTree getListaR(Canvas canvas);
 >>>>>>> Stashed changes
 
+
 /*
 Retorna um lista contendo todos os retângulos com bordas tracejadas presentes em um canvas.
 Retorna null caso não exista nenhum retângulo com bordas tracejadas no canvas.
 */
 Lista getListaR2(Canvas canvas);
+
 
 
 /*
@@ -210,11 +269,14 @@ Apaga todos os retângulos com bordas tracejadas presentes em um canvas.
 void eraseListaR2(Canvas canvas);
 
 
+<<<<<<< Updated upstream
 /*
 Inicia o canvas com algumas cores padrões.
 */
 void setarCores(Canvas canvas);
 
+=======
+>>>>>>> Stashed changes
 /*
 Apaga o canvas e todos os seus componentes.
 */

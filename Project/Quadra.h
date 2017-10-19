@@ -33,9 +33,9 @@ Retorna a coordenada y do par ordenado de Quadra element.
 */
 double getYQ(Quadra element);
 
-double getCorpQ(Quadra element);
+char *getCorpQ(Quadra element);
 
-double getCorbQ(Quadra element);
+char *getCorbQ(Quadra element);
 
 /**
 Retorna a largura de Quadra element.

@@ -22,11 +22,14 @@ ItemS removeTopI(Stack stack);
 
 
 ItemS getItemTop(Stack stack);
+<<<<<<< Updated upstream
 
 
 Stack concatStacks(Stack stack1, Stack stack2);
 
 void eraseBaseStack(Stack stack);
+=======
+>>>>>>> Stashed changes
 
 void eraseBaseStack(Stack stack);
 

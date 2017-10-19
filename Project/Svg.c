@@ -1,14 +1,8 @@
-#include "Circulo.h"
-#include "Hidrante.h"
-#include "Quadra.h"
-#include "Retangulo.h"
-#include "Semafaro.h"
-#include "Cor.h"
-#include "Svg.h"
 #include "Torre.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "Svg.h"
 
 FILE *createSvg(char *arqName) {
   FILE *file;

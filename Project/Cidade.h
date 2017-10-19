@@ -1,8 +1,16 @@
 #ifndef CIDADE_H
 #define CIDADE_H
 
+<<<<<<< Updated upstream
 #include "Lista.h"
 #include "Quadra.h"
+=======
+#include "Quadra.h"
+#include "Hidrante.h"
+#include "Semafaro.h"
+#include "Torre.h"
+#include "QuadTree.h"
+>>>>>>> Stashed changes
 typedef void* ElementoUrbano;
 typedef void* Cidade;
 
@@ -34,6 +42,7 @@ Remove uma quadra presente em uma cidade em uma posição indicada por p.
 void removeQuadra(Cidade cidade,  Posic p);
 
 
+
 /*
 Insere um semafaro em uma cidade.
 */
@@ -44,6 +53,7 @@ void insertSemafaro(Cidade cidade, ElementoUrbano item);
 Remove um semafaro presente em uma cidade em uma posição indicada por p.
 */
 void removeSemafaro(Cidade cidade, Posic p);
+
 
 
 /*
@@ -58,6 +68,7 @@ Remove uma torre celular presente em uma cidade em uma posição indicada por p.
 void removeTorre(Cidade cidade, Posic p);
 
 
+
 /*
 Insere um hidrante em uma cidade.
 */
@@ -68,6 +79,7 @@ void insertHidrante(Cidade cidade, ElementoUrbano item);
 Remove um hidrante de uma cidade em uma posição indicada por p.
 */
 void removeHidrante(Cidade cidade, Posic p);
+
 
 
 /*
@@ -89,11 +101,13 @@ Retorna null caso não exista quadras na cidade.
 Lista getListaQ(Cidade cidade);
 
 
+
 /*
 Retorna um lista contendo todos os semafaros de uma cidade.
 Retorna null caso não exista semafaros na cidade.
 */
 Lista getListaS(Cidade cidade);
+
 
 
 /*
@@ -103,11 +117,42 @@ Retorna null caso não exista torres celulares na cidade.
 Lista getListaT(Cidade cidade);
 
 
+
 /*
 Retorna um lista contendo todos os hidrantes de uma cidade.
 Retorna null caso não exista hidrantes na cidade.
 */
 Lista getListaH(Cidade cidade);
+
+
+/*
+ Escreve as propriedades de uma quadra em um arquivo no formato svg.
+O arquivo é expecificado pelo usúario através da variável newArqCity.
+O arquivo svg deve existir e estar aberto.
+*/
+void showQ(Quadra quadra);
+
+
+/*
+ Escreve as propriedades de um hidrante em um arquivo no formato svg.
+O arquivo é expecificado pelo usúario através da variável newArqCity.
+O arquivo svg deve existir e estar aberto.
+*/
+void showH(Hidrante hidrante);
+
+
+/*
+ Escreve as propriedades de um semafaro em um arquivo no formato svg.
+O arquivo é expecificado pelo usúario através da variável newArqCity.
+O arquivo svg deve existir e estar aberto.
+*/
+void showS(Semafaro semafaro);
+
+
+/*A funcão escreve as propriedades de uma torre em um arquivo no formato svg.
+O arquivo é expecificado pelo usúario através da variável newArqCanvas.
+O arquivo svg deve existir e estar aberto.*/
+void showT(Torre torre);
 
 
 /*
