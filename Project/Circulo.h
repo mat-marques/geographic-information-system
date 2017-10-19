@@ -2,6 +2,7 @@
 #define CIRCULO_H
 
 typedef void* Circulo;
+#include "Cor.h"
 /**
 TAD: CÍRCULO.
 Definição:
@@ -37,7 +38,7 @@ double getCy(Circulo element);
 /**
 RETORNA A COR DE PREENCHIMENTO DE UM CÍRCULO.
 */
-char *getCcor(Circulo element);
+char* getCcor(Circulo element);
 
 void removeCirculo(Circulo element);
 

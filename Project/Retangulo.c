@@ -10,16 +10,16 @@ typedef struct Rectangle{
 }Rectangle;
 
 Retangulo createRectangle(int i, double w, double h, double x, double y, char cor[30]){
-    Rectangle *new;
-    new = (Rectangle*) malloc(sizeof(Rectangle));
-    new->i = i;
-    new->w = w;
-    new->h = h;
-    new->x = x;
-    new->y = y;
+    Rectangle *newR;
+    newR = (Rectangle*) malloc(sizeof(Rectangle));
+    newR->i = i;
+    newR->w = w;
+    newR->h = h;
+    newR->x = x;
+    newR->y = y;
 
-    strcpy(new->cor,cor);
-    return new;
+    strcpy(newR->cor,cor);
+    return newR;
   }
 
 
@@ -53,7 +53,7 @@ char *getRcor(Retangulo element){
   return element2->cor;
 }
 
-void removeRetangulo(Retangulo element){
+void removeR(Retangulo element){
   Rectangle *element2 = (Rectangle *) element;
   if(element2 != NULL){
     free(element2);

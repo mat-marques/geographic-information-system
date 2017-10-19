@@ -33,7 +33,7 @@ void insertRetangulo(Canvas canvas, Retangulo retangulo);
 /*
 Remove do canvas passado como parâmetro um retângulo com uma posição específica.
 */
-void removeRetangulo(Canvas canvas, Posic p);
+void removeRetangulo(Canvas canvas, int id);
 
 
 /*
@@ -45,7 +45,7 @@ void insertRetangulo2(Canvas canvas, Retangulo retangulo);
 /*
 Remove do canvas passado como parâmetro um retângulo com bordas tracejadas em uma posição indicada por p.
 */
-void removeRetangulo2(Canvas canvas, Posic p);
+void removeRetangulo2(Canvas canvas, int id);
 
 
 /*
@@ -57,17 +57,25 @@ void insertCirculo(Canvas canvas, Circulo circulo);
 /*
 Remove do canvas passado como parâmetro um círculo em uma posição indicada por p.
 */
-void removeCirculo(Canvas canvas, Posic p);
+void removeCirculo(Canvas canvas, int id);
 
 /*
 Insere no canvas passado como parâmetro uma cor.
 */
 void insertCor(Canvas canvas, Cor cor);
 
+List getElementsListInsideR(Canvas canvas, int type, double x, double y, double w, double h);
+
+List getElementsListInsideC(Canvas canvas, int type, double x, double y, double r);
+
 /*
 Remove do canvas passado como parâmetro uma cor em uma posição indicada por p.
 */
-void removeCor(Canvas canvas, Posic p);
+void removeCor(Canvas canvas, int id);
+
+void showCanvasR(Canvas canvas, FILE *file);
+
+void showCanvasC(Canvas canvas, FILE *file);
 
 
 /*
@@ -115,8 +123,12 @@ int getIdCanvas(Canvas canvas);
 Retorna um lista contendo todos os retângulos genéricos presentes em um canvas.
 Retorna null caso não exista nenhum retângulo genérico no canvas.
 */
+<<<<<<< Updated upstream
 Lista getListaR(Canvas canvas);
 
+=======
+QuadTree getListaR(Canvas canvas);
+>>>>>>> Stashed changes
 
 /*
 Retorna um lista contendo todos os retângulos com bordas tracejadas presentes em um canvas.
@@ -129,7 +141,11 @@ Lista getListaR2(Canvas canvas);
 Retorna um lista contendo todos os círculos presentes em um canvas.
 Retorna null caso não exista nenhum círculo no canvas.
 */
+<<<<<<< Updated upstream
 Lista getListaC(Canvas canvas);
+=======
+QuadTree getListaC(Canvas canvas);
+>>>>>>> Stashed changes
 
 /*
 Retorna um lista contendo todos as cores presentes em um canvas.

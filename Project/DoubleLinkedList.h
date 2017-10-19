@@ -4,6 +4,7 @@
 typedef void* List;
 typedef void* Item;
 typedef void(*eraseItemDLL)(Item);
+typedef void(*showDLLI)(Item);
 typedef int(*compareToDLL)(Item, Item);
 
 List createDLL();
@@ -17,6 +18,7 @@ int insertBeginDLL(List list, Item item);
 
 int insertEndDLL(List list, Item item);
 
+void showDLL(List list, showDLLI func);
 
 int insertMiddleDLL(List list, int p, Item item);
 

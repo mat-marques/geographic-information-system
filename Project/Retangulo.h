@@ -48,7 +48,7 @@ Retorna uma string que representa a cor de preenchimento de Retangulo element.
 */
 char *getRcor(Retangulo element);
 
-void removeRetangulo(Retangulo element);
+void removeR(Retangulo element);
 
 int compareR(Retangulo element, void* item);
 

@@ -84,6 +84,13 @@ Executa o comando Cs. Faz a leitura dos parâmetros do comando Cs no arquivo arq
 */
 void executarCs(FILE *arqEntradaGeo, Canvas canvas);
 
+
+void executarHI(FILE *arqEntradaGeo, Canvas canvas);
+
+void executarTI(FILE *arqEntradaGeo, Canvas canvas);
+
+void executarSI(FILE *arqEntradaGeo, Canvas canvas);
+
 /**
 Verifica e retorna um caracter 't' ou 'f' se dois retângulos estão sobrepostos.
 Utiliza procedimentos do módulo OperacoesF e procedimentos do Tad Arquivo.

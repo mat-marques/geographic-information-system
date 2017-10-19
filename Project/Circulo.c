@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Circulo.h"
+#include "Cor.h"
 /**
   Define as propriedades de um círculo.
 */
@@ -15,6 +16,7 @@ typedef struct Circle{
 */
 Circulo createCircle(int i, double r, double x, double y, char cor[30]){
 
+<<<<<<< Updated upstream
     Circle *new = (Circle*) malloc(sizeof(Circle));
     new->i = i;
     new->r = r;
@@ -23,6 +25,16 @@ Circulo createCircle(int i, double r, double x, double y, char cor[30]){
 
     strcpy(new->cor,cor);
     return new;
+=======
+    Circle *newC = (Circle*) malloc(sizeof(Circle));
+    newC->i = i;
+    newC->r = r;
+    newC->x = x;
+    newC->y = y;
+    newC->cor[0] = '\0';
+    strcpy(newC->cor, cor);
+    return newC;
+>>>>>>> Stashed changes
 }
 /**
  Retorna o número de identificação do círculo.
@@ -59,7 +71,7 @@ double getCy(Circulo element){
 /**
   Retorna a cor do círculo.
 */
-char *getCcor(Circulo element){
+char* getCcor(Circulo element){
   Circle *element2 = (Circle *) element;
   return element2->cor;
 }

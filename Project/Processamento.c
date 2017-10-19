@@ -3,21 +3,22 @@
 
 #include "Circulo.h"
 #include "Retangulo.h"
-#include "torre.h"
-#include "semafaro.h"
-#include "hidrante.h"
-#include "quadra.h"
+#include "Torre.h"
+#include "Semafaro.h"
+#include "Hidrante.h"
+#include "Quadra.h"
 #include "Cidade.h"
 #include "Arquivo.h"
 #include "Cor.h"
 #include "Svg.h"
 #include "StringO.h"
 
-#include "Lista.h"
+#include "DoubleLinkedList.h"
 #include "Cor.h"
 #include "Processamento.h"
 #include "ExecucaoGeo.h"
 #include "ExecucaoQry.h"
+#include "Exibicao.h"
 
 void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry, char **arqNome, char **dirPath, char **exitFileSvg, char *acc0, char *acc, char **argv, int argc)
 {
@@ -79,114 +80,40 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry, char **arqNome, c
 }
 
 void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas){
-  void *elemento1, *elemento2;
-  int n, i;
-  double w, h, x, y;
-  char *corA, *corB;
-  Cor corAux;
-  Lista lista;
-  Cidade cidade;
+
+  QuadTree conjunto;
+
+  globalFile = arqSaidaSvg;
+
   tagAbertura(arqSaidaSvg, getWidth(canvas)+50, getHeight(canvas)+50);
 
-  lista = getListaR(canvas);
-  n = lenght(lista);
-  elemento1 = getFirst(lista);
-  for(i=0; i<n; i++){
-    elemento2 = get(lista, elemento1);
-    w = getRw(elemento2);
-    h = getRh(elemento2);
-    x = getRx(elemento2);
-    y = getRy(elemento2);
-    corA = getRcor(elemento2);
-    tagRetangulo(arqSaidaSvg, w, h, x, y, corA);
-    elemento1 = getNext(lista, elemento1);
-  }
+  /* Retângulos */
+  conjunto = getListaR(canvas);
+  showQuadTree(conjunto, showR);
 
-  lista = getListaC(canvas);
-  n = lenght(lista);
-  elemento1 = getFirst(lista);
-  for(i=0; i<n; i++){
-    elemento2 = get(lista, elemento1);
-    h = getCr(elemento2);
-    x = getCx(elemento2);
-    y = getCy(elemento2);
-    corA = getCcor(elemento2);
-    tagCirculo(arqSaidaSvg, h, x, y, corA);
-    elemento1 = getNext(lista, elemento1);
-  }
+  /* Círculos */
+  conjunto = getListaC(canvas);
+  showQuadTree(conjunto, showC);
 
-  lista = getListaR2(canvas);
-  n = lenght(lista);
-  elemento1 = getFirst(lista);
-  for(i=0; i<n; i++){
-    elemento2 = get(lista, elemento1);
-    w = getRw(elemento2);
-    h = getRh(elemento2);
-    x = getRx(elemento2);
-    y = getRy(elemento2);
-    tagRetanguloSobreposicao(arqSaidaSvg, x, y, w, h);
-    tagTexto(arqSaidaSvg, x+4, y+10);
-    elemento1 = getNext(lista, elemento1);
-  }
+  /* Retângulos de sobreposição. */
 
-  cidade = getCidade(canvas);
-  lista = getListaQ(cidade);
-  n = lenght(lista);
-  elemento1 = getFirst(lista);
-  corAux = getCor(canvas, 1);
-  corA = getCorP(corAux);
-  corB = getCorC(corAux);
-  for(i=0; i<n; i++){
-    elemento2 = get(lista, elemento1);
-    w = getLargQ(elemento2);
-    h = getAltQ(elemento2);
-    x = getXQ(elemento2);
-    y = getYQ(elemento2);
-    tagRetangulo2(arqSaidaSvg, w, h, x, y, corA, corB);
-    elemento1 = getNext(lista, elemento1);
-  }
 
-  lista = getListaS(cidade);
-  n = lenght(lista);
-  elemento1 = getFirst(lista);
-  corAux = getCor(canvas, 2);
-  corA = getCorP(corAux);
-  corB = getCorC(corAux);
-  for(i=0; i<n; i++){
-    elemento2 = get(lista, elemento1);
-    x = getXQ(elemento2);
-    y = getYQ(elemento2);
-    tagCirculo2(arqSaidaSvg, 2, x, y, corA, corB);
-    elemento1 = getNext(lista, elemento1);
-  }
+  /* Quadra */
+  conjunto = getListaQ(canvas);
+  showQuadTree(conjunto, showQ);
 
-  lista = getListaT(cidade);
-  n = lenght(lista);
-  elemento1 = getFirst(lista);
-  corAux = getCor(canvas, 3);
-  corA = getCorP(corAux);
-  corB = getCorC(corAux);
-  for(i=0; i<n; i++){
-    elemento2 = get(lista, elemento1);
-    x = getXQ(elemento2);
-    y = getYQ(elemento2);
-    tagCirculo2(arqSaidaSvg, 2, x, y, corA, corB);
-    elemento1 = getNext(lista, elemento1);
-  }
+  /* Semafaro */
+  conjunto = getListaS(canvas);
+  showQuadTree(conjunto, showS);
 
-  lista = getListaH(cidade);
-  n = lenght(lista);
-  elemento1 = getFirst(lista);
-  corAux = getCor(canvas, 4);
-  corA = getCorP(corAux);
-  corB = getCorC(corAux);
-  for(i=0; i<n; i++){
-    elemento2 = get(lista, elemento1);
-    x = getXQ(elemento2);
-    y = getYQ(elemento2);
-    tagCirculo2(arqSaidaSvg, 2, x, y, corA, corB);
-    elemento1 = getNext(lista, elemento1);
-  }
+  /* Torre */
+  conjunto = getListaT(canvas);
+  showQuadTree(conjunto, showT);
+
+  /* Hidrante */
+  conjunto = getListaH(canvas);
+  showQuadTree(conjunto, showH);
+
   tagFechamento(arqSaidaSvg);
 }
 
@@ -201,6 +128,7 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
     printf("ERRO EM ABERTURA DE ARQUIVO GEO.\n");
     exit(0);
   }
+
   while(1){
     fscanf(arqEntradaGeo, "%s ", entradaA);
     if(entradaA[0]=='#'){
@@ -225,6 +153,15 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
     }else
     if(strcmp(entradaA, "cs")==0){
       executarCs(arqEntradaGeo, canvas);
+    }else
+    if(strcmp(entradaA, "hI")==0){
+      executarHI(arqEntradaGeo, canvas);
+    }else
+    if(strcmp(entradaA, "tI")==0){
+      executarTI(arqEntradaGeo, canvas);
+    }else
+    if(strcmp(entradaA, "sI")==0){
+      executarSI(arqEntradaGeo, canvas);
     }else
     if(entradaA[0] == 'c'){
       executarC(arqEntradaGeo, canvas);

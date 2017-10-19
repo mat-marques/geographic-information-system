@@ -129,6 +129,22 @@ int insertMiddleDLL(List list, int p, Item item) {
   return 0;
 }
 
+void showDLL(List list, showDLLI func){
+  Base *base = (Base *)list;
+  Element *aux = NULL;
+  int i=0, j=0;
+  if (base != NULL) {
+    if (base->first != NULL) {
+      j = base->size;
+      aux = base->first;
+      for (i = 1; i <= j; i++) {
+        func(aux->info);
+        aux = aux->next;
+      }
+    }
+  }
+}
+
 Item searchItemDLL(List list, Item item, compareToDLL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
@@ -136,6 +152,7 @@ Item searchItemDLL(List list, Item item, compareToDLL func) {
   int i=0, j=0;
   if (base != NULL) {
     if (base->first != NULL) {
+      j = base->size;
       aux = base->first;
       for (i = 1; i <= j; i++) {
         if (func(item ,aux->info) == 1){
