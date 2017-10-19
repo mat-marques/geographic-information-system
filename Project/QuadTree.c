@@ -78,6 +78,7 @@ void insertQuadTree(QuadTree tree, ItemQt item, double x, double y) {
     newElement->info = item;
     newElement->x = x;
     newElement->y = y;
+    base->size = base->size + 1;
     for (i = 0; i < 4; i++) {
       newElement->direction[i] = NULL;
     }
@@ -90,6 +91,15 @@ void insertQuadTree(QuadTree tree, ItemQt item, double x, double y) {
   }
 }
 
+<<<<<<< Updated upstream
+=======
+int lenghtQuadTree(QuadTree tree){
+  Base *base = (Base *)tree;
+  return base->size;
+}
+
+/* Função interna. */
+>>>>>>> Stashed changes
 void show(node *tree, showItem function) {
   node *aux = tree;
   if (aux != NULL) {
@@ -120,6 +130,7 @@ void reInsertSubTree(node *tree, node *subTree) {
 
 ItemQt removeItem(Base *tree, double x, double y) {
   ItemQt info = NULL;
+<<<<<<< Updated upstream
   node *aux = tree->root;
   node *vectorAux[4];
   node *aux2;
@@ -131,6 +142,25 @@ ItemQt removeItem(Base *tree, double x, double y) {
         vectorAux[i] = aux->direction[i];
         if (aux->direction[i] != NULL) {
           j++;
+=======
+  base->size = base->size - 1;
+  if (function(base->root, item) == 1) { /* Raiz da árvore. */
+    base->root = NULL;
+    info = r->info;
+    for (i = 0; i < 4; i++) {
+      reInsertSubTree(base->root, r->direction[i]);
+    }
+    free(r);
+    base->size = base->size - 1;
+  } else { /* Nó qualquer da árvore. */
+    removeItem(base->root, item, &r, function);
+    if (r != NULL) {
+      f = r->father;
+      for (i = 0; i < 4; i++) { /* Direção do father. */
+        if (f->direction[i] == r) {
+          f->direction[i] = NULL;
+          break;
+>>>>>>> Stashed changes
         }
       }
       info = aux->info;

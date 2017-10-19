@@ -14,6 +14,7 @@
 #include "StringO.h"
 
 #include "DoubleLinkedList.h"
+#include "QuadTree.h"
 #include "Cor.h"
 #include "Processamento.h"
 #include "ExecucaoGeo.h"
@@ -123,11 +124,20 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
   char *string1 = NULL, entradaA[6];
   char extensao1[] = ".txt";
   char extensao2[] = ".svg";
+  int i, n;
   FILE *arqSaidaT = NULL;
+  List quadras, semafaros, torres, hidrantes, retangulos, circulos;
   if(arqEntradaGeo==NULL){
     printf("ERRO EM ABERTURA DE ARQUIVO GEO.\n");
     exit(0);
   }
+  /*  Lista de auxiliares. */
+  quadras = createDLL();
+  semafaros = createDLL();
+  torres = createDLL();
+  hidrantes = createDLL();
+  retangulos = createDLL();
+  circulos = createDLL();
 
   while(1){
     fscanf(arqEntradaGeo, "%s ", entradaA);
@@ -164,22 +174,23 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
       executarSI(arqEntradaGeo, canvas);
     }else
     if(entradaA[0] == 'c'){
-      executarC(arqEntradaGeo, canvas);
+      executarAuxC(arqEntradaGeo, circulos);
     } else
     if(entradaA[0] == 'r'){
-      executarR(arqEntradaGeo, canvas);
+      executarAuxR(arqEntradaGeo, retangulos);
     } else
     if(entradaA[0] == 'q'){
-      executarQ(arqEntradaGeo, canvas, qtdQuadrasInseridas);
+      qtdQuadrasInseridas++;
+      executarAuxQ(arqEntradaGeo, quadras);
     } else
     if(entradaA[0] == 'h'){
-      executarH(arqEntradaGeo, canvas);
+      executarAuxH(arqEntradaGeo, hidrantes);
     } else
     if(entradaA[0] == 't'){
-      executarT(arqEntradaGeo, canvas);
+      executarAuxT(arqEntradaGeo, torres);
     } else
     if(entradaA[0] == 's'){
-      executarS(arqEntradaGeo, canvas);
+      executarAuxS(arqEntradaGeo, semafaros);
     } else
     if(entradaA[0] == 'd'){
       executarD(arqEntradaGeo, arqSaidaT,canvas);
@@ -196,6 +207,7 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
     }
     entradaA[0] = '\0';
   }
+
   if(arqSaidaT!=NULL){
     fclose(arqSaidaT);
   }

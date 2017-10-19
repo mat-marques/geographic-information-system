@@ -14,15 +14,18 @@ O módulo ExecucaoGeo tem por objetivo abrigar todos os procedimentos necessári
 
 */
 
+void executarConvexHull(List list, Canvas canvas, int type);
+
+
 /*
 Executa o comando C. Faz a leitura dos parâmetros do comando C no arquivo arqEntradaGeo e cria um círculo e o armazena no canvas.
 */
-void executarC(FILE *arqEntradaGeo, Canvas canvas);
+void executarAuxC(FILE *arqEntradaGeo, List list);
 
 /*
 Executa o comando R. Faz a leitura dos parâmetros do comando R no arquivo arqEntradaGeo e cria um retângulo e o armazena no canvas.
 */
-void executarR(FILE *arqEntradaGeo, Canvas canvas);
+void executarAuxR(FILE *arqEntradaGeo, List list);
 
 /*
 Executa o comando D. Faz a leitura dos parâmetros do comando D no arquivo arqEntradaGeo. Procura os ids i e j das figuras geométricas no canvas e escreve o resultado do comando D em arqSaidaT.
@@ -47,22 +50,25 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome,char *dirPath, 
 /*
 Executa o comando Q. Faz a leitura dos parâmetros do comando Q no arquivo arqEntradaGeo e armazena esses dados no canvas. O inteiro qtdQuadrasInseridas é incrementado a cada quadra inserida.
 */
-void executarQ(FILE *arqEntradaGeo,  Canvas canvas, int *qtdQuadrasInseridas);
+void executarAuxQ(FILE *arqEntradaGeo, List list);
+
 
 /*
 Executa o comando H. Faz a leitura dos parâmetros do comando H no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarH(FILE *arqEntradaGeo, Canvas canvas);
+void executarAuxH(FILE *arqEntradaGeo, List list);
+
 
 /*
 Executa o comando S. Faz a leitura dos parâmetros do comando S no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarS(FILE *arqEntradaGeo, Canvas canvas);
+void executarAuxS(FILE *arqEntradaGeo, List list);
+
 
 /*
 Executa o comando T. Faz a leitura dos parâmetros do comando T no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarT(FILE *arqEntradaGeo, Canvas canvas);
+void executarAuxT(FILE *arqEntradaGeo, List list);
 
 /*
 Executa o comando Cq. Faz a leitura dos parâmetros do comando Cq no arquivo arqEntradaGeo e armazena esses dados no canvas.

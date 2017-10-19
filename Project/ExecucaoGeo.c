@@ -12,11 +12,17 @@
 #include "Torre.h"
 
 #include "ConvexHull.h"
+<<<<<<< Updated upstream
+=======
+#include "Cor.h"
+>>>>>>> Stashed changes
 #include "DoubleLinkedList.h"
+#include "Exibicao.h"
 #include "QuadTree.h"
 #include "Stack.h"
 #include "StringO.h"
 #include "Svg.h"
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 #include "Canvas.h"
@@ -95,12 +101,78 @@ void executarC(FILE *arqEntradaGeo, Canvas canvas) {
 void executarC(FILE *arqEntradaGeo, Canvas canvas) {
   double x = 0, y = 0, r = 0, width, height;
 >>>>>>> Stashed changes
+=======
+
+void executarConvexHull(List list, Canvas canvas, int type) {
+  int i, n;
+  void *element = NULL;
+  Stack stack;
+
+  switch (type) {
+  case 1: /* Quadra. */
+    stack = convexHullOfAll(list, 1);
+    n = lengthStack(stack);
+    for (i = 0; i < n; i++) {
+      element = removeTopI(stack);
+      insertQuadra(canvas, element);
+    }
+    break;
+  case 2: /* Hidrante. */
+    stack = convexHullOfAll(list, 1);
+    n = lengthStack(stack);
+    for (i = 0; i < n; i++) {
+      element = removeTopI(stack);
+      insertHidrante(canvas, element);
+    }
+    break;
+  case 3: /* semafaro. */
+    stack = convexHullOfAll(list, 1);
+    n = lengthStack(stack);
+    for (i = 0; i < n; i++) {
+      element = removeTopI(stack);
+      insertSemafaro(canvas, element);
+    }
+    break;
+  case 4: /* Torre. */
+    stack = convexHullOfAll(list, 1);
+    n = lengthStack(stack);
+    for (i = 0; i < n; i++) {
+      element = removeTopI(stack);
+      insertTorre(canvas, element);
+    }
+    break;
+  case 5: /* Retângulo. */
+    stack = convexHullOfAll(list, 1);
+    n = lengthStack(stack);
+    for (i = 0; i < n; i++) {
+      element = removeTopI(stack);
+      insertRetangulo(canvas, element);
+    }
+    break;
+  case 6: /* Círculo. */
+    stack = convexHullOfAll(list, 6);
+    n = lengthStack(stack);
+    for (i = 0; i < n; i++) {
+      element = removeTopI(stack);
+      insertCirculo(canvas, element);
+    }
+    break;
+  }
+
+  eraseStackTwo(stack);
+  eraseBaseStack(stack);
+}
+
+void executarAuxC(FILE *arqEntradaGeo, List list) {
+  double x = 0, y = 0, r = 0;
+>>>>>>> Stashed changes
   char cor[60];
   int i;
 
   Circulo circulo = NULL;
   fscanf(arqEntradaGeo, "%d %lf %lf %lf %s\n", &i, &r, &x, &y, cor);
   circulo = createCircle(i, r, x, y, cor);
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   insertEndDLL(list, circulo);
 }
@@ -125,11 +197,19 @@ void executarR(FILE *arqEntradaGeo, Canvas canvas) {
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
+=======
+  insertEndDLL(list, circulo);
+}
+
+void executarAuxR(FILE *arqEntradaGeo, List list) {
+  double w = 0, h = 0, x = 0, y = 0;
+>>>>>>> Stashed changes
   char cor[60];
   int i = 0;
   Retangulo retangulo = NULL;
   fscanf(arqEntradaGeo, "%d %lf %lf %lf %lf %s\n", &i, &w, &h, &x, &y, cor);
   retangulo = createRectangle(i, w, h, x, y, cor);
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
   insertEndDLL(list, retangulo);
@@ -206,6 +286,9 @@ void executarD(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
+=======
+  insertEndDLL(list, retangulo);
+>>>>>>> Stashed changes
 }
 
 void executarI(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
@@ -241,6 +324,7 @@ void executarI(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
       if (caracter == 'c') {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         comandoIc(arqSaidaT, x, y, getCx(voidPointer1), getCy(voidPointer1),
                   getCr(voidPointer1));
       } else {
@@ -257,6 +341,14 @@ void executarI(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
 <<<<<<< Updated upstream
 >>>>>>> Stashed changes
 =======
+>>>>>>> Stashed changes
+=======
+        comandoIc(arqSaidaT, x, y, getCx(voidPointer1), getCy(voidPointer1),
+                  getCr(voidPointer1));
+      } else {
+        if (caracter == 'r') {
+          comandoIr(arqSaidaT, getRw(voidPointer1), getRh(voidPointer1),
+                    getRx(voidPointer1), getRy(voidPointer1), x, y);
 >>>>>>> Stashed changes
         }
       }
@@ -375,6 +467,7 @@ void executarO(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome, char *dirPath,
                char *extensao2) {
 =======
@@ -382,6 +475,10 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome, char *dirPath,
 >>>>>>> Stashed changes
 =======
 void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome, char *dirPath, char *extensao2) {
+>>>>>>> Stashed changes
+=======
+void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome, char *dirPath,
+               char *extensao2) {
 >>>>>>> Stashed changes
   char *string1 = NULL, *string2 = NULL, *string3 = NULL;
   char cor[60];
@@ -399,6 +496,7 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome, char *dirPath,
     string2 = concatenarStrings(arqNome, stringAux);
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   } else if (string1[0] != '-' && arqNome[n - 1] == '-') {
     string2 = concatenarStrings(NULL, arqNome);
   } else {
@@ -413,6 +511,12 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome, char *dirPath,
 <<<<<<< Updated upstream
 >>>>>>> Stashed changes
 =======
+>>>>>>> Stashed changes
+=======
+  } else if (string1[0] != '-' && arqNome[n - 1] == '-') {
+    string2 = concatenarStrings(NULL, arqNome);
+  } else {
+    string2 = concatenarStrings(NULL, (arqNome + 1));
 >>>>>>> Stashed changes
   }
   string3 = concatenarStrings(string2, string1);
@@ -447,6 +551,7 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome, char *dirPath,
   showCanvasC(canvas, arqSaidaSvg2);
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
   tagFechamento(arqSaidaSvg2);
 }
@@ -464,6 +569,13 @@ void executarQ(FILE *arqEntradaGeo, Canvas canvas, int *qtdQuadrasInseridas) {
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
+=======
+
+  tagFechamento(arqSaidaSvg2);
+}
+
+void executarAuxQ(FILE *arqEntradaGeo, List list) {
+>>>>>>> Stashed changes
   double w = 0, h = 0, x = 0, y = 0;
   int i;
   char *string;
@@ -473,6 +585,7 @@ void executarQ(FILE *arqEntradaGeo, Canvas canvas, int *qtdQuadrasInseridas) {
   i = qtdCaracteres(arqEntradaGeo);
   string = alocarString(i);
   fscanf(arqEntradaGeo, "%s\n", string);
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
   quadra = criaQuadra(x, y, w, h, string, getCorP(cor), getCorC(cor));
@@ -491,10 +604,18 @@ void executarQ(FILE *arqEntradaGeo, Canvas canvas, int *qtdQuadrasInseridas) {
     setHeight(canvas, y + h);
   }
 >>>>>>> Stashed changes
+=======
+
+  quadra = criaQuadra(x, y, w, h, string);
+
+  insertEndDLL(list, quadra);
+
+>>>>>>> Stashed changes
   desalocar(string);
   string = NULL;
 }
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 void executarAuxH(FILE *arqEntradaGeo, List list, Cor cor) {
@@ -503,6 +624,9 @@ void executarH(FILE *arqEntradaGeo, Canvas canvas) {
 >>>>>>> Stashed changes
 =======
 void executarH(FILE *arqEntradaGeo, Canvas canvas) {
+>>>>>>> Stashed changes
+=======
+void executarAuxH(FILE *arqEntradaGeo, List list) {
 >>>>>>> Stashed changes
   double x = 0, y = 0;
   Hidrante hidrante;
@@ -513,6 +637,7 @@ void executarH(FILE *arqEntradaGeo, Canvas canvas) {
   i = qtdCaracteres(arqEntradaGeo);
   string = alocarString(i);
   fscanf(arqEntradaGeo, "%s\n", string);
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
   hidrante = criaHidrante(x, y, string, getCorP(cor), getCorC(cor));
@@ -530,10 +655,18 @@ void executarH(FILE *arqEntradaGeo, Canvas canvas) {
     setHeight(canvas, y + 5);
   }
 >>>>>>> Stashed changes
+=======
+
+  hidrante = criaHidrante(x, y, string);
+
+  insertEndDLL(list, hidrante);
+
+>>>>>>> Stashed changes
   desalocar(string);
   string = NULL;
 }
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 void executarAuxS(FILE *arqEntradaGeo, List list, Cor cor) {
@@ -542,6 +675,9 @@ void executarS(FILE *arqEntradaGeo, Canvas canvas) {
 >>>>>>> Stashed changes
 =======
 void executarS(FILE *arqEntradaGeo, Canvas canvas) {
+>>>>>>> Stashed changes
+=======
+void executarAuxS(FILE *arqEntradaGeo, List list) {
 >>>>>>> Stashed changes
   double x = 0, y = 0;
   int i;
@@ -552,6 +688,7 @@ void executarS(FILE *arqEntradaGeo, Canvas canvas) {
   i = qtdCaracteres(arqEntradaGeo);
   string = alocarString(i);
   fscanf(arqEntradaGeo, "%s\n", string);
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
   semafaro = criaSemafaro(x, y, string, getCorP(cor), getCorC(cor));
@@ -569,10 +706,18 @@ void executarS(FILE *arqEntradaGeo, Canvas canvas) {
     setHeight(canvas, y + 5);
   }
 >>>>>>> Stashed changes
+=======
+
+  semafaro = criaSemafaro(x, y, string);
+
+  insertEndDLL(list, semafaro);
+
+>>>>>>> Stashed changes
   desalocar(string);
   string = NULL;
 }
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 void executarAuxT(FILE *arqEntradaGeo, List list, Cor cor) {
@@ -581,6 +726,9 @@ void executarT(FILE *arqEntradaGeo, Canvas canvas) {
 >>>>>>> Stashed changes
 =======
 void executarT(FILE *arqEntradaGeo, Canvas canvas) {
+>>>>>>> Stashed changes
+=======
+void executarAuxT(FILE *arqEntradaGeo, List list) {
 >>>>>>> Stashed changes
   double x = 0, y = 0;
   int i;
@@ -591,6 +739,7 @@ void executarT(FILE *arqEntradaGeo, Canvas canvas) {
   i = qtdCaracteres(arqEntradaGeo);
   string = alocarString(i);
   fscanf(arqEntradaGeo, "%s\n", string);
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
   torre = criaTorre(x, y, string, getCorP(cor), getCorC(cor));
@@ -607,6 +756,13 @@ void executarT(FILE *arqEntradaGeo, Canvas canvas) {
   if (y + 5 >= (getHeight(canvas))) {
     setHeight(canvas, y + 5);
   }
+>>>>>>> Stashed changes
+=======
+
+  torre = criaTorre(x, y, string);
+
+  insertEndDLL(list, torre);
+
 >>>>>>> Stashed changes
   desalocar(string);
   string = NULL;
@@ -693,6 +849,7 @@ void executarHI(FILE *arqEntradaGeo, Canvas canvas) {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   if (hidrante != NULL) {
     setVazao(hidrante, vazao);
   }
@@ -703,6 +860,11 @@ void executarHI(FILE *arqEntradaGeo, Canvas canvas) {
     setVazao(hidrante, vazao);
   }
 
+>>>>>>> Stashed changes
+=======
+  if (hidrante != NULL) {
+    setVazao(hidrante, vazao);
+  }
 >>>>>>> Stashed changes
 }
 
@@ -723,6 +885,7 @@ void executarTI(FILE *arqEntradaGeo, Canvas canvas) {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   if (torre != NULL) {
     setRaio(torre, raio);
   }
@@ -733,6 +896,11 @@ void executarTI(FILE *arqEntradaGeo, Canvas canvas) {
     setRaio(torre, raio);
   }
 
+>>>>>>> Stashed changes
+=======
+  if (torre != NULL) {
+    setRaio(torre, raio);
+  }
 >>>>>>> Stashed changes
 }
 
@@ -751,6 +919,7 @@ void executarSI(FILE *arqEntradaGeo, Canvas canvas) {
 
   semafaro = searchQuadTreeItem(quadT, id, compareT);
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
   if (semafaro != NULL) {
@@ -816,12 +985,15 @@ char comandoOcc(FILE *arqSaidaT, double r1, double x1, double y1, double r2,
 =======
 =======
   if(semafaro != NULL){
+=======
+  if (semafaro != NULL) {
+>>>>>>> Stashed changes
     setTempo(semafaro, tempo);
   }
-
 }
 
-char comandoOrr(FILE *arqSaidaT, double w1, double h1, double x1, double y1, double w2, double h2, double x2, double y2) {
+char comandoOrr(FILE *arqSaidaT, double w1, double h1, double x1, double y1,
+                double w2, double h2, double x2, double y2) {
   char palavra[] = "SIM";
   if (verificarSobreposicaoRR(w1, h1, x1, y1, w2, h2, x2, y2) == 't') {
     fillArq1(arqSaidaT, palavra);
@@ -838,8 +1010,13 @@ char comandoOrr(FILE *arqSaidaT, double w1, double h1, double x1, double y1, dou
   }
 }
 
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 char comandoOrc(FILE *arqSaidaT, double w1, double h1, double x1, double y1, double r2, double x2, double y2) {
+=======
+char comandoOrc(FILE *arqSaidaT, double w1, double h1, double x1, double y1,
+                double r2, double x2, double y2) {
+>>>>>>> Stashed changes
   char palavra[] = "SIM";
   if (verificarSobreposicaoRC(w1, h1, x1, y1, r2, x2, y2) == 't') {
     fillArq1(arqSaidaT, palavra);
@@ -860,6 +1037,7 @@ char comandoOrc(FILE *arqSaidaT, double w1, double h1, double x1, double y1, dou
   }
 }
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 void comandoD(FILE *arqSaidaT, double x1, double y1, double x2, double y2) {
@@ -936,6 +1114,10 @@ Cor setCores(int type){
   return cor;
 =======
 char comandoOcc(FILE *arqSaidaT, double r1, double x1, double y1, double r2, double x2, double y2) {
+=======
+char comandoOcc(FILE *arqSaidaT, double r1, double x1, double y1, double r2,
+                double x2, double y2) {
+>>>>>>> Stashed changes
   char palavra[] = "SIM";
   if (verificarSobreposicaoCC(r1, x1, y1, r2, x2, y2) == 't') {
     fillArq1(arqSaidaT, palavra);
@@ -960,7 +1142,8 @@ void comandoD(FILE *arqSaidaT, double x1, double y1, double x2, double y2) {
   fillBreakLine(arqSaidaT);
 }
 
-void comandoIc(FILE *arqSaidaT, double x1, double y1, double x2, double y2, double r) {
+void comandoIc(FILE *arqSaidaT, double x1, double y1, double x2, double y2,
+               double r) {
   char palavra[] = "SIM";
   if (pontoInternoC(r, x1, y1, x2, y2) == 't') {
     fillArq1(arqSaidaT, palavra);
@@ -975,6 +1158,7 @@ void comandoIc(FILE *arqSaidaT, double x1, double y1, double x2, double y2, doub
   }
 }
 
+<<<<<<< Updated upstream
 =======
     return 'f';
   }
@@ -1004,6 +1188,10 @@ void comandoIc(FILE *arqSaidaT, double x1, double y1, double x2, double y2, doub
 
 >>>>>>> Stashed changes
 void comandoIr(FILE *arqSaidaT, double w, double h, double x1, double y1, double x2, double y2) {
+=======
+void comandoIr(FILE *arqSaidaT, double w, double h, double x1, double y1,
+               double x2, double y2) {
+>>>>>>> Stashed changes
   char palavra[] = "SIM";
   if (pontoInternoR(w, h, x1, y1, x2, y2) == 't') {
     fillArq1(arqSaidaT, palavra);

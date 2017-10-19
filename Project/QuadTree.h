@@ -16,6 +16,7 @@ void insertQuadTree(QuadTree tree, ItemQt item, double x, double y);
 
 void showQuadTree(QuadTree tree, showItem function);
 
+int lenghtQuadTree(QuadTree tree);
 
 ItemQt removeQuadTreeItem(QuadTree tree, double x, double y);
 
