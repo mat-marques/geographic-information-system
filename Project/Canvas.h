@@ -34,7 +34,10 @@ void insertRetangulo(Canvas canvas, Retangulo retangulo);
 Remove do canvas passado como parâmetro um retângulo com uma posição específica.
 */
 void removeRetangulo(Canvas canvas, int id);
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
 /*
 Insere no canvas passado como parâmetro um retângulo com bordas tracejadas e sem cor de preenchimento.
@@ -46,7 +49,10 @@ void insertRetangulo2(Canvas canvas, Retangulo retangulo);
 Remove do canvas passado como parâmetro um retângulo com bordas tracejadas em uma posição indicada por p.
 */
 void removeRetangulo2(Canvas canvas, int id);
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
 /*
 Insere no canvas passado como parâmetro um círculo.
@@ -76,7 +82,10 @@ void removeCor(Canvas canvas, int id);
 void showCanvasR(Canvas canvas, FILE *file);
 
 void showCanvasC(Canvas canvas, FILE *file);
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
 /*
 Retorna o comprimento do canvas passado como parâmetro.
@@ -124,8 +133,12 @@ Retorna um lista contendo todos os retângulos genéricos presentes em um canvas
 Retorna null caso não exista nenhum retângulo genérico no canvas.
 */
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Lista getListaR(Canvas canvas);
 
+=======
+QuadTree getListaR(Canvas canvas);
+>>>>>>> Stashed changes
 =======
 QuadTree getListaR(Canvas canvas);
 >>>>>>> Stashed changes
@@ -142,7 +155,11 @@ Retorna um lista contendo todos os círculos presentes em um canvas.
 Retorna null caso não exista nenhum círculo no canvas.
 */
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Lista getListaC(Canvas canvas);
+=======
+QuadTree getListaC(Canvas canvas);
+>>>>>>> Stashed changes
 =======
 QuadTree getListaC(Canvas canvas);
 >>>>>>> Stashed changes

@@ -10,16 +10,23 @@
 #include "quadra.h"
 #include "Cidade.h"
 #include "Arquivo.h"
-
+#include "Exibicao.h"
 #include "Cor.h"
+<<<<<<< Updated upstream
 #include "Lista.h"
+=======
+#include "Svg.h"
+#include "DoubleLinkedList.h"
+>>>>>>> Stashed changes
 #include "StringO.h"
+#include "ConvexHull.h"
 
 void executardq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas, int *qtdQuadrasRemovidas){
   double w=0, h=0, x=0, y=0;
   void *elemento = NULL;
   int i, n;
   char *cep = NULL;
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   Cidade cidade;
   Lista lista = NULL;
@@ -56,6 +63,12 @@ void executardq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas
 
   fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
 
+=======
+  List lista = NULL;
+
+  fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
+
+>>>>>>> Stashed changes
   lista = getElementsListInsideR(canvas, 3, x, y, w,  h);
   if(*arqSaidaT==NULL){
     *arqSaidaT = createArqA(path);
@@ -73,6 +86,9 @@ void executardq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas
         *qtdQuadrasRemovidas = *qtdQuadrasRemovidas+1;
       }
       cep = NULL;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
     eraseListDLLTwo(lista);
@@ -86,10 +102,154 @@ void executardh(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas
   double w=0, h=0, x=0, y=0;
   void *elemento = NULL;
   int i, n;
+<<<<<<< Updated upstream
   Lista lista = NULL;
+=======
+  List lista = NULL;
+>>>>>>> Stashed changes
   char *id = NULL;
   fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
   lista = getElementsListInsideR(canvas, 5, x, y, w,  h);
+  if(*arqSaidaT==NULL){
+    *arqSaidaT = createArqA(path);
+<<<<<<< Updated upstream
+  }
+
+  if(lista != NULL){
+    n = lengthDLL(lista);
+    id = NULL;
+    for(i=1; i<=n; i++){
+      elemento = getItemDLL(lista, i);
+      id = getIdH(elemento);
+      if(id != NULL){
+        fillArq1(*arqSaidaT, id);
+        fillBreakLine(*arqSaidaT);
+      }
+      id = NULL;
+    }
+    eraseListDLLTwo(lista);
+    eraseBase(lista);
+=======
+>>>>>>> Stashed changes
+  }
+
+  if(lista != NULL){
+    n = lengthDLL(lista);
+    id = NULL;
+    for(i=1; i<=n; i++){
+      elemento = getItemDLL(lista, i);
+      id = getIdH(elemento);
+      if(id != NULL){
+        fillArq1(*arqSaidaT, id);
+        fillBreakLine(*arqSaidaT);
+      }
+      id = NULL;
+    }
+    eraseListDLLTwo(lista);
+    eraseBase(lista);
+  }
+
+}
+
+void executards(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas){
+  double w=0, h=0, x=0, y=0;
+  void *elemento = NULL;
+  int i, n;
+  char *id;
+  List lista = NULL;
+  fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
+
+  lista = getElementsListInsideR(canvas, 6, x, y, w,  h);
+  if(*arqSaidaT==NULL){
+    *arqSaidaT = createArqA(path);
+  }
+
+  if(lista != NULL){
+    n = lengthDLL(lista);
+    id = NULL;
+    for(i=1; i<=n; i++){
+      elemento = getItemDLL(lista, i);
+      id = getIdS(elemento);
+      if(id != NULL){
+        fillArq1(*arqSaidaT, id);
+        fillBreakLine(*arqSaidaT);
+      }
+      id = NULL;
+    }
+    eraseListDLLTwo(lista);
+    eraseBase(lista);
+  }
+
+}
+
+void executardt(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas){
+  double w=0, h=0, x=0, y=0;
+  void *elemento = NULL;
+  int i, n;
+  char *id;
+  List lista = NULL;
+  fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
+  lista = getElementsListInsideR(canvas, 4, x, y, w,  h);
+
+  if(*arqSaidaT==NULL){
+    *arqSaidaT = createArqA(path);
+  }
+
+  if(lista != NULL){
+    n = lengthDLL(lista);
+    id = NULL;
+    for(i=1; i<=n; i++){
+      elemento = getItemDLL(lista, i);
+      id = getIdT(elemento);
+      if(id != NULL){
+        fillArq1(*arqSaidaT, id);
+        fillBreakLine(*arqSaidaT);
+      }
+      id = NULL;
+    }
+    eraseListDLLTwo(lista);
+    eraseBase(lista);
+  }
+}
+
+void executarDq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas, int *qtdQuadrasRemovidas){
+  double r=0, x=0, y=0;
+  void *elemento = NULL;
+  int i, n;
+  char *cep;
+  List lista = NULL;
+  fscanf(arqEntradaQry, "%lf %lf %lf\n", &x, &y, &r);
+  lista = getElementsListInsideC(canvas, 3, x, y, r);
+  if(*arqSaidaT==NULL){
+    *arqSaidaT = createArqA(path);
+  }
+
+  if(lista != NULL){
+    n = lengthDLL(lista);
+    cep = NULL;
+    for(i=1; i<=n; i++){
+      elemento = getItemDLL(lista, i);
+      cep =getCepQ(elemento);
+      if(cep != NULL){
+        fillArq1(*arqSaidaT, cep);
+        fillBreakLine(*arqSaidaT);
+        *qtdQuadrasRemovidas = *qtdQuadrasRemovidas+1;
+      }
+      cep = NULL;
+    }
+    eraseListDLLTwo(lista);
+    eraseBase(lista);
+  }
+}
+
+void executarDh(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas){
+  double r=0, x=0, y=0;
+  void *elemento = NULL;
+  int i, n;
+  char *id;
+  List lista = NULL;
+  fscanf(arqEntradaQry, "%lf %lf %lf\n", &x, &y, &r);
+  lista = getElementsListInsideC(canvas, 5, x, y, r);
   if(*arqSaidaT==NULL){
     *arqSaidaT = createArqA(path);
   }
@@ -109,221 +269,66 @@ void executardh(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas
     eraseListDLLTwo(lista);
     eraseBase(lista);
   }
-}
 
-void executards(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas){
-  double w=0, h=0, x=0, y=0;
-  double x1=0, y1=0;
-  void *elemento = NULL, *elemento2=NULL;
-  int i, n;
-  char *id;
-  Cidade cidade;
-  Lista lista = NULL;
-  fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
-    cidade = getCidade(canvas);
-    lista = getListaS(cidade);
-    n = lenght(lista);
-    elemento = getFirst(lista);
-    for(i=0;i<n;i++){
-      elemento2 = get(lista, elemento);
-      if(elemento2!=NULL){
-        x1 = getXS(elemento2);
-        y1 = getYS(elemento2);
-        id = getIdS(elemento2);
-        if(pontoInternoR(w, h, x, y, x1, y1) == 't'){
-          if(*arqSaidaT==NULL){
-            *arqSaidaT = createArqA(path);
-          }
-          fillArq1(*arqSaidaT, id);
-          fillBreakLine(*arqSaidaT);
-          elemento2 = getNext(lista, elemento);
-          removeSemafaro(cidade, elemento);
-          elemento = elemento2;
-        }else{
-          elemento = getNext(lista, elemento);
-        }
-      }
-  }
-}
-
-void executardt(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas){
-  double w=0, h=0, x=0, y=0;
-  double x1=0, y1=0;
-  void *elemento = NULL, *elemento2=NULL;
-  int i, n;
-  char *id;
-  Cidade cidade;
-  Lista lista = NULL;
-  fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
-    cidade = getCidade(canvas);
-    lista = getListaT(cidade);
-    n = lenght(lista);
-    elemento = getFirst(lista);
-    for(i=0;i<n;i++){
-      elemento2 = get(lista, elemento);
-      if(elemento2!=NULL){
-        x1 = getXT(elemento2);
-        y1 = getYT(elemento2);
-        id = getIdT(elemento2);
-        if(pontoInternoR(w, h, x, y, x1, y1) == 't'){
-          if(*arqSaidaT==NULL){
-            *arqSaidaT = createArqA(path);
-          }
-          fillArq1(*arqSaidaT, id);
-          fillBreakLine(*arqSaidaT);
-          elemento2 = getNext(lista, elemento);
-          removeTorre(cidade, elemento);
-          elemento = elemento2;
-        }else{
-          elemento = getNext(lista, elemento);
-        }
-    }
-    }
-}
-
-void executarDq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas, int *qtdQuadrasRemovidas){
-  double r=0, x=0, y=0;
-  double w1=0, h1=0, x1=0, y1=0;
-  void *elemento = NULL, *elemento2=NULL;
-  int i, n;
-  char *cep;
-  Cidade cidade=NULL;
-  Lista lista = NULL;
-  fscanf(arqEntradaQry, "%lf %lf %lf\n", &x, &y, &r);
-
-    cidade = getCidade(canvas);
-    lista = getListaQ(cidade);
-    n = lenght(lista);
-
-    elemento = getFirst(lista);
-    for(i=0;i<n;i++){
-      elemento2 = get(lista, elemento);
-      if(elemento2!=NULL){
-        w1 = getLargQ(elemento2);
-        h1 = getAltQ(elemento2);
-        x1 = getXQ(elemento2);
-        y1 = getYQ(elemento2);
-        cep = getCepQ(elemento2);
-        if(verificarInteiramenteSobrepostoCR(w1, h1, x1, y1, r, x, y) == 't'){
-          if(*arqSaidaT==NULL){
-            *arqSaidaT = createArqA(path);
-          }
-          fillArq1(*arqSaidaT, cep);
-          fillBreakLine(*arqSaidaT);
-          elemento2 = getNext(lista, elemento);
-          removeQuadra(cidade, elemento);
-          *qtdQuadrasRemovidas = *qtdQuadrasRemovidas+1;
-          elemento = elemento2;
-        }else{
-          elemento = getNext(lista, elemento);
-        }
-      }
-    }
-}
-
-void executarDh(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas){
-  double r=0, x=0, y=0;
-  double x1=0, y1=0;
-  void *elemento = NULL, *elemento2=NULL;
-  int i, n;
-  char *id;
-  Cidade cidade=NULL;
-  Lista lista = NULL;
-  fscanf(arqEntradaQry, "%lf %lf %lf\n", &x, &y, &r);
-    cidade = getCidade(canvas);
-    lista = getListaH(cidade);
-    n = lenght(lista);
-    elemento = getFirst(lista);
-    for(i=0;i<n;i++){
-      elemento2 = get(lista, elemento);
-      if(elemento2!=NULL){
-        x1 = getXH(elemento2);
-        y1 = getYH(elemento2);
-        id = getIdH(elemento2);
-        if(pontoInternoC(r, x, y, x1, y1) == 't'){
-          if(*arqSaidaT==NULL){
-            *arqSaidaT = createArqA(path);
-          }
-          fillArq1(*arqSaidaT, id);
-          fillBreakLine(*arqSaidaT);
-          elemento2 = getNext(lista, elemento);
-          removeHidrante(cidade, elemento);
-          elemento = elemento2;
-        }else{
-          elemento = getNext(lista, elemento);
-        }
-      }
-   }
 }
 
 void executarDs(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas){
   double r=0, x=0, y=0;
-  double x1=0, y1=0;
-  void *elemento = NULL, *elemento2=NULL;
+  void *elemento = NULL;
   int i, n;
   char *id;
-  Cidade cidade=NULL;
-  Lista lista = NULL;
+
+  List lista = NULL;
   fscanf(arqEntradaQry, "%lf %lf %lf\n", &x, &y, &r);
-    cidade = getCidade(canvas);
-    lista = getListaS(cidade);
-    n = lenght(lista);
-    elemento = getFirst(lista);
-    for(i=0;i<n;i++){
-      elemento2 = get(lista, elemento);
-      if(elemento2!=NULL){
-        x1 = getXS(elemento2);
-        y1 = getYS(elemento2);
-        id = getIdS(elemento2);
-        if(pontoInternoC(r, x, y, x1, y1) == 't'){
-          if(*arqSaidaT==NULL){
-            *arqSaidaT = createArqA(path);
-          }
-          fillArq1(*arqSaidaT, id);
-          fillBreakLine(*arqSaidaT);
-          elemento2 = getNext(lista, elemento);
-          removeSemafaro(cidade, elemento);
-          elemento = elemento2;
-        }else{
-          elemento = getNext(lista, elemento);
-        }
+  lista = getElementsListInsideC(canvas, 6, x, y, r);
+  if(*arqSaidaT==NULL){
+    *arqSaidaT = createArqA(path);
+  }
+
+  if(lista != NULL){
+    n = lengthDLL(lista);
+    id = NULL;
+    for(i=1; i<=n; i++){
+      elemento = getItemDLL(lista, i);
+      id = getIdS(elemento);
+      if(id != NULL){
+        fillArq1(*arqSaidaT, id);
+        fillBreakLine(*arqSaidaT);
       }
+      id = NULL;
     }
+    eraseListDLLTwo(lista);
+    eraseBase(lista);
+  }
 }
 
 void executarDt(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas){
   double r=0, x=0, y=0;
-  double x1=0, y1=0;
-  void *elemento = NULL, *elemento2=NULL;
+  void *elemento = NULL;
   int i, n;
   char *id;
-  Cidade cidade=NULL;
-  Lista lista = NULL;
+  List lista = NULL;
   fscanf(arqEntradaQry, "%lf %lf %lf\n", &x, &y, &r);
-    cidade = getCidade(canvas);
-    lista = getListaT(cidade);
-    n = lenght(lista);
-    elemento = getFirst(lista);
-    for(i=0;i<n;i++){
-      elemento2 = get(lista, elemento);
-      if(elemento2!=NULL){
-        x1 = getXT(elemento2);
-        y1 = getYT(elemento2);
-        id = getIdT(elemento2);
-        if(pontoInternoC(r, x, y, x1, y1) == 't'){
-          if(*arqSaidaT==NULL){
-            *arqSaidaT = createArqA(path);
-          }
-          fillArq1(*arqSaidaT, id);
-          fillBreakLine(*arqSaidaT);
-          elemento2 = getNext(lista, elemento);
-          removeTorre(cidade, elemento);
-          elemento = elemento2;
-        }else{
-          elemento = getNext(lista, elemento);
-        }
+  lista = getElementsListInsideC(canvas, 4, x, y, r);
+  if(*arqSaidaT==NULL){
+    *arqSaidaT = createArqA(path);
+  }
+
+  if(lista != NULL){
+    n = lengthDLL(lista);
+    id = NULL;
+    for(i=1; i<=n; i++){
+      elemento = getItemDLL(lista, i);
+      id = getIdT(elemento);
+      if(id != NULL){
+        fillArq1(*arqSaidaT, id);
+        fillBreakLine(*arqSaidaT);
       }
+      id = NULL;
     }
+    eraseListDLLTwo(lista);
+    eraseBase(lista);
+  }
 }
 
 void executarCrd(FILE *arqEntradaQry , FILE **arqSaidaT, char *path, Canvas canvas){
@@ -346,7 +351,9 @@ void executarCrd(FILE *arqEntradaQry , FILE **arqSaidaT, char *path, Canvas canv
   sizeString = qtdCaracteres(arqEntradaQry);
 
   string = alocarString(sizeString);
+
   fscanf(arqEntradaQry, "%s\n", string);
+
   cidade = getCidade(canvas);
   elemento = getQuadra(cidade, string);
   if(elemento==NULL){
@@ -407,6 +414,55 @@ void executarCrd(FILE *arqEntradaQry , FILE **arqSaidaT, char *path, Canvas canv
   }
   desalocar(string);
   string = NULL;
+}
+
+void executarPc(FILE *arqEntradaQry, Canvas canvas, char *arqNome, char *dirPath, char *extensao2){
+  char *string1 = NULL, *string2 = NULL, *string3 = NULL;
+  char stringAux[] = "-";
+  int i, n;
+  double width, height, x, y, w, h;
+  FILE *arqSaidaSvg2 = NULL;
+  List lista;
+  i = qtdCaracteres(arqEntradaQry);
+  string1 = alocarString(i);
+
+  fscanf(arqEntradaQry, "%s %lf %lf %lf %lf\n", string1, &x, &y, &w, &h);
+
+  n = strlen(arqNome);
+  /* Concatena o sufixo no nome do arquivo de saida. */
+  if (string1[0] != '-' && arqNome[n - 1] != '-') {
+    string2 = concatenarStrings(arqNome, stringAux);
+  } else if(string1[0] != '-' && arqNome[n - 1] == '-'){
+    string2 = concatenarStrings(NULL, arqNome);
+  }else{
+    string2 = concatenarStrings(NULL, (arqNome+1));
+  }
+  string3 = concatenarStrings(string2, string1);
+
+  desalocar(string1);
+  string1 = NULL;
+  string1 = concatenarElementos(dirPath, string3, extensao2);
+  arqSaidaSvg2 = createSvg(string1);
+  width = getWidth(canvas);
+  height = getHeight(canvas);
+  desalocar(string1);
+  string1 = NULL;
+  desalocar(string2);
+  string2 = NULL;
+  desalocar(string3);
+  string3 = NULL;
+
+  tagAbertura(arqSaidaSvg2, width, height);
+
+  lista = getElementsListInsideR(canvas, 4, x, y,  w, h);
+
+
+
+  tagFechamento(arqSaidaSvg2);
+}
+
+void executarAc(FILE *arqEntradaQry , FILE **arqSaidaT, char *path, Canvas canvas){
+
 }
 
 void executarAcc0(char *dirPath, char *arqNome, char *extensao, int qtdQuadrasInseridas, int qtdCompararacoesI, int qtdQuadrasRemovidas, int qtdCompararacoesR){

@@ -13,6 +13,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+<<<<<<< Updated upstream
+=======
+typedef void (*eraseElement)(void*);
+
+>>>>>>> Stashed changes
 typedef struct Dots {
   void *info;
   double x, y;
