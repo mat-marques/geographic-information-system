@@ -102,7 +102,6 @@ void executarAuxR(FILE *arqEntradaGeo, List list) {
   insertEndDLL(list, retangulo);
 }
 
-
 void executarD(FILE *arqEntradaGeo,  FILE *arqSaidaT, Canvas canvas){
   void *voidPointer1=NULL, *voidPointer2=NULL;
   int i,j;
@@ -147,18 +146,14 @@ void executarD(FILE *arqEntradaGeo,  FILE *arqSaidaT, Canvas canvas){
           comandoD(arqSaidaT,
           (getRx(voidPointer1)+getRw(voidPointer1))/2, (getRy(voidPointer1)+getRh(voidPointer1))/2, (getRx(voidPointer2)+getRw(voidPointer2))/2, (getRy(voidPointer2)+getRh(voidPointer2))/2);
       }else printf("ERRO EM COMANDO D.\n");
-    }else{
-      printf("Poligono não encontrado.\n");
+    }else{      printf("Poligono não encontrado.\n");
       fillArq1(arqSaidaT, stringAux);
       fillBreakLine(arqSaidaT);
     }
-    voidPointer1=NULL;
-    voidPointer2=NULL;
+    voidPointer1 = NULL;
+    voidPointer2 = NULL;
   }
-
 }
-
-
 void executarI(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
   void *voidPointer1 = NULL;
   int i;
