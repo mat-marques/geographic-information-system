@@ -5,10 +5,13 @@
 #include "OperacoesF.h"
 #include "QuadTree.h"
 #include "Retangulo.h"
+#include "Svg.h"
+#include "QuadTree.h"
+#include "Stack.h"
+#include "DoubleLinkedList.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 
 typedef struct reg { double w, h, x, y; } Reg;
 
@@ -89,13 +92,13 @@ void removeCirculo(Canvas canvas, int id) {
 
 void showCanvasR(Canvas canvas, FILE *file) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  globalFile = file;
+  newArqCanvas = file;
   showQuadTree(canvasP->listaR, showR);
 }
 
 void showCanvasC(Canvas canvas, FILE *file) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  globalFile = file;
+  newArqCanvas = file;
   showQuadTree(canvasP->listaC, showC);
 }
 
@@ -152,7 +155,6 @@ QuadTree getListaC(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   return canvasP->listaC;
 }
-
 
 /****************************************************/
 int compareRR(Item item1, Region item2) {
@@ -398,7 +400,6 @@ figuraGeometrica getCirculo(Canvas canvas, int id) {
   CanvasP *canvasP = (CanvasP *)canvas;
   return searchQuadTreeItem(canvasP->listaR, &id, compareR);
 }
-
 
 void eraseListaR(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;

@@ -51,25 +51,25 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome,char *dirPath, 
 /*
 Executa o comando Q. Faz a leitura dos parâmetros do comando Q no arquivo arqEntradaGeo e armazena esses dados no canvas. O inteiro qtdQuadrasInseridas é incrementado a cada quadra inserida.
 */
-void executarAuxQ(FILE *arqEntradaGeo, List list);
+void executarAuxQ(FILE *arqEntradaGeo, List list, Cor cor);
 
 
 /*
 Executa o comando H. Faz a leitura dos parâmetros do comando H no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarAuxH(FILE *arqEntradaGeo, List list);
+void executarAuxH(FILE *arqEntradaGeo, List list, Cor cor);
 
 
 /*
 Executa o comando S. Faz a leitura dos parâmetros do comando S no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarAuxS(FILE *arqEntradaGeo, List list);
+void executarAuxS(FILE *arqEntradaGeo, List list, Cor cor);
 
 
 /*
 Executa o comando T. Faz a leitura dos parâmetros do comando T no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarAuxT(FILE *arqEntradaGeo, List list);
+void executarAuxT(FILE *arqEntradaGeo, List list, Cor cor);
 
 /*
 Executa o comando Cq. Faz a leitura dos parâmetros do comando Cq no arquivo arqEntradaGeo e armazena esses dados no canvas.
