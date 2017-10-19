@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 typedef struct reg { double w, h, x, y; } Reg;
 
 typedef struct CanvasP {

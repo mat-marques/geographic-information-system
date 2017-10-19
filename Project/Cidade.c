@@ -11,6 +11,7 @@
 #include "Stack.h"
 #include "ConvexHull.h"
 
+
 typedef struct City{
    QuadTree listaQ, listaS, listaT, listaH;
    char *nome;
