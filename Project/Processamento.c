@@ -9,7 +9,7 @@
 #include "quadra.h"
 #include "Cidade.h"
 #include "Arquivo.h"
-
+#include "Cor.h"
 #include "Svg.h"
 #include "StringO.h"
 
@@ -198,6 +198,7 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
   char extensao2[] = ".svg";
   FILE *arqSaidaT = NULL;
   if(arqEntradaGeo==NULL){
+    printf("ERRO EM ABERTURA DE ARQUIVO GEO.\n");
     exit(0);
   }
   while(1){

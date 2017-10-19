@@ -2,7 +2,7 @@
 #include "Stack.h"
 
 typedef struct Element{
-  Item info;
+  ItemS info;
   struct Element *up, *down;
 }Element;
 
@@ -31,7 +31,7 @@ int lengthStack(Stack stack){
 }
 
 
-int insertTop(Stack stack, Item item){
+int insertTop(Stack stack, ItemS item){
   Base *base = (Base*) stack;
   Element *element = NULL;
   if(base!=NULL){
@@ -81,10 +81,10 @@ int removeTop(Stack stack, eraseItemS func){
 }
 
 
-Item removeTopI(Stack stack){
+ItemS removeTopI(Stack stack){
   Base *base = (Base*) stack;
   Element *aux = NULL;
-  Item info = NULL;
+  ItemS info = NULL;
   if(base!=NULL){
     if(base->top!=NULL && base->top->down!=NULL){
         aux = base->top->down;
@@ -105,9 +105,9 @@ Item removeTopI(Stack stack){
 }
 
 
-Item getItemTop(Stack stack){
+ItemS getItemTop(Stack stack){
   Base *base = (Base*) stack;
-  return (Item) base->top->info;
+  return (ItemS) base->top->info;
 }
 
 

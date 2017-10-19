@@ -52,6 +52,8 @@ void removeSemafaro(Semafaro element){
   semafaro0 *newElement = (semafaro0*) element;
   if(newElemen != NULL){
     free(newElement->id);
+    free(newElement->corP);
+    free(newElement->corB);
     free(newElement);
   }
 }

@@ -6,6 +6,8 @@
 typedef void* ElementoUrbano;
 typedef void* Cidade;
 
+FILE *newArqCity;
+
 /**
 Autor: Matheus Augusto Marques
 TAD: Cidade.
@@ -13,60 +15,72 @@ Definição:
 Uma cidade é definida por um nome , um conjunto de elementos urbanos e quadras. Um elemento urbano pode ser um hidrante, uma torre celular ou um semafáro.
 */
 
+
 /*
 Cria uma cidade vazia com o nome na string name.
 */
 Cidade criaCidade(char *name);
+
 
 /*
 Insere uma quadra em uma cidade.
 */
 void insertQuadra(Cidade cidade, ElementoUrbano item);
 
+
 /*
 Remove uma quadra presente em uma cidade em uma posição indicada por p.
 */
 void removeQuadra(Cidade cidade,  Posic p);
+
 
 /*
 Insere um semafaro em uma cidade.
 */
 void insertSemafaro(Cidade cidade, ElementoUrbano item);
 
+
 /*
 Remove um semafaro presente em uma cidade em uma posição indicada por p.
 */
 void removeSemafaro(Cidade cidade, Posic p);
+
 
 /*
 Insere uma torre celular em uma cidade.
 */
 void insertTorre(Cidade cidade, ElementoUrbano item);
 
+
 /*
 Remove uma torre celular presente em uma cidade em uma posição indicada por p.
 */
 void removeTorre(Cidade cidade, Posic p);
+
 
 /*
 Insere um hidrante em uma cidade.
 */
 void insertHidrante(Cidade cidade, ElementoUrbano item);
 
+
 /*
 Remove um hidrante de uma cidade em uma posição indicada por p.
 */
 void removeHidrante(Cidade cidade, Posic p);
+
 
 /*
 Retorna o nome da cidade.
 */
 char *getNome(Cidade cidade);
 
+
 /*
 Troca o nome de uma cidade por outro nome contido na string nome.
 */
 void setNome(Cidade cidade, char *nome);
+
 
 /*
 Retorna um lista contendo todas as quadras de uma cidade.
@@ -74,11 +88,13 @@ Retorna null caso não exista quadras na cidade.
 */
 Lista getListaQ(Cidade cidade);
 
+
 /*
 Retorna um lista contendo todos os semafaros de uma cidade.
 Retorna null caso não exista semafaros na cidade.
 */
 Lista getListaS(Cidade cidade);
+
 
 /*
 Retorna um lista contendo todas as torres celulares de uma cidade.
@@ -86,11 +102,42 @@ Retorna null caso não exista torres celulares na cidade.
 */
 Lista getListaT(Cidade cidade);
 
+
 /*
 Retorna um lista contendo todos os hidrantes de uma cidade.
 Retorna null caso não exista hidrantes na cidade.
 */
 Lista getListaH(Cidade cidade);
+
+
+/*
+ Escreve as propriedades de uma quadra em um arquivo no formato svg.
+O arquivo é expecificado pelo usúario através da variável newArqCity.
+O arquivo svg deve existir e estar aberto.
+*/
+void showQ(Quadra quadra);
+
+
+/*
+ Escreve as propriedades de um hidrante em um arquivo no formato svg.
+O arquivo é expecificado pelo usúario através da variável newArqCity.
+O arquivo svg deve existir e estar aberto.
+*/
+void showH(Hidrante hidrante);
+
+
+/*
+ Escreve as propriedades de um semafaro em um arquivo no formato svg.
+O arquivo é expecificado pelo usúario através da variável newArqCity.
+O arquivo svg deve existir e estar aberto.
+*/
+void showS(Semafaro semafaro);
+
+
+/*A funcão escreve as propriedades de uma torre em um arquivo no formato svg.
+O arquivo é expecificado pelo usúario através da variável newArqCanvas.
+O arquivo svg deve existir e estar aberto.*/
+void showT(Torre torre);
 
 /*
 Retorna uma quadra presente em uma cidade com o título de identificação definido pela string cep.

@@ -3,8 +3,8 @@
 #include <stdio.h>
 
 typedef void* Stack;
-typedef void* Item;
-typedef void(*eraseItemS)(Item);
+typedef void* ItemS;
+typedef void(*eraseItemS)(ItemS);
 
 Stack createStack();
 
@@ -12,16 +12,16 @@ Stack createStack();
 int lengthStack(Stack stack);
 
 
-int insertTop(Stack stack, Item item);
+int insertTop(Stack stack, ItemS item);
 
 
 int removeTop(Stack stack, eraseItemS func);
 
 
-Item removeTopI(Stack stack);
+ItemS removeTopI(Stack stack);
 
 
-Item getItemTop(Stack stack);
+ItemS getItemTop(Stack stack);
 
 
 Stack concatStacks(Stack stack1, Stack stack2);

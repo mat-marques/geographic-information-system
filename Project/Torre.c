@@ -55,6 +55,8 @@ void removeTorr(Torre element){
   torre0 *newElement = (torre0*) element;
   if(newElement != NULL){
     free(newElement->id);
+    free(newElement->corP);
+    free(newElement->corB);
     free(newElement);
   }
 }

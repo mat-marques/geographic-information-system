@@ -108,9 +108,10 @@ void quickSort(void *vector, int begin, int end, allocateData  func1, deallocate
 
 void createHeap(void *vector, int begin, int end, allocateData  func1, deallocateData  func2, compareToOrd func3, attribution func4)
 {
+    int j;
     void *aux = func1(1);
     func4(aux, 0, vector, begin);
-    int j = begin * 2 + 1;
+    j = begin * 2 + 1;
     while(j <= end){
         if(j < end){
             if(func3(vector, j, vector, j+1) > 0){

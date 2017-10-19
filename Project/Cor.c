@@ -84,9 +84,6 @@ void removeCor(Cor cor){
     free(corAux->corC);
     free(corAux->corP);
     free(corAux);
+    free(cor);
   }
-}
-
-int compareCores(Cor corA, Cor corB) {
-  
 }
