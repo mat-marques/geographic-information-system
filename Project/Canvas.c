@@ -19,13 +19,9 @@ typedef struct CanvasP {
   int id;
 } CanvasP;
 
-<<<<<<< Updated upstream
-=======
-
 void ConvexHullAux(Stack stack, Canvas canvas, int type);
 
 
->>>>>>> Stashed changes
 Canvas criaCanvas(int id) {
   char *nome;
   CanvasP *canvas;
@@ -49,27 +45,17 @@ void insertRetangulo(Canvas canvas, Retangulo retangulo) {
                  getRy(retangulo));
 }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
 void removeRetangulo(Canvas canvas, int id)
 {
     CanvasP *canvasP = (CanvasP *)canvas;
-=======
-=======
->>>>>>> Stashed changes
-=======
 
->>>>>>> Stashed changes
 void removeRetangulo(Canvas canvas, int id) {
   figuraGeometrica f;
   CanvasP *canvasP = (CanvasP *)canvas;
   f = removeQuadTreeItem(canvasP->listaR, &id, compareR);
   free(f);
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
 }
 
 
@@ -100,38 +86,27 @@ void removeCirculo(Canvas canvas, int id) {
   free(f);
 }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
 void insertCor(Canvas canvas, Cor cor) {
   CanvasP *canvasP = (CanvasP *)canvas;
   insertEndDLL(canvasP->listaCores, cor);
 }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
 void removeCor(Canvas canvas, int id)
 {
     Item item;
     CanvasP *canvasP = (CanvasP *)canvas;
     item = removeItemDLL(CanvasP->listaCores, &id, compareCores);
     free(item);
-=======
-=======
->>>>>>> Stashed changes
+
 void removeCor(Canvas canvas, int id) {
   Item item;
   CanvasP *canvasP = (CanvasP *)canvas;
   item = removeItemDLL(canvasP->listaCores, &id, compareCores);
   free(item);
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }
 
-=======
->>>>>>> Stashed changes
-=======
 
 void showR(Retangulo retangulo) {
   /* Escreve em um arquivo svg as propriedades de um retângulo.
@@ -175,7 +150,6 @@ void showC(Circulo circulo) {
 }
 
 
->>>>>>> Stashed changes
 void showCanvasR(Canvas canvas, FILE *file) {
   CanvasP *canvasP = (CanvasP *)canvas;
   showQuadTree(canvasP->listaR, showR);
@@ -209,7 +183,6 @@ double getHeight(Canvas canvas) {
 void setHeight(Canvas canvas, double height) {
   CanvasP *canvasP = (CanvasP *)canvas;
   canvasP->height = height;
-<<<<<<< Updated upstream
 }
 
 
@@ -246,8 +219,7 @@ List getListaR2(Canvas canvas) {
   return canvasP->listaR2;
 }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
 figuraGeometrica getRetangulo(Canvas canvas, int id)
 {
     CanvasP *canvasP = (CanvasP *)canvas;
