@@ -1,22 +1,16 @@
 #ifndef CIDADE_H
 #define CIDADE_H
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-#include "Lista.h"
-#include "Quadra.h"
-=======
 #include "Quadra.h"
 #include "Hidrante.h"
 #include "Semafaro.h"
 #include "Torre.h"
 #include "QuadTree.h"
->>>>>>> Stashed changes
-=======
+
 #include "DoubleLinkedList.h"
 #include "Quadra.h"
 #include "QuadTree.h"
->>>>>>> recover-branch
+
 typedef void* ElementoUrbano;
 typedef void* Cidade;
 
