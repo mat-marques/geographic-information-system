@@ -103,48 +103,59 @@ void executarAuxR(FILE *arqEntradaGeo, List list) {
 }
 
 
-void executarD(FILE *arqEntradaGeo,  FILE *arqSaidaT, Canvas canvas) {
-  void *voidPointer1 = NULL;
-  int i, j;
-  char caracter;
+void executarD(FILE *arqEntradaGeo,  FILE *arqSaidaT, Canvas canvas){
+  void *voidPointer1=NULL, *voidPointer2=NULL;
+  int i,j;
+  char caracter='r';
+  char caracter1='r';
   char stringAux[] = "Nao encontrados";
-  if (arqSaidaT != NULL) {
-    fscanf(arqEntradaGeo, "%d %d\n", &i, &j);
+  if(arqSaidaT!=NULL){
+    fscanf(arqEntradaGeo,"%d %d\n",&i,&j);
     caracter = 'd';
     fillArq(arqSaidaT, caracter);
     fillSpace(arqSaidaT);
-
     fillArq3(arqSaidaT, i);
     fillSpace(arqSaidaT);
-
-    fillArq2(arqSaidaT, j);
-    fillSpace(arqSaidaT);
-
+    fillArq3(arqSaidaT, j);
     fillBreakLine(arqSaidaT);
-
-    caracter = 'r';
+    caracter='r';
     voidPointer1 = getRetangulo(canvas, i);
-    if (voidPointer1 == NULL) {
+    if(voidPointer1==NULL){
       voidPointer1 = getCirculo(canvas, i);
-      caracter = 'c';
+      caracter='c';
     }
-    if (voidPointer1 != NULL) {
-      if (caracter == 'c') {
-        comandoIc(arqSaidaT, x, y, getCx(voidPointer1), getCy(voidPointer1),
-                  getCr(voidPointer1));
-      } else {
-        if (caracter == 'r') {
-          comandoIr(arqSaidaT, getRw(voidPointer1), getRh(voidPointer1),
-                    getRx(voidPointer1), getRy(voidPointer1), x, y);
-        }
-      }
-    } else {
+    caracter1='r';
+    voidPointer2 = getRetangulo(canvas, j);
+    if(voidPointer2==NULL){
+      voidPointer2 = getCirculo(canvas, j);
+      caracter1='c';
+    }
+
+    if(voidPointer1!=NULL&&voidPointer2!=NULL){
+      if(caracter=='c'&&caracter1=='c'){
+          comandoD(arqSaidaT,
+          getCx(voidPointer1), getCy(voidPointer1),
+          getCx(voidPointer2), getCy(voidPointer2));
+      }else if(caracter=='c'&&caracter1=='r'){
+          comandoD(arqSaidaT,
+          getCx(voidPointer1), getCy(voidPointer1), (getRx(voidPointer2)+getRw(voidPointer2))/2, (getRy(voidPointer2)+getRh(voidPointer2))/2);
+      }else if(caracter=='r'&&caracter1=='c'){
+          comandoD(arqSaidaT,
+          (getRx(voidPointer1)+getRw(voidPointer1))/2, (getRy(voidPointer1)+getRh(voidPointer1))/2,
+          getCx(voidPointer2), getCy(voidPointer2));
+      }else if(caracter=='r'&&caracter1=='r'){
+          comandoD(arqSaidaT,
+          (getRx(voidPointer1)+getRw(voidPointer1))/2, (getRy(voidPointer1)+getRh(voidPointer1))/2, (getRx(voidPointer2)+getRw(voidPointer2))/2, (getRy(voidPointer2)+getRh(voidPointer2))/2);
+      }else printf("ERRO EM COMANDO D.\n");
+    }else{
       printf("Poligono não encontrado.\n");
       fillArq1(arqSaidaT, stringAux);
       fillBreakLine(arqSaidaT);
     }
-    voidPointer1 = NULL;
+    voidPointer1=NULL;
+    voidPointer2=NULL;
   }
+
 }
 
 
