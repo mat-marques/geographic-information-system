@@ -71,6 +71,8 @@ void removeH(Hidrante element){
   hidrante0 *newElement = (hidrante0*) element;
   if(newElement != NULL){
     free(newElement->id);
+    free(newElement->corP);
+    free(newElement->corB);
     free(newElement);
   }
 }

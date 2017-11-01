@@ -31,7 +31,7 @@ RETORNA A COORDENADA X DO CENTRO DE UM CÍRCULO.
 double getCx(Circulo element);
 
 /**
-RETORNA A COORDENADA Y DO CENTRO D UM CÍRCULO.
+RETORNA A COORDENADA Y DO CENTRO DE UM CÍRCULO.
 */
 double getCy(Circulo element);
 
@@ -40,8 +40,15 @@ RETORNA A COR DE PREENCHIMENTO DE UM CÍRCULO.
 */
 char* getCcor(Circulo element);
 
+/*
+Remove Circulo element da memória.
+*/
 void removeC(Circulo element);
 
+/*
+A função verifica se um circulo é igual ao tipo de dado item.
+item é um tipo de dado genérico.
+*/
 int compareC(Circulo element, void* item);
 
 #endif

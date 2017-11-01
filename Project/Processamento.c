@@ -46,25 +46,37 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry, char **arqNome, c
     }
   }
 
-  desalocar(string0);
   desalocar(string1);
   desalocar(string2);
-  string0 = NULL;
   string1 = NULL;
   string2 = NULL;
 
 
   *dirPath = parametroO(argv, argc);
 
-  string0 = parametroQ(argv, argc);
+  string1 = parametroQ(argv, argc);
 
-  if(string0 != NULL){
-    *arqEntradaQry = createArqR(string0);
-     string1 = nomeArquivo(string0);
-     string2 = concatenarStrings(*arqNome, travessao);
-     free(*arqNome);
-     *arqNome = NULL;
-     *arqNome = concatenarStrings(string2, string1);
+  if(string1 != NULL){
+    if(string0 != NULL){
+      string2 = concatenarElementos2(string0, string1);
+      *arqEntradaQry = createArqR(string2);
+      desalocar(string2);
+      string2 = NULL;
+      desalocar(string0);
+      string0 = NULL;
+      string2 = nomeArquivo(string1);
+      string0 = concatenarStrings(*arqNome, travessao);
+      free(*arqNome);
+      *arqNome = NULL;
+      *arqNome = concatenarStrings(string0, string2);
+    }else{
+      *arqEntradaQry = createArqR(string1);
+      string0 = nomeArquivo(string1);
+      string2 = concatenarStrings(*arqNome, travessao);
+      free(*arqNome);
+      *arqNome = NULL;
+      *arqNome = concatenarStrings(string2, string0);
+    }
   }
 
   *exitFileSvg = concatenarElementos(*dirPath, *arqNome, extensao2);
@@ -78,7 +90,6 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry, char **arqNome, c
   *acc0 = parametroAcc0(argv, argc);
 
   *acc = parametroAcc(argv, argc);
-
 }
 
 void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas){
@@ -99,14 +110,15 @@ void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas){
   /* Quadra */
     showCanvasElements(canvas, 1);
 
-  /* Semafaro */
-    showCanvasElements(canvas, 4);
-
-  /* Torre */
-    showCanvasElements(canvas, 3);
-
   /* Hidrante */
     showCanvasElements(canvas, 2);
+
+  /* Semafaro */
+    showCanvasElements(canvas, 3);
+
+  /* Torre */
+    showCanvasElements(canvas, 4);
+
 
   tagFechamento(arqSaidaSvg);
 }
@@ -122,7 +134,7 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
   List quadras = NULL, semafaros = NULL, torres = NULL, hidrantes = NULL, retangulos = NULL, circulos = NULL;
 
   Cor cq = NULL, cs = NULL, ct = NULL, ch = NULL;
-  int bool1 = 0, bool2 = 0, bool3 = 0, bool4 = 0;
+  int bool1 = 0, bool2 = 0, bool3 = 0, bool4 = 0, cont = 0;
 
   /*  Listas auxiliares. */
   quadras = createDLL();
@@ -145,6 +157,7 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
 
   while(1){
     fscanf(arqEntradaGeo, "%s ", entradaA);
+
     if(entradaA[0]=='#'){
       break;
     }
@@ -202,23 +215,23 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
       executarSI(arqEntradaGeo, canvas);
     }else
     if(entradaA[0] == 'c'){
-      executarAuxC(arqEntradaGeo, circulos);
+      executarC(arqEntradaGeo, circulos);
     } else
     if(entradaA[0] == 'r'){
-      executarAuxR(arqEntradaGeo, retangulos);
+      executarR(arqEntradaGeo, retangulos);
     } else
     if(entradaA[0] == 'q'){
-      qtdQuadrasInseridas++;
-      executarAuxQ(arqEntradaGeo, quadras, cq);
+      cont++;
+      executarQ(arqEntradaGeo, quadras, cq);
     } else
     if(entradaA[0] == 'h'){
-      executarAuxH(arqEntradaGeo, hidrantes, ch);
+      executarH(arqEntradaGeo, hidrantes, ch);
     } else
     if(entradaA[0] == 't'){
-      executarAuxT(arqEntradaGeo, torres, ct);
+      executarT(arqEntradaGeo, torres, ct);
     } else
     if(entradaA[0] == 's'){
-      executarAuxS(arqEntradaGeo, semafaros, cs);
+      executarS(arqEntradaGeo, semafaros, cs);
     } else
     if(entradaA[0] == 'd'){
       executarD(arqEntradaGeo, arqSaidaT,canvas);
@@ -235,46 +248,55 @@ void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canv
     }
     entradaA[0] = '\0';
   }
-
+ *qtdQuadrasInseridas = cont;
   if(bool1 == 0){
-    executarConvexHull(retangulos, canvas, 5);
-    executarConvexHull(circulos, canvas, 6);
-    bool4 = 1;
+    if(lengthDLL(retangulos))
+      executarConvexHull(retangulos, canvas, 5);
+
+    if(lengthDLL(circulos))
+      executarConvexHull(circulos, canvas, 6);
+
+    bool1 = 1;
   }
 
   if(bool2 == 0){
-    executarConvexHull(hidrantes, canvas, 2);
-    bool4 = 1;
+    if(lengthDLL(hidrantes))
+      executarConvexHull(hidrantes, canvas, 2);
+    bool2 = 1;
   }
 
   if(bool3 == 0){
-    executarConvexHull(torres, canvas, 4);
-    bool4 = 1;
+    if(lengthDLL(torres))
+      executarConvexHull(torres, canvas, 4);
+    bool3 = 1;
   }
 
   if(bool4 == 0){
-    executarConvexHull(semafaros, canvas, 3);
+    if(lengthDLL(semafaros))
+      executarConvexHull(semafaros, canvas, 3);
     bool4 = 1;
   }
 
-  executarConvexHull(quadras, canvas, 1);
+  if(lengthDLL(quadras) > 0){
+    executarConvexHull(quadras, canvas, 1);
+  }
 
-  eraseListDLLTwo(retangulos);
+  eraseListDLL(retangulos, NULL);
   eraseBase(retangulos);
 
-  eraseListDLLTwo(circulos);
+  eraseListDLL(circulos, NULL);
   eraseBase(circulos);
 
-  eraseListDLLTwo(quadras);
+  eraseListDLL(quadras, NULL);
   eraseBase(quadras);
 
-    eraseListDLLTwo(torres);
+  eraseListDLL(torres, NULL);
   eraseBase(torres);
 
-  eraseListDLLTwo(semafaros);
+  eraseListDLL(semafaros, NULL);
   eraseBase(semafaros);
 
-  eraseListDLLTwo(hidrantes);
+  eraseListDLL(hidrantes, NULL);
   eraseBase(hidrantes);
 
   removeCor(cq);

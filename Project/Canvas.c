@@ -63,7 +63,7 @@ void removeRetangulo(Canvas canvas, int id) {
   removeR(f);
   stack = convexHullOfAll(list, 5);
   ConvexHullAux(stack, canvas, 1);
-  eraseStackTwo(stack);
+  eraseStack(stack, NULL);
   eraseBaseStack(stack);
 }
 
@@ -97,7 +97,7 @@ void removeCirculo(Canvas canvas, int id) {
   removeC(f);
   stack = convexHullOfAll(list, 6);
   ConvexHullAux(stack, canvas, 2);
-  eraseStackTwo(stack);
+  eraseStack(stack, NULL);
   eraseBaseStack(stack);
 }
 
@@ -108,12 +108,15 @@ void showR(Retangulo retangulo) {
   */
   double w, h, x, y;
   char *cor;
+  char cor1[] = "red";
+  char text[] = "R";
   x = getRx(retangulo);
   y = getRy(retangulo);
   w = getRw(retangulo);
   h = getRh(retangulo);
   cor = getRcor(retangulo);
   tagRetangulo(newArqCanvas, w, h, x, y, cor);
+  tagTexto2(newArqCanvas, text, cor1, 4, x, y);
 }
 
 
@@ -136,11 +139,14 @@ void showC(Circulo circulo) {
   */
   double x, y, r;
   char *cor;
+  char cor1[] = "red";
+  char text[] = "C";
   x = getCx(circulo);
   y = getCy(circulo);
   r = getCr(circulo);
   cor = getCcor(circulo);
   tagCirculo(newArqCanvas, r, x, y, cor);
+  tagTexto2(newArqCanvas, text, cor1, 4, x, y);
 }
 
 
@@ -431,13 +437,13 @@ List getElementsListInsideR(Canvas canvas, int type, double x, double y,
   newReg->x = x;
   newReg->y = y;
   switch (type) {
-  case 1: /* Retângulo */
+  case 5: /* Retângulo */
     list = getElementsByRegion(canvasP->listaR, newReg, compareRR);
     break;
-  case 2: /* Círculo */
+  case 6: /* Círculo */
     list = getElementsByRegion(canvasP->listaC, newReg, compareRC);
     break;
-  case 3: /* Quadra */
+  case 1: /* Quadra */
     cidade = getCidade(canvas);
     list = getElementsByRegion(getListaQ(cidade), newReg, compareRQ);
     break;
@@ -445,11 +451,11 @@ List getElementsListInsideR(Canvas canvas, int type, double x, double y,
     cidade = getCidade(canvas);
     list = getElementsByRegion(getListaT(cidade), newReg, compareRT);
     break;
-  case 5: /* Hidrante */
+  case 2: /* Hidrante */
     cidade = getCidade(canvas);
     list = getElementsByRegion(getListaH(cidade), newReg, compareRH);
     break;
-  case 6: /* Semafáro */
+  case 3: /* Semafáro */
     cidade = getCidade(canvas);
     list = getElementsByRegion(getListaS(cidade), newReg, compareRS);
     break;
@@ -473,13 +479,13 @@ List getElementsListInsideC(Canvas canvas, int type, double x, double y,
   newReg->x = x;
   newReg->y = y;
   switch (type) {
-  case 1: /* Retângulo */
+  case 5: /* Retângulo */
     list = getElementsByRegion(canvasP->listaR, newReg, compareCR);
     break;
-  case 2: /* Círculo */
+  case 6: /* Círculo */
     list = getElementsByRegion(canvasP->listaC, newReg, compareCC);
     break;
-  case 3: /* Quadra */
+  case 1: /* Quadra */
     cidade = getCidade(canvas);
     list = getElementsByRegion(getListaQ(cidade), newReg, compareCQ);
     break;
@@ -487,11 +493,11 @@ List getElementsListInsideC(Canvas canvas, int type, double x, double y,
     cidade = getCidade(canvas);
     list = getElementsByRegion(getListaT(cidade), newReg, compareCT);
     break;
-  case 5: /* Hidrante */
+  case 2: /* Hidrante */
     cidade = getCidade(canvas);
     list = getElementsByRegion(getListaH(cidade), newReg, compareCH);
     break;
-  case 6: /* Semafáro */
+  case 3: /* Semafáro */
     cidade = getCidade(canvas);
     list = getElementsByRegion(getListaS(cidade), newReg, compareCS);
     break;
@@ -516,19 +522,22 @@ figuraGeometrica getCirculo(Canvas canvas, int id) {
 
 void eraseListaR(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  eraseQuadTreeNodeOne(canvasP->listaR, removeR);
+  eraseQuadTreeNode(canvasP->listaR, removeR);
+  eraseQuadTreeBase(canvasP->listaR);
 }
 
 
 void eraseListaC(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  eraseQuadTreeNodeOne(canvasP->listaC, removeC);
+  eraseQuadTreeNode(canvasP->listaC, removeC);
+  eraseQuadTreeBase(canvasP->listaC);
 }
 
 
 void eraseListaR2(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  eraseListDLLOne(canvasP->listaR2, removeR);
+  eraseListDLL(canvasP->listaR2, removeR);
+  eraseBase(canvasP->listaR2);
 }
 
 
@@ -560,13 +569,13 @@ void showCanvasElements(Canvas canvas, int type) {
     newArqCity = newArqCanvas;
     showQuadTree(conjunto, showH);
     break;
-  case 3: /* Torre */
+  case 4: /* Torre */
     cidade = canvasP->cidade;
     conjunto = getListaT(cidade);
     newArqCity = newArqCanvas;
     showQuadTree(conjunto, showT);
     break;
-  case 4: /* Semafaro */
+  case 3: /* Semafaro */
     cidade = canvasP->cidade;
     conjunto = getListaS(cidade);
     newArqCity = newArqCanvas;
@@ -602,14 +611,16 @@ void ConvexHullAux(Stack stack, Canvas canvas, int type) {
   case 1: /* Retângulo. */
     n = lengthStack(stack);
     for (i = 0; i < n; i++) {
-      element = removeTopI(stack);
+      element = getItemTop(stack);
+      removeTop(stack, NULL);
       insertRetangulo(canvas, element);
     }
     break;
   case 2: /* Círculo. */
     n = lengthStack(stack);
     for (i = 0; i < n; i++) {
-      element = removeTopI(stack);
+      element = getItemTop(stack);
+      removeTop(stack, NULL);
       insertCirculo(canvas, element);
     }
     break;

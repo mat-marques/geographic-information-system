@@ -38,15 +38,44 @@ Esse id será do hidrante passado como parâmetro.
 */
 char *getIdH(Hidrante element);
 
+
+/**
+Retorna a cor de preenchimento de Hidrante element.
+Retorna uma string.
+*/
 char *getCorpH(Hidrante element);
 
+
+/**
+Retorna a cor de borda de Hidrante element.
+Retorna uma string.
+*/
 char *getCorbH(Hidrante element);
 
+
+/**
+Retorna a vazão de Hidrante element.
+Retorna uma número real.
+*/
 double getVazao(Hidrante element);
 
+
+/*
+Modifica a vazão de Hidrante element pelo valor em vazão.
+*/
 void setVazao(Hidrante element, double vazao);
 
+
+/*
+Remove um hidrante da memória.
+*/
 void removeH(Hidrante element);
 
+
+/*
+A função verifica se um hidrante é igual ao tipo de dado item.
+item é um tipo de dado genérico.
+*/
 int compareH(Hidrante element, void *item);
+
 #endif

@@ -27,11 +27,11 @@ Torre criaTorre(double x, double y, char *id, char *corP, char *corB){
    strcpy(newElement->id, id);
 
    i = strlen(corP);
-   newElement->corP = (char*) malloc(i * sizeof(char));
+   newElement->corP = (char*) malloc((i+1) * sizeof(char));
    strcpy(newElement->corP, corP);
 
    i = strlen(corB);
-   newElement->corB = (char*) malloc(i * sizeof(char));
+   newElement->corB = (char*) malloc((i+1) * sizeof(char));
    strcpy(newElement->corB, corB);
 
    return (Torre) newElement;

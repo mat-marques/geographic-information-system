@@ -22,13 +22,15 @@ List createDLL() {
     base->last = NULL;
     base->size = 0;
   } else {
-    printf("Error in alocation in memory.\n");
+    printf("Error in alocation memory.\n");
   }
   return (List)base;
 }
 
 int lengthDLL(List list) {
   Base *base = (Base *)list;
+  if(base == NULL)
+    return 0;
   return base->size;
 }
 
@@ -180,6 +182,7 @@ Item removeItemDLL(List list, Item item, compareToDLL func){
           aux->previous->next = aux->next;
           aux->next->previous = aux->previous;
           free(aux);
+          base->size = base->size - 1;
           break;
         }
         aux = aux->next;
@@ -189,41 +192,63 @@ Item removeItemDLL(List list, Item item, compareToDLL func){
   return info;
 }
 
-int removeBeginDLLOne(List list, eraseItemDLL func) {
+int removeBeginDLL(List list, eraseItemDLL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
   if (base != NULL) {
     if (base->first != NULL) {
       aux = base->first->next;
       aux->previous = NULL;
-      func(base->first->info);
+      if(func != NULL)
+        func(base->first->info);
       free(base->first);
       base->first = aux;
       base->size = base->size - 1;
       return 1;
+    }else{
+      if (base->first != NULL && base->size == 1) {
+          if(func != NULL)
+            func(base->last->info);
+          free(base->last);
+          base->last = NULL;
+          base->first = NULL;
+          base->size = base->size - 1;
+          return 1;
+      }
     }
   }
   return 0;
 }
 
-int removeEndDLLOne(List list, eraseItemDLL func) {
+int removeEndDLL(List list, eraseItemDLL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
   if (base != NULL) {
-    if (base->first != NULL) {
+    if (base->first != NULL && base->size > 1) {
       aux = base->last->previous;
       aux->next = NULL;
-      func(base->last->info);
+      if(func != NULL)
+        func(base->last->info);
       free(base->last);
       base->last = aux;
       base->size = base->size - 1;
       return 1;
-    }
+    } else {
+       if (base->first != NULL && base->size == 1) {
+          if(func != NULL)
+            func(base->last->info);
+          free(base->last);
+          base->last = NULL;
+          base->first = NULL;
+          base->size = base->size - 1;
+          return 1;
+        }
+      }
   }
   return 0;
 }
 
-int removeMiddleDLLOne(List list, int p, eraseItemDLL func) {
+int removeMiddleDLL(List list, int p, eraseItemDLL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
   int i, j;
@@ -232,18 +257,20 @@ int removeMiddleDLLOne(List list, int p, eraseItemDLL func) {
   }
   j = lengthDLL(list);
   if (p == 1) {
-    removeBeginDLLOne(list, func);
+    removeBeginDLL(list, func);
     return 1;
   } else if (p >= j) {
-    removeEndDLLOne(list, func);
+    removeEndDLL(list, func);
     return 1;
   } else {
     if (base != NULL) {
       if (base->first != NULL) {
+        base->size = base->size - 1;
         aux = base->first;
         for (i = 1; i <= j; i++) {
           if (i == p) {
-            func(aux->info);
+            if(func != NULL)
+              func(aux->info);
             aux->previous->next = aux->next;
             aux->next->previous = aux->previous;
             free(aux);
@@ -258,72 +285,6 @@ int removeMiddleDLLOne(List list, int p, eraseItemDLL func) {
   return 0;
 }
 
-Item removeBeginDLLTwo(List list) {
-  Base *base = (Base *)list;
-  Element *aux = NULL;
-  Item item = NULL;
-  if (base != NULL) {
-    if (base->first != NULL) {
-      item = base->first->info;
-      aux = base->first->next;
-      aux->previous = NULL;
-      free(base->first);
-      base->first = aux;
-      base->size = base->size - 1;
-    }
-  }
-  return item;
-}
-
-Item removeEndDLLTwo(List list) {
-  Base *base = (Base *)list;
-  Element *aux = NULL;
-  Item item = NULL;
-  if (base != NULL) {
-    if (base->first != NULL) {
-      item = base->last->info;
-      aux = base->last->previous;
-      aux->next = NULL;
-      free(base->last);
-      base->last = aux;
-      base->size = base->size - 1;
-    }
-  }
-  return item;
-}
-
-Item removeMiddleDLLTwo(List list, int p) {
-  Base *base = (Base *)list;
-  Element *aux = NULL;
-  Item item = NULL;
-  int i, j;
-  if (p <= 0) {
-    return 0;
-  }
-  j = lengthDLL(list);
-  if (p == 1) {
-    item = removeBeginDLLTwo(list);
-  } else if (p >= j) {
-    item = removeEndDLLTwo(list);
-  } else {
-    if (base != NULL) {
-      if (base->first != NULL) {
-        aux = base->first;
-        for (i = 1; i <= j; i++) {
-          if (i == p) {
-            aux->previous->next = aux->next;
-            aux->next->previous = aux->previous;
-            item = aux->info;
-            free(aux);
-            break;
-          }
-          aux = aux->next;
-        }
-      }
-    }
-  }
-  return item;
-}
 
 Item getBeginItemDLL(List list) {
   Base *base = (Base *)list;
@@ -357,7 +318,7 @@ Item getItemDLL(List list, int p) {
       if (p <= 0 || p > j) {
         return NULL;
       }
-      for (i = 0; i < j; i++) {
+      for (i = 1; i <= j; i++) {
         if (i == p) {
           item = aux->info;
           return item;
@@ -371,12 +332,46 @@ Item getItemDLL(List list, int p) {
 
 void concatDLL(List listOne, List listTwo){
   if(listOne!=NULL && listTwo!=NULL){
-      Base *base1 = (Base *)listOne;
-      Base *base2 = (Base *)listTwo;
+    Base *base1 = (Base *)listOne;
+    Base *base2 = (Base *)listTwo;
+    if(base1->first != NULL && base2->first != NULL){
       base1->last->next = base2->first;
       base2->first->previous = base1->last;
+      base1->last = base2->last;
       base1->size = base1->size + base2->size;
+    }else {
+      if(base1->first == NULL && base2->first != NULL) {
+        base1->first = base2->first;
+        base1->last = base2->last;
+        base1->size = base2->size;
+      }
+    }
   }
+}
+
+
+int eraseListDLL(List list, eraseItemDLL func) {
+  Base *base = (Base *)list;
+  Element *aux, *aux2;
+  int i, j;
+  if (base != NULL) {
+    if (base->first != NULL) {
+      aux = base->first;
+      j = lengthDLL(list);
+      for (i = 1; i <= j; i++) {
+        aux2 = aux;
+        aux = aux->next;
+        if(func != NULL)
+          func(aux2->info);
+        free(aux2);
+      }
+        base->first = NULL;
+        base->last = NULL;
+      base->size = 0;
+      return 1;
+    }
+  }
+  return 0;
 }
 
 void eraseBase(List list){
@@ -384,43 +379,4 @@ void eraseBase(List list){
   if(base!=NULL){
     free(base);
   }
-}
-
-int eraseListDLLOne(List list, eraseItemDLL func) {
-  Base *base = (Base *)list;
-  Element *aux, *aux2;
-  int i, j;
-  if (base != NULL) {
-    if (base->first != NULL) {
-      aux = base->first;
-      j = lengthDLL(list);
-      for (i = 0; i < j; i++) {
-        aux2 = aux;
-        aux = aux->next;
-        func(aux2->info);
-        free(aux2);
-      }
-      return 1;
-    }
-  }
-  return 0;
-}
-
-int eraseListDLLTwo(List list) {
-  Base *base = (Base *)list;
-  Element *aux, *aux2;
-  int i, j;
-  if (base != NULL) {
-    if (base->first != NULL) {
-      aux = base->first;
-      j = lengthDLL(list);
-      for (i = 0; i < j; i++) {
-        aux2 = aux;
-        aux = aux->next;
-        free(aux2);
-      }
-      return 1;
-    }
-  }
-  return 0;
 }

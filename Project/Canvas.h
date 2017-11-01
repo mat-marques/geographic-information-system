@@ -83,12 +83,12 @@ h : altura,
 x : coordenada no espaço 2d,
 y : coordenada no espaço 2d.
 O argumento type pode receber os inteiros:
-1 : Retângulo;
-2 : Círculo;
-3 : Quadra;
+1 : Quadra;
+2 : Hidrante;
+3 : Semáfaro.
 4 : Torre;
-5 : Hidrante;
-6 : Semáfaro.
+5 : Retângulo;
+6 : Círculo;
 */
 List getElementsListInsideR(Canvas canvas, int type, double x, double y, double w, double h);
 
@@ -98,12 +98,12 @@ r : raio,
 x : coordenada no espaço 2d,
 y : coordenada no espaço 2d.
 O argumento type pode receber os inteiros:
-1 : Retângulo;
-2 : Círculo;
-3 : Quadra;
+1 : Quadra;
+2 : Hidrante;
+3 : Semáfaro.
 4 : Torre;
-5 : Hidrante;
-6 : Semáfaro.
+5 : Retângulo;
+6 : Círculo;
 */
 List getElementsListInsideC(Canvas canvas, int type, double x, double y, double r);
 
@@ -238,8 +238,8 @@ void eraseCanvas(Canvas canvas);
 O argumento type pode receber um dos seguintes valores:
 1 : Quadra;
 2 : Hidrante;
-3 : Torre;
-4 : Semáfaro;
+3 : Semáfaro.
+4 : Torre;
 5 : Retângulo;
 6 : Círculo;
 7 : Retângulo de sobreposição.

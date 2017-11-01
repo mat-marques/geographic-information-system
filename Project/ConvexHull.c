@@ -1,6 +1,7 @@
 #include "Circulo.h"
 #include "ConvexHull.h"
 #include "Hidrante.h"
+#include "OperacoesF.h"
 #include "Ordination.h"
 #include "QuadTree.h"
 #include "Quadra.h"
@@ -9,13 +10,12 @@
 #include "Stack.h"
 #include "Svg.h"
 #include "Torre.h"
-#include "OperacoesF.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef void (*eraseElement)(void*);
-
+typedef void (*eraseElement)(void *);
+int convexHull(void *vetor, int n, List listConvex, List listPi);
 
 typedef struct Dots {
   void *info;
@@ -33,7 +33,9 @@ void *allocate(int qtd) {
 /*Desaloca a variavel item. Função necessária para a pilha.*/
 void deallocate(void *item) {
   S *s1 = (S *)item;
-  free(s1);
+  if (s1 != NULL) {
+    free(s1);
+  }
 }
 
 /*Função que atribui os valores de valor para valor. Função necessária para a
@@ -53,6 +55,7 @@ S *smallerDot(S *s, int qtd) {
   S *s1;
   y = s->y;
   x = s->x;
+  s1 = s;
   for (i = 1; i < qtd; i++) {
     /*Encontra o menor y*/
     if ((s + i)->y < y) {
@@ -105,132 +108,200 @@ int orientation(S *p, S *q, S *r) {
 int compare(void *valor1, int i, void *valor2, int j) {
   S *s1 = (S *)valor1;
   S *s2 = (S *)valor2;
-  int o = orientation(p0, s1, s2);
+  int o = orientation(p0, s1 + i, s2 + j);
   if (o == 0) {
     return (dist(p0, s2 + j) >= dist(p0, s1 + i)) ? -1 : 1;
   }
   return (o == -1) ? -1 : 1;
 }
 
-Vector listToVector(List list, int typeOfList) {
+Vector listToVectorOne(List list, int type) {
   int i, j;
   S *newVector = NULL;
   Item item;
   j = lengthDLL(list);
   newVector = (S *)malloc(j * sizeof(S));
-  switch (typeOfList) {
+  switch (type) {
   case 1: /* Quadra */
-    for (i = 0; i < j; i++) {
-      item = getItemDLL(list, i + 1);
-      (newVector + i)->x = getXQ(item);
-      (newVector + i)->y = getYQ(item);
-      (newVector + i)->info = item;
+    for (i = 1; i <= j; i++) {
+      item = getItemDLL(list, i);
+      (newVector + i - 1)->x = getXQ(item);
+      (newVector + i - 1)->y = getYQ(item);
+      (newVector + i - 1)->info = item;
     }
     break;
   case 2: /* Hidrante */
-    for (i = 0; i < j; i++) {
-      item = getItemDLL(list, i + 1);
-      (newVector + i)->x = getXH(item);
-      (newVector + i)->y = getYH(item);
-      (newVector + i)->info = item;
+    for (i = 1; i <= j; i++) {
+      item = getItemDLL(list, i);
+      (newVector + i - 1)->x = getXH(item);
+      (newVector + i - 1)->y = getYH(item);
+      (newVector + i - 1)->info = item;
     }
     break;
   case 3: /* Semafáro */
-    for (i = 0; i < j; i++) {
-      item = getItemDLL(list, i + 1);
-      (newVector + i)->x = getXS(item);
-      (newVector + i)->y = getYS(item);
-      (newVector + i)->info = item;
+    for (i = 1; i <= j; i++) {
+      item = getItemDLL(list, i);
+      (newVector + i - 1)->x = getXS(item);
+      (newVector + i - 1)->y = getYS(item);
+      (newVector + i - 1)->info = item;
     }
     break;
   case 4: /* Torre */
-    for (i = 0; i < j; i++) {
-      item = getItemDLL(list, i + 1);
-      (newVector + i)->x = getXT(item);
-      (newVector + i)->y = getYT(item);
-      (newVector + i)->info = item;
+    for (i = 1; i <= j; i++) {
+      item = getItemDLL(list, i);
+      (newVector + i - 1)->x = getXT(item);
+      (newVector + i - 1)->y = getYT(item);
+      (newVector + i - 1)->info = item;
     }
     break;
   case 5: /* Retângulo */
-    for (i = 0; i < j; i++) {
-      item = getItemDLL(list, i + 1);
-      (newVector + i)->x = getRx(item);
-      (newVector + i)->y = getRy(item);
-      (newVector + i)->info = item;
+    for (i = 1; i <= j; i++) {
+      item = getItemDLL(list, i);
+      (newVector + i - 1)->x = getRx(item);
+      (newVector + i - 1)->y = getRy(item);
+      (newVector + i - 1)->info = item;
     }
     break;
   case 6: /* Círculo */
-    for (i = 0; i < j; i++) {
-      item = getItemDLL(list, i + 1);
-      (newVector + i)->x = getCx(item);
-      (newVector + i)->y = getCy(item);
-      (newVector + i)->info = item;
+    for (i = 1; i <= j; i++) {
+      item = getItemDLL(list, i);
+      (newVector + i - 1)->x = getCx(item);
+      (newVector + i - 1)->y = getCy(item);
+      (newVector + i - 1)->info = item;
     }
     break;
   }
   return newVector;
 }
 
-/* Calcula a envoltória convexa */
-Stack convexHullOfAll(List list, int typeOfList) {
+Vector listToVectorTwo(List list) {
   int i, j;
   S *newVector = NULL;
+  S *item;
+  j = lengthDLL(list);
+  newVector = (S *)malloc(j * sizeof(S));
+  for (i = 1; i <= j; i++) {
+    item = (S *)getItemDLL(list, i);
+    (newVector + i - 1)->x = item->x;
+    (newVector + i - 1)->y = item->y;
+    (newVector + i - 1)->info = item->info;
+  }
+  return newVector;
+}
+
+/* Calcula a envoltória convexa */
+Stack convexHullOfAll(List list, int type) {
+  int i, j = 0;
+  S *newVector = NULL;
   List listConvex, listPi;
-  Item item;
+  S *item;
+  void *item2;
 
   Stack stack = createStack();
 
-  /* Configura o primeiro vetor de pontos   */
-  newVector = (S *)listToVector(list, typeOfList);
-  listConvex =
-      createDLL(); /* Cria a lista de elementos que formam a envoltória convexa
-                      */
-  listPi = createDLL(); /* Cria a lista de elementos que não formam a envoltória
-                           convexa */
-  while (j > 2) {
+  j = lengthDLL(list);
 
-    convexHull(newVector, j, listConvex,
-               listPi); /* Calcula a envoltória convexa */
+  if (j >= 3) {
+    /* Configura o primeiro vetor de pontos   */
+    newVector = (S *)listToVectorOne(list, type);
+    listConvex = createDLL(); /* Cria a lista de elementos que formam a
+                                 envoltória convexa */
 
-    j = lengthDLL(listConvex);
-    for (i = 0; i < j; i++) {
-      item = removeEndDLLTwo(listConvex);
-      insertTop(stack, item);
-    }
-    eraseListDLLTwo(listConvex);
+    listPi = createDLL(); /* Cria a lista de elementos que não formam a
+                             envoltória convexa */
 
-    j = lengthDLL(listPi);
-    if (j > 2) {
-      free(newVector);
-      newVector = (S *)listToVector(listPi, typeOfList);
-      eraseListDLLTwo(listPi);
-      listPi = createDLL();
-      listConvex = createDLL();
-    } else {
-      if (j > 0) {
+    while (j > 2) {
+
+      convexHull(newVector, j, listConvex,
+                 listPi); /* Calcula a envoltória convexa */
+
+      j = lengthDLL(listConvex);
+      for (i = 1; i <= j; i++) {
+        item = (S *)getEndItemDLL(listConvex);
+        removeEndDLL(listConvex, NULL);
+        insertTop(stack, item->info);
+        free(item);
+      }
+      eraseListDLL(listConvex, deallocate);
+
+      j = lengthDLL(listPi);
+      if (j > 2) {
         free(newVector);
-        item = removeEndDLLTwo(listPi);
-        insertTop(stack, item);
-        item = removeEndDLLTwo(listPi);
-        insertTop(stack, item);
-        eraseListDLLTwo(listPi);
+        newVector = NULL;
+        newVector = (S *)listToVectorTwo(listPi);
+        eraseListDLL(listPi, deallocate);
+      } else {
+        free(newVector);
+        newVector = NULL;
+        for (i = 1; i <= j; i++) {
+          item = (S *)getEndItemDLL(listPi);
+          removeEndDLL(listPi, NULL);
+          insertTop(stack, item->info);
+          free(item);
+        }
+        eraseListDLL(listConvex, deallocate);
+        eraseListDLL(listPi, deallocate);
       }
     }
+    eraseBase(listConvex);
+    eraseBase(listPi);
+  } else {
+    for (i = 1; i <= j; i++) {
+      item2 = (S *)getItemDLL(list, i);
+      insertTop(stack, item2);
+    }
   }
-
   return stack;
 }
 
+void swap(void *valor1, int i, void *valor2, int j) {
+  S *s1 = (S *)valor1;
+  S *s2 = (S *)valor2;
+  S s3;
+  s3.x = (s1 + i)->x;
+  s3.y = (s1 + i)->y;
+  s3.info = (s1 + i)->info;
+  (s1 + i)->x = (s2 + j)->x;
+  (s1 + i)->y = (s2 + j)->y;
+  (s1 + i)->info = (s2 + j)->info;
+  (s2 + j)->x = s3.x;
+  (s2 + j)->y = s3.y;
+  (s2 + j)->info = s3.info;
+}
+
 /* Calcula os vertices do polígono convexo. */
-void convexHull(void *vetor, int n, List listConvex, List listPi) {
-  int i;
+int convexHull(void *vetor, int n, List listConvex, List listPi) {
+  int i, m;
+  double a;
   S *vetorA = (S *)vetor;
-  Item elementOne = NULL;
+  S *elementOne = NULL;
+
   /*Encontra o menor y no conjunto de pontos*/
+
   p0 = smallerDot(vetorA, n);
 
   /*Ordena o vetor da posicão 1 até n. A posição inicial e o menor y.*/
   mergeSort(vetorA + 1, 0, n - 2, allocate, deallocate, compare, assign);
+
+  /*Verifica a quantidade de pontos do vetor que são colineares com p0.*/
+  m = 1;
+  for (i = 1; i < n; i++) {
+    while ((i < n - 1) &&
+           orientation(p0, (vetorA + i), (vetorA + i + 1)) == 0) {
+      i++;
+    }
+    swap(vetorA, m, vetorA, i);
+    m++;
+  }
+
+  if (m < 3) {
+    for (i = 0; i < n; i++) {
+      elementOne = (S *)malloc(sizeof(S));
+      assign(elementOne, 0, vetorA, i);
+      insertBeginDLL(listConvex, elementOne);
+    }
+    return 0;
+  }
 
   /* Coloca na listaCovex vetor[0] */
   elementOne = (S *)malloc(sizeof(S));
@@ -248,20 +319,36 @@ void convexHull(void *vetor, int n, List listConvex, List listPi) {
   insertBeginDLL(listConvex, elementOne);
 
   /*Comparação entre os pontos*/
-  for (i = 3; i < n; i++) {
+  for (i = 3; i < m; i++) {
     /*Continua removendo os pontos da listaCovex enquanto os três pontos não
-     * fazem
-     * uma curva para a esquerda.*/
-    while (orientation((S *)getItemDLL(listConvex, 2),
-                       (S *)getItemDLL(listConvex, 1), (vetorA + i)) != 2) {
-      elementOne = removeBeginDLLTwo(listConvex);
-      insertBeginDLL(listPi, elementOne);
+     * fazem uma curva para a esquerda.*/
+    while (1) {
+      a = orientation((S *)getItemDLL(listConvex, 2),
+                      (S *)getItemDLL(listConvex, 1), (vetorA + i));
+      if (a != -1) {
+        elementOne = (S *)getBeginItemDLL(listConvex);
+        removeBeginDLL(listConvex, NULL);
+        insertBeginDLL(listPi, elementOne);
+        if (lengthDLL(listConvex) == 1) {
+          break;
+        }
+      } else {
+        break;
+      }
     }
     /*  Insere um novo elemento na listaCovex*/
     elementOne = (S *)malloc(sizeof(S));
     assign(elementOne, 0, vetorA, i);
     insertBeginDLL(listConvex, elementOne);
   }
+  if (m < n) {
+    for (i = m; i < n; i++) {
+      elementOne = (S *)malloc(sizeof(S));
+      assign(elementOne, 0, vetorA, i);
+      insertBeginDLL(listPi, elementOne);
+    }
+  }
+  return 1;
 }
 
 List createListPoints(double x, double y, double r) {
@@ -314,67 +401,83 @@ List createListPoints(double x, double y, double r) {
   return list;
 }
 
-void generateConvexHullT(List list, FILE *file){
+void generateConvexHullT(List list, FILE *file) {
   List list2 = NULL, list3 = NULL;
-  int i, n;
+  int i, n, j, k, a;
   double x, y, r;
   Torre torre;
   S *vetor;
   S *element;
   char cor[] = "red";
-  char cor2[]= "black";
+  char cor2[] = "black";
 
   /* Pega os oito pontos envolta do alcance da torre. */
   n = lengthDLL(list);
   list3 = createDLL();
-  for(i=0; i<n; i++){
-    torre = getItemDLL(list, i+1);
+  for (i = 0; i < n; i++) {
+    torre = getItemDLL(list, i + 1);
     x = getXT(torre);
     y = getYT(torre);
     r = getRaio(torre);
-    if(r > 0){
+    if (r > 0) {
       list2 = createListPoints(x, y, r);
       concatDLL(list3, list2);
       tagCirculoOpacity(file, r, x, y, cor);
-      eraseListDLLTwo(list2);
       eraseBase(list2);
     }
   }
 
-  /* Converte a lista em vetor. */
+  /* Converte a lista em vetor e verifica se não existem elementos repetidos.*/
   n = lengthDLL(list3);
-  if(n>0){
-    vetor = (S*) malloc(sizeof(S) * n);
-  }
-  for(i=0; i<n; i++){
-    element = (S*) getItemDLL(list3, i+1);
-    if(element != NULL){
-      (vetor + i)->x = element->x;
-      (vetor + i)->y = element->y;
-      (vetor + i)->info = element->info;
-      /* Coloca os pontos no svg. */
-      pontos(file, (element+i)->x, (element+i)->y, cor);
+  if (n > 0) {
+    vetor = (S *)malloc(sizeof(S) * n);
+    k = 0;
+    for (i = 1; i <= n; i++) {
+      element = (S *)getItemDLL(list3, i);
+      if (element != NULL) {
+        a = 0;
+        for (j = 0; j < k; j++) { /* elementos repetidos. */
+          if (((vetor + j)->x == element->x) &&
+              ((vetor + j)->y == element->y)) {
+            a = 1;
+            break;
+          }
+        }
+        if (a == 0) {
+          (vetor + k)->x = element->x;
+          (vetor + k)->y = element->y;
+          (vetor + k)->info = element->info;
+          /* Coloca os pontos no svg. */
+          pontos(file, element->x, element->y, cor);
+          k++;
+        }
+      }
     }
-  }
-  /* Encontra a envoltória convexa. */
-  eraseListDLLTwo(list3);
-  list2 = createDLL();
-  convexHull(vetor, n, list2, list3);
+    /* Encontra a envoltória convexa. */
+    eraseListDLL(list3, deallocate);
+    list2 = createDLL();
+    convexHull(vetor, k, list2, list3);
 
-  /* Coloca as linhas no svg. */
-  for(i=0; i<n-2; i++){
-    element = (S*) getItemDLL(list3, i+1);
-    x = (element+i)->x;
-    y = (element+i)->y;
-    element = (S*) getItemDLL(list3, i+2);
-    linha(file, x, y, (element+i)->x, (element+i)->y, cor2);
+    n = lengthDLL(list2);
+    /* Coloca as linhas no svg. */
+    for (i = n; i > 1; i--) {
+      element = (S *)getItemDLL(list2, i);
+      x = element->x;
+      y = element->y;
+      element = (S *)getItemDLL(list2, i - 1);
+      linha(file, x, y, element->x, element->y, cor2);
+    }
+    element = (S *)getBeginItemDLL(list2);
+    x = element->x;
+    y = element->y;
+    element = (S *)getEndItemDLL(list2);
+    linha(file, x, y, element->x, element->y, cor2);
+    free(vetor);
   }
-
-  eraseListDLLTwo(list3);
-  eraseListDLLTwo(list2);
+  eraseListDLL(list3, deallocate);
+  eraseListDLL(list2, deallocate);
   eraseBase(list3);
   eraseBase(list2);
-  free(vetor);
 }
 
 double **allocateMatrix(int row, int col) {
@@ -404,7 +507,7 @@ void display(double **mat, int row, int col) {
   }
 }
 
-double calcArea(List list){
+double calcArea(List list) {
   double area = 0, aux1 = 0, aux2 = 0;
   int n;
   int i, j;
@@ -413,27 +516,27 @@ double calcArea(List list){
   n = lengthDLL(list);
   mat = allocateMatrix(n, 2);
   j = 0;
-  for(i=n; i>0; i--){
-    element = (S*) getItemDLL(list, i);
-    if(element != NULL){
+  for (i = n; i > 0; i--) {
+    element = (S *)getItemDLL(list, i);
+    if (element != NULL) {
       mat[j][0] = element->x;
       mat[j][1] = element->y;
       j++;
     }
   }
-  for(i=0; i<n-1; i++){
-    aux1 = aux1 + (mat[i][0] * mat[i+1][1]);
+  for (i = 0; i < n - 1; i++) {
+    aux1 = aux1 + (mat[i][0] * mat[i + 1][1]);
   }
-  for(i=0; i<n-1; i++){
-    aux2 = aux2 + (mat[i+1][0] * mat[i][1]);
+  for (i = 0; i < n - 1; i++) {
+    aux2 = aux2 + (mat[i + 1][0] * mat[i][1]);
   }
-  area = fabs(aux1 - aux2)/2;
+  area = fabs(aux1 - aux2) / 2;
   deallocMatrix(mat, n);
   return area;
 }
 
-double areaConvexHull(List list){
-  double area;
+double areaConvexHull(List list) {
+  double area = 0;
   List list2 = NULL, list3 = NULL;
   int i, n;
   double x, y, r;
@@ -444,46 +547,44 @@ double areaConvexHull(List list){
   /* Pega os oito pontos envolta do alcance da torre. */
   n = lengthDLL(list);
   list3 = createDLL();
-  for(i=0; i<n; i++){
-    torre = getItemDLL(list, i+1);
+  for (i = 0; i < n; i++) {
+    torre = getItemDLL(list, i + 1);
     x = getXT(torre);
     y = getYT(torre);
     r = getRaio(torre);
-    if(r > 0){
+    if (r > 0) {
       list2 = createListPoints(x, y, r);
       concatDLL(list3, list2);
-      eraseListDLLTwo(list2);
       eraseBase(list2);
+      list2 = NULL;
     }
   }
 
   /* Converte a lista em vetor. */
   n = lengthDLL(list3);
-  if(n>0){
-    vetor = (S*) malloc(sizeof(S) * n);
-  }
-  for(i=0; i<n; i++){
-    element = (S*) getItemDLL(list3, i+1);
-    if(element != NULL){
-      (vetor + i)->x = element->x;
-      (vetor + i)->y = element->y;
-      (vetor + i)->info = element->info;
+  if (n > 0) {
+    vetor = (S *)malloc(sizeof(S) * n);
+
+    for (i = 1; i <= n; i++) {
+      element = (S *)getItemDLL(list3, i);
+      if (element != NULL) {
+        (vetor + i - 1)->x = element->x;
+        (vetor + i - 1)->y = element->y;
+        (vetor + i - 1)->info = element->info;
+      }
     }
+    /* Encontra a envoltória convexa. */
+    eraseListDLL(list3, deallocate);
+    list2 = createDLL();
+    convexHull(vetor, n, list2, list3);
+    area = calcArea(list2);
+    free(vetor);
   }
 
-  /* Encontra a envoltória convexa. */
-  eraseListDLLTwo(list3);
-  list2 = createDLL();
-  convexHull(vetor, n, list2, list3);
-
-  area = calcArea(list2);
-
-  eraseListDLLTwo(list3);
-  eraseListDLLTwo(list2);
+  eraseListDLL(list3, deallocate);
+  eraseListDLL(list2, deallocate);
   eraseBase(list3);
   eraseBase(list2);
-  free(vetor);
-
 
   return area;
 }

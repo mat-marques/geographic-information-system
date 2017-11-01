@@ -48,8 +48,15 @@ Retorna uma string que representa a cor de preenchimento de Retangulo element.
 */
 char *getRcor(Retangulo element);
 
+/*
+Remove Retangulo element da memória.
+*/
 void removeR(Retangulo element);
 
+/*
+A função verifica se um retângulo é igual ao tipo de dado item.
+item é um tipo de dado genérico.
+*/
 int compareR(Retangulo element, void* item);
 
 #endif

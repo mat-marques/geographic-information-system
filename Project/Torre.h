@@ -7,7 +7,7 @@ typedef void* Torre;
 Autor: Matheus Augusto Marques.
 TAD: Torre
 Definição:
-Uma torre de celular, basicamente, é composta por um par ordenado x, y(ambos pertecem aos números reais) e um valor inteiro para identificar a torre no plano.
+Uma torre de celular, basicamente, é composta por um par ordenado x, y(ambos pertecem aos números reais), um valor inteiro para identificar a torre no plano e uma cor nos padrões do svg.
 */
 
 /**
@@ -33,25 +33,47 @@ double getYT(Torre element);
 
 /**
 Retorna o número de identificação da Torre element.
+Retorna uma string.
 */
 char *getIdT(Torre element);
 
 
+/**
+Retorna a cor de preenchimento da Torre element.
+Retorna uma string.
+*/
 char *getCorpT(Torre element);
 
 
+/**
+Retorna a cor de borda da Torre element.
+Retorna uma string.
+*/
 char *getCorbT(Torre element);
 
 
+/**
+Retorna o raio de alcance da Torre element.
+Retorna uma string.
+*/
 double getRaio(Torre element);
 
 
+/**
+Modifica o raio de alcance da Torre element pelo valor em raio.
+*/
 void setRaio(Torre element, double raio);
 
 
+/**
+Remove uma torre da memória.
+*/
 void removeT(Torre element);
 
-
+/*
+A função verifica se uma torre é igual ao tipo de dado item.
+item é um tipo de dado genérico.
+*/
 int compareT(Torre element, void *item);
 
 #endif

@@ -57,6 +57,7 @@ void removeR(Retangulo element){
   Rectangle *element2 = (Rectangle *) element;
   if(element2 != NULL){
     free(element2);
+    element2 = NULL;
   }
 }
 

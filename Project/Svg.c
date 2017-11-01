@@ -155,6 +155,31 @@ void tagTexto(FILE *arqSvg, double x, double y) {
   fprintf(arqSvg, "%s\n", "</text>");
 }
 
+void tagTexto2(FILE *arqSvg, char *texto, char *cor, int fontSize, double x, double y) {
+  fprintf(arqSvg, "%s", "<text");
+
+  fprintf(arqSvg, " %s", "x=");
+  fprintf(arqSvg, "\"%f\"", x);
+
+  fprintf(arqSvg, " %s", "y=");
+  fprintf(arqSvg, "\"%f\"", y);
+
+  fprintf(arqSvg, "\n%s\n", "stroke-width=\"1\"");
+
+  fprintf(arqSvg, "%s", "fill=\"");
+  fprintf(arqSvg, "%s", cor);
+  fprintf(arqSvg, "%s\n", "\"");
+
+  fprintf(arqSvg, "%s", "font-size=\"");
+  fprintf(arqSvg, "%d", fontSize);
+  fprintf(arqSvg, "%s\n", "\"");
+
+  fprintf(arqSvg, " %s", ">");
+  fprintf(arqSvg, "%s", texto);
+  fprintf(arqSvg, "%s\n", "</text>");
+}
+
+
 void tagRetanguloSobreposicao(FILE *arqSvg, double x, double y, double w,
                               double h) {
   fprintf(arqSvg, "%s\n", "<rect");

@@ -11,88 +11,158 @@
 #include "Semafaro.h"
 #include "Torre.h"
 
+#include "Canvas.h"
 #include "ConvexHull.h"
 #include "DoubleLinkedList.h"
 #include "QuadTree.h"
 #include "Stack.h"
 #include "StringO.h"
 #include "Svg.h"
-#include "Canvas.h"
 
 void executarConvexHull(List list, Canvas canvas, int type) {
   int i, n;
   void *element = NULL;
-  Stack stack;
-
+  Stack stack = NULL;
+  double x, y, w, h;
+  w = getWidth(canvas);
+  h = getHeight(canvas);
   switch (type) {
   case 1: /* Quadra. */
     stack = convexHullOfAll(list, 1);
     n = lengthStack(stack);
     for (i = 0; i < n; i++) {
-      element = removeTopI(stack);
-      insertQuadra(canvas, element);
+      element = getItemTop(stack);
+      removeTop(stack, NULL);
+      insertQuadra(getCidade(canvas), element);
+      x = getXQ(element);
+      y = getYQ(element);
+      x = x + getLargQ(element);
+      y = y + getAltQ(element);
+      if (w < x) {
+        setWidth(canvas, x);
+        w = x;
+      }
+      if (h < y) {
+        setHeight(canvas, y);
+        h = y;
+      }
     }
     break;
   case 2: /* Hidrante. */
-    stack = convexHullOfAll(list, 1);
+    stack = convexHullOfAll(list, 2);
     n = lengthStack(stack);
     for (i = 0; i < n; i++) {
-      element = removeTopI(stack);
-      insertHidrante(canvas, element);
+      element = getItemTop(stack);
+      removeTop(stack, NULL);
+      insertHidrante(getCidade(canvas), element);
+      x = getXH(element);
+      y = getYH(element);
+      if (w < x) {
+        setWidth(canvas, x);
+        w = x;
+      }
+      if (h < y) {
+        setHeight(canvas, y);
+        h = y;
+      }
     }
     break;
   case 3: /* semafaro. */
-    stack = convexHullOfAll(list, 1);
+    stack = convexHullOfAll(list, 3);
     n = lengthStack(stack);
     for (i = 0; i < n; i++) {
-      element = removeTopI(stack);
-      insertSemafaro(canvas, element);
+      element = getItemTop(stack);
+      removeTop(stack, NULL);
+      insertSemafaro(getCidade(canvas), element);
+      x = getXS(element);
+      y = getYS(element);
+      if (w < x) {
+        setWidth(canvas, x);
+        w = x;
+      }
+      if (h < y) {
+        setHeight(canvas, y);
+        h = y;
+      }
     }
     break;
   case 4: /* Torre. */
-    stack = convexHullOfAll(list, 1);
+    stack = convexHullOfAll(list, 4);
     n = lengthStack(stack);
     for (i = 0; i < n; i++) {
-      element = removeTopI(stack);
-      insertTorre(canvas, element);
+      element = getItemTop(stack);
+      removeTop(stack, NULL);
+      insertTorre(getCidade(canvas), element);
+      x = getXT(element);
+      y = getYT(element);
+      if (w < x) {
+        setWidth(canvas, x);
+        w = x;
+      }
+      if (h < y) {
+        setHeight(canvas, y);
+        h = y;
+      }
     }
     break;
   case 5: /* Retângulo. */
-    stack = convexHullOfAll(list, 1);
+    stack = convexHullOfAll(list, 5);
     n = lengthStack(stack);
     for (i = 0; i < n; i++) {
-      element = removeTopI(stack);
+      element = getItemTop(stack);
+      removeTop(stack, NULL);
       insertRetangulo(canvas, element);
+      x = getRx(element);
+      y = getRy(element);
+      x = x + getRw(element);
+      y = y + getRh(element);
+      if (w < x) {
+        setWidth(canvas, x);
+        w = x;
+      }
+      if (h < y) {
+        setHeight(canvas, y);
+        h = y;
+      }
     }
     break;
   case 6: /* Círculo. */
     stack = convexHullOfAll(list, 6);
     n = lengthStack(stack);
     for (i = 0; i < n; i++) {
-      element = removeTopI(stack);
+      element = getItemTop(stack);
+      removeTop(stack, NULL);
       insertCirculo(canvas, element);
+      x = getCx(element);
+      y = getCy(element);
+      x = x + getCr(element);
+      y = y + getCr(element);
+      if (w < x) {
+        setWidth(canvas, x);
+        w = x;
+      }
+      if (h < y) {
+        setHeight(canvas, y);
+        h = y;
+      }
     }
     break;
   }
-
-  eraseStackTwo(stack);
+  eraseStack(stack, NULL);
   eraseBaseStack(stack);
 }
 
-
-void executarAuxC(FILE *arqEntradaGeo, List list) {
+void executarC(FILE *arqEntradaGeo, List list) {
   double x = 0, y = 0, r = 0;
   char cor[60];
   int i;
-
   Circulo circulo = NULL;
   fscanf(arqEntradaGeo, "%d %lf %lf %lf %s\n", &i, &r, &x, &y, cor);
   circulo = createCircle(i, r, x, y, cor);
   insertEndDLL(list, circulo);
 }
 
-
-void executarAuxR(FILE *arqEntradaGeo, List list) {
+void executarR(FILE *arqEntradaGeo, List list) {
   double w = 0, h = 0, x = 0, y = 0;
   char cor[60];
   int i = 0;
@@ -102,14 +172,14 @@ void executarAuxR(FILE *arqEntradaGeo, List list) {
   insertEndDLL(list, retangulo);
 }
 
-void executarD(FILE *arqEntradaGeo,  FILE *arqSaidaT, Canvas canvas){
-  void *voidPointer1=NULL, *voidPointer2=NULL;
-  int i,j;
-  char caracter='r';
-  char caracter1='r';
+void executarD(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
+  void *voidPointer1 = NULL, *voidPointer2 = NULL;
+  int i, j;
+  char caracter = 'r';
+  char caracter1 = 'r';
   char stringAux[] = "Nao encontrados";
-  if(arqSaidaT!=NULL){
-    fscanf(arqEntradaGeo,"%d %d\n",&i,&j);
+  if (arqSaidaT != NULL) {
+    fscanf(arqEntradaGeo, "%d %d\n", &i, &j);
     caracter = 'd';
     fillArq(arqSaidaT, caracter);
     fillSpace(arqSaidaT);
@@ -117,36 +187,40 @@ void executarD(FILE *arqEntradaGeo,  FILE *arqSaidaT, Canvas canvas){
     fillSpace(arqSaidaT);
     fillArq3(arqSaidaT, j);
     fillBreakLine(arqSaidaT);
-    caracter='r';
+    caracter = 'r';
     voidPointer1 = getRetangulo(canvas, i);
-    if(voidPointer1==NULL){
+    if (voidPointer1 == NULL) {
       voidPointer1 = getCirculo(canvas, i);
-      caracter='c';
+      caracter = 'c';
     }
-    caracter1='r';
+    caracter1 = 'r';
     voidPointer2 = getRetangulo(canvas, j);
-    if(voidPointer2==NULL){
+    if (voidPointer2 == NULL) {
       voidPointer2 = getCirculo(canvas, j);
-      caracter1='c';
+      caracter1 = 'c';
     }
 
-    if(voidPointer1!=NULL&&voidPointer2!=NULL){
-      if(caracter=='c'&&caracter1=='c'){
-          comandoD(arqSaidaT,
-          getCx(voidPointer1), getCy(voidPointer1),
-          getCx(voidPointer2), getCy(voidPointer2));
-      }else if(caracter=='c'&&caracter1=='r'){
-          comandoD(arqSaidaT,
-          getCx(voidPointer1), getCy(voidPointer1), (getRx(voidPointer2)+getRw(voidPointer2))/2, (getRy(voidPointer2)+getRh(voidPointer2))/2);
-      }else if(caracter=='r'&&caracter1=='c'){
-          comandoD(arqSaidaT,
-          (getRx(voidPointer1)+getRw(voidPointer1))/2, (getRy(voidPointer1)+getRh(voidPointer1))/2,
-          getCx(voidPointer2), getCy(voidPointer2));
-      }else if(caracter=='r'&&caracter1=='r'){
-          comandoD(arqSaidaT,
-          (getRx(voidPointer1)+getRw(voidPointer1))/2, (getRy(voidPointer1)+getRh(voidPointer1))/2, (getRx(voidPointer2)+getRw(voidPointer2))/2, (getRy(voidPointer2)+getRh(voidPointer2))/2);
-      }else printf("ERRO EM COMANDO D.\n");
-    }else{      printf("Poligono não encontrado.\n");
+    if (voidPointer1 != NULL && voidPointer2 != NULL) {
+      if (caracter == 'c' && caracter1 == 'c') {
+        comandoD(arqSaidaT, getCx(voidPointer1), getCy(voidPointer1),
+                 getCx(voidPointer2), getCy(voidPointer2));
+      } else if (caracter == 'c' && caracter1 == 'r') {
+        comandoD(arqSaidaT, getCx(voidPointer1), getCy(voidPointer1),
+                 (getRx(voidPointer2) + getRw(voidPointer2)) / 2,
+                 (getRy(voidPointer2) + getRh(voidPointer2)) / 2);
+      } else if (caracter == 'r' && caracter1 == 'c') {
+        comandoD(arqSaidaT, (getRx(voidPointer1) + getRw(voidPointer1)) / 2,
+                 (getRy(voidPointer1) + getRh(voidPointer1)) / 2,
+                 getCx(voidPointer2), getCy(voidPointer2));
+      } else if (caracter == 'r' && caracter1 == 'r') {
+        comandoD(arqSaidaT, (getRx(voidPointer1) + getRw(voidPointer1)) / 2,
+                 (getRy(voidPointer1) + getRh(voidPointer1)) / 2,
+                 (getRx(voidPointer2) + getRw(voidPointer2)) / 2,
+                 (getRy(voidPointer2) + getRh(voidPointer2)) / 2);
+      } else
+        printf("ERRO EM COMANDO D.\n");
+    } else {
+      printf("Poligono não encontrado.\n");
       fillArq1(arqSaidaT, stringAux);
       fillBreakLine(arqSaidaT);
     }
@@ -154,6 +228,7 @@ void executarD(FILE *arqEntradaGeo,  FILE *arqSaidaT, Canvas canvas){
     voidPointer2 = NULL;
   }
 }
+
 void executarI(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
   void *voidPointer1 = NULL;
   int i;
@@ -201,7 +276,6 @@ void executarI(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
     voidPointer1 = NULL;
   }
 }
-
 
 void executarO(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
   void *voidPointer1 = NULL, *voidPointer2 = NULL;
@@ -307,7 +381,6 @@ void executarO(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
   }
 }
 
-
 void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome, char *dirPath,
                char *extensao2) {
   char *string1 = NULL, *string2 = NULL, *string3 = NULL;
@@ -355,13 +428,11 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome, char *dirPath,
   tagFechamento(arqSaidaSvg2);
 }
 
-
-void executarAuxQ(FILE *arqEntradaGeo, List list, Cor cor) {
+void executarQ(FILE *arqEntradaGeo, List list, Cor cor) {
   double w = 0, h = 0, x = 0, y = 0;
   int i;
   char *string;
   Quadra quadra;
-
   fscanf(arqEntradaGeo, "%lf %lf %lf %lf ", &x, &y, &w, &h);
   i = qtdCaracteres(arqEntradaGeo);
   string = alocarString(i);
@@ -375,8 +446,7 @@ void executarAuxQ(FILE *arqEntradaGeo, List list, Cor cor) {
   string = NULL;
 }
 
-
-void executarAuxH(FILE *arqEntradaGeo, List list, Cor cor) {
+void executarH(FILE *arqEntradaGeo, List list, Cor cor) {
   double x = 0, y = 0;
   Hidrante hidrante;
   int i;
@@ -395,8 +465,7 @@ void executarAuxH(FILE *arqEntradaGeo, List list, Cor cor) {
   string = NULL;
 }
 
-
-void executarAuxS(FILE *arqEntradaGeo, List list, Cor cor) {
+void executarS(FILE *arqEntradaGeo, List list, Cor cor) {
   double x = 0, y = 0;
   int i;
   Semafaro semafaro;
@@ -415,8 +484,7 @@ void executarAuxS(FILE *arqEntradaGeo, List list, Cor cor) {
   string = NULL;
 }
 
-
-void executarAuxT(FILE *arqEntradaGeo, List list, Cor cor) {
+void executarT(FILE *arqEntradaGeo, List list, Cor cor) {
   double x = 0, y = 0;
   int i;
   Torre torre;
@@ -435,7 +503,6 @@ void executarAuxT(FILE *arqEntradaGeo, List list, Cor cor) {
   string = NULL;
 }
 
-
 Cor executarCq(FILE *arqEntradaGeo) {
   char stringA[100], stringB[100];
   Cor cor = NULL;
@@ -443,7 +510,6 @@ Cor executarCq(FILE *arqEntradaGeo) {
   cor = criaCor(stringA, stringB, 1);
   return cor;
 }
-
 
 Cor executarCh(FILE *arqEntradaGeo) {
   char stringA[100], stringB[100];
@@ -453,7 +519,6 @@ Cor executarCh(FILE *arqEntradaGeo) {
   return cor;
 }
 
-
 Cor executarCt(FILE *arqEntradaGeo) {
   char stringA[100], stringB[100];
   Cor cor = NULL;
@@ -462,7 +527,6 @@ Cor executarCt(FILE *arqEntradaGeo) {
   return cor;
 }
 
-
 Cor executarCs(FILE *arqEntradaGeo) {
   char stringA[100], stringB[100];
   Cor cor = NULL;
@@ -470,7 +534,6 @@ Cor executarCs(FILE *arqEntradaGeo) {
   cor = criaCor(stringA, stringB, 4);
   return cor;
 }
-
 
 void executarHI(FILE *arqEntradaGeo, Canvas canvas) {
 
@@ -486,12 +549,11 @@ void executarHI(FILE *arqEntradaGeo, Canvas canvas) {
   quadT = getListaH(getCidade(canvas));
 
   hidrante = searchQuadTreeItem(quadT, id, compareH);
-
+  free(id);
   if (hidrante != NULL) {
     setVazao(hidrante, vazao);
   }
 }
-
 
 void executarTI(FILE *arqEntradaGeo, Canvas canvas) {
 
@@ -507,12 +569,11 @@ void executarTI(FILE *arqEntradaGeo, Canvas canvas) {
   quadT = getListaT(getCidade(canvas));
 
   torre = searchQuadTreeItem(quadT, id, compareT);
-
+  free(id);
   if (torre != NULL) {
     setRaio(torre, raio);
   }
 }
-
 
 void executarSI(FILE *arqEntradaGeo, Canvas canvas) {
 
@@ -528,12 +589,11 @@ void executarSI(FILE *arqEntradaGeo, Canvas canvas) {
   quadT = getListaS(getCidade(canvas));
 
   semafaro = searchQuadTreeItem(quadT, id, compareT);
-
+  free(id);
   if (semafaro != NULL) {
     setTempo(semafaro, tempo);
   }
 }
-
 
 char comandoOrr(FILE *arqSaidaT, double w1, double h1, double x1, double y1,
                 double w2, double h2, double x2, double y2) {
@@ -553,7 +613,6 @@ char comandoOrr(FILE *arqSaidaT, double w1, double h1, double x1, double y1,
   }
 }
 
-
 char comandoOrc(FILE *arqSaidaT, double w1, double h1, double x1, double y1,
                 double r2, double x2, double y2) {
   char palavra[] = "SIM";
@@ -571,7 +630,6 @@ char comandoOrc(FILE *arqSaidaT, double w1, double h1, double x1, double y1,
     return 'f';
   }
 }
-
 
 char comandoOcc(FILE *arqSaidaT, double r1, double x1, double y1, double r2,
                 double x2, double y2) {
@@ -592,14 +650,12 @@ char comandoOcc(FILE *arqSaidaT, double r1, double x1, double y1, double r2,
   }
 }
 
-
 void comandoD(FILE *arqSaidaT, double x1, double y1, double x2, double y2) {
   float distancia;
   distancia = distanciaEntrePontos(x1, y1, x2, y2);
   fillArq2(arqSaidaT, distancia);
   fillBreakLine(arqSaidaT);
 }
-
 
 void comandoIc(FILE *arqSaidaT, double x1, double y1, double x2, double y2,
                double r) {
@@ -617,7 +673,6 @@ void comandoIc(FILE *arqSaidaT, double x1, double y1, double x2, double y2,
   }
 }
 
-
 void comandoIr(FILE *arqSaidaT, double w, double h, double x1, double y1,
                double x2, double y2) {
   char palavra[] = "SIM";
@@ -634,28 +689,28 @@ void comandoIr(FILE *arqSaidaT, double w, double h, double x1, double y1,
   }
 }
 
-
-Cor setCores(int type){
+Cor setCores(int type) {
   char corB[] = "black";
   char corP1[] = "red";
   char corP2[] = "blue";
   char corP3[] = "yellow";
   char corP4[] = "orange";
   Cor cor = NULL;
-  switch(type){
-    case 1: /* Quadra. */
-      cor = criaCor(corP1, corB, 1);
-      break;
-    case 2: /* Torre. */
-      cor = criaCor(corP2, corB, 2);
-      break;
-    case 3: /* Hidrante. */
-      cor = criaCor(corP3, corB, 3);
-      break;
-    case 4: /* Semafaro. */
-      cor = criaCor(corP4, corB, 4);
-      break;
-    default: cor = criaCor(corB, corB, 5);
+  switch (type) {
+  case 1: /* Quadra. */
+    cor = criaCor(corP1, corB, 1);
+    break;
+  case 4: /* Torre. */
+    cor = criaCor(corP2, corB, 2);
+    break;
+  case 2: /* Hidrante. */
+    cor = criaCor(corP3, corB, 3);
+    break;
+  case 3: /* Semafaro. */
+    cor = criaCor(corP4, corB, 4);
+    break;
+  default:
+    cor = criaCor(corB, corB, 5);
   }
   return cor;
 }

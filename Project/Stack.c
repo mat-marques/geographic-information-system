@@ -63,7 +63,8 @@ int removeTop(Stack stack, eraseItemS func){
   if(base!=NULL){
     if(base->top!=NULL && base->top->down!=NULL){
         aux = base->top->down;
-        func(base->top->info);
+        if(func != NULL)
+          func(base->top->info);
         free(base->top);
         base->top = aux;
         aux->up = NULL;
@@ -71,7 +72,8 @@ int removeTop(Stack stack, eraseItemS func){
         return 1;
     }
     if(base->top!=NULL && base->top->down==NULL){
-        func(base->top->info);
+        if(func != NULL)
+          func(base->top->info);
         free(base->top);
         base->top = NULL;
         base->size = base->size - 1;
@@ -81,43 +83,13 @@ int removeTop(Stack stack, eraseItemS func){
 }
 
 
-ItemS removeTopI(Stack stack){
-  Base *base = (Base*) stack;
-  Element *aux = NULL;
-  ItemS info = NULL;
-  if(base!=NULL){
-    if(base->top!=NULL && base->top->down!=NULL){
-        aux = base->top->down;
-        info = base->top->info;
-        free(base->top);
-        base->top = aux;
-        aux->up = NULL;
-        base->size = base->size - 1;
-    }
-    if(base->top!=NULL && base->top->down==NULL){
-        info = base->top->info;
-        free(base->top);
-        base->top = NULL;
-        base->size = base->size - 1;
-    }
-  }
-  return info;
-}
-
-
 ItemS getItemTop(Stack stack){
   Base *base = (Base*) stack;
   return (ItemS) base->top->info;
 }
 
-void eraseBaseStack(Stack stack){
-  Base *base = (Base*) stack;
-  if(base->top==NULL){
-    free(base);
-  }
-}
 
-int eraseStackOne(Stack stack, eraseItemS func){
+int eraseStack(Stack stack, eraseItemS func){
   Base *base = (Base*) stack;
   int i, j;
   if(base!=NULL){
@@ -132,16 +104,9 @@ int eraseStackOne(Stack stack, eraseItemS func){
 }
 
 
-int eraseStackTwo(Stack stack){
+void eraseBaseStack(Stack stack){
   Base *base = (Base*) stack;
-  int i, j;
-  if(base!=NULL){
-    j = lengthStack(stack);
-    for(i=0; i<j; i++){
-      removeTopI(stack);
-    }
-    base->top = NULL;
-    return 1;
- }
- return 0;
+  if(base->top==NULL){
+    free(base);
+  }
 }

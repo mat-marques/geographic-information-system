@@ -45,6 +45,9 @@ Reseta os componentes de uma cor para vazio.
 */
 void resetarCores(Cor cor);
 
+/*
+O procedimento remove da memória cor.
+*/
 void removeCor(Cor cor);
 
 #endif

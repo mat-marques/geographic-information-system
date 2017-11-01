@@ -45,7 +45,7 @@ void removeQuadra(Cidade cidade, char *cep){
     removeQ(quadra);
     stack = convexHullOfAll(list, 1);
     ConvexHullAuxC(stack, cidade, 2);
-    eraseStackTwo(stack);
+    eraseStack(stack, NULL);
     eraseBaseStack(stack);
 }
 
@@ -63,7 +63,7 @@ void removeSemafaro(Cidade cidade, char *id){
    removeS(semafaro);
    stack = convexHullOfAll(list, 3);
    ConvexHullAuxC(stack, cidade, 3);
-   eraseStackTwo(stack);
+   eraseStack(stack, NULL);
    eraseBaseStack(stack);
 }
 
@@ -81,7 +81,7 @@ void removeTorre(Cidade cidade, char *id){
    removeT(torre);
    stack = convexHullOfAll(list, 4);
    ConvexHullAuxC(stack, cidade, 4);
-   eraseStackTwo(stack);
+   eraseStack(stack, NULL);
    eraseBaseStack(stack);
 }
 
@@ -99,7 +99,7 @@ void removeHidrante(Cidade cidade, char *id){
    removeQ(hidrante);
    stack = convexHullOfAll(list, 2);
    ConvexHullAuxC(stack, cidade, 2);
-   eraseStackTwo(stack);
+   eraseStack(stack, NULL);
    eraseBaseStack(stack);
 }
 
@@ -144,6 +144,8 @@ Quadra getQuadra(Cidade cidade, char *cep){
 void showQ(Quadra quadra){
   double x, y, w, h;
   char *corP, *corB;
+  char cor[] = "red";
+  char text[] = "Q";
   x = getXQ(quadra);
   y = getYQ(quadra);
   w = getLargQ(quadra);
@@ -151,36 +153,50 @@ void showQ(Quadra quadra){
   corP = getCorpQ(quadra);
   corB = getCorbQ(quadra);
   tagRetangulo2(newArqCity, w, h, x, y, corP, corB);
+  tagTexto2(newArqCity, text, cor, 5, x, y);
 }
 
 void showH(Hidrante hidrante){
   double x, y;
   char *corP, *corB;
+  char cor[] = "red";
+  char text[] = "H";
   x = getXH(hidrante);
   y = getYH(hidrante);
   corP = getCorpH(hidrante);
   corB = getCorbH(hidrante);
   tagCirculo2(newArqCity, 5, x, y, corP, corB);
+  tagTexto2(newArqCity, text, cor, 5, x-1.5, y+1.5);
 }
 
 void showS(Semafaro semafaro){
   double x, y;
   char *corP, *corB;
+  char cor[] = "red";
+  char text[] = "S";
   x = getXS(semafaro);
   y = getYS(semafaro);
   corP = getCorpS(semafaro);
   corB = getCorbS(semafaro);
   tagCirculo2(newArqCity, 5, x, y, corP, corB);
+  tagTexto2(newArqCity, text, cor, 5, x-1.5, y+1.5);
 }
 
 void showT(Torre torre){
-  double x, y;
+  double x, y, r;
   char *corP, *corB;
+  char cor[] = "red";
+  char text[] = "T";
   x = getXT(torre);
   y = getYT(torre);
   corP = getCorpT(torre);
   corB = getCorbT(torre);
+  r = getRaio(torre);
+  if(r > 0){
+    tagCirculoOpacity(newArqCity, r, x, y, cor);
+  }
   tagCirculo2(newArqCity, 5, x, y, corP, corB);
+  tagTexto2(newArqCity, text, cor, 5, x-1.5, y+1.5);
 }
 
 
@@ -209,7 +225,7 @@ void eraseListaQ(Cidade cidade){
 
   City *city = (City*) cidade;
 
-  eraseQuadTreeNodeOne(city->listaQ, removeQ);
+  eraseQuadTreeNode(city->listaQ, removeQ);
   eraseQuadTreeBase(city->listaQ);
 
   city->listaQ = NULL;
@@ -219,7 +235,7 @@ void eraseListaS(Cidade cidade){
 
   City *city = (City*) cidade;
 
-  eraseQuadTreeNodeOne(city->listaS, removeS);
+  eraseQuadTreeNode(city->listaS, removeS);
   eraseQuadTreeBase(city->listaS);
 
   city->listaS = NULL;
@@ -229,7 +245,7 @@ void eraseListaT(Cidade cidade){
 
   City *city = (City*) cidade;
 
-  eraseQuadTreeNodeOne(city->listaT, removeT);
+  eraseQuadTreeNode(city->listaT, removeT);
   eraseQuadTreeBase(city->listaT);
 
   city->listaT = NULL;
@@ -239,7 +255,7 @@ void eraseListaH(Cidade cidade){
 
   City *city = (City*) cidade;
 
-  eraseQuadTreeNodeOne(city->listaH, removeH);
+  eraseQuadTreeNode(city->listaH, removeH);
   eraseQuadTreeBase(city->listaH);
 
   city->listaH = NULL;
@@ -265,28 +281,32 @@ void ConvexHullAuxC(Stack stack, Cidade cidade, int type) {
   case 1: /* Quadra. */
     n = lengthStack(stack);
     for (i = 0; i < n; i++) {
-      element = removeTopI(stack);
+      element = getItemTop(stack);
+      removeTop(stack, NULL);
       insertQuadra(cidade, element);
     }
     break;
   case 2: /* Hidrante. */
     n = lengthStack(stack);
     for (i = 0; i < n; i++) {
-      element = removeTopI(stack);
+      element = getItemTop(stack);
+      removeTop(stack, NULL);
       insertHidrante(cidade, element);
     }
     break;
   case 3: /* semafaro. */
     n = lengthStack(stack);
     for (i = 0; i < n; i++) {
-      element = removeTopI(stack);
+      element = getItemTop(stack);
+      removeTop(stack, NULL);
       insertSemafaro(cidade, element);
     }
     break;
   case 4: /* Torre. */
     n = lengthStack(stack);
     for (i = 0; i < n; i++) {
-      element = removeTopI(stack);
+      element = getItemTop(stack);
+      removeTop(stack, NULL);
       insertTorre(cidade, element);
     }
     break;

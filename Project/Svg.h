@@ -38,6 +38,10 @@ Escreve no arquivo arqSvg uma string referente a tag svg de criação de um cír
 */
 void tagCirculo2(FILE *arqSvg,double r, double x, double y, char corB[60], char corS[60]);
 
+
+/**
+Escreve no arquivo arqSvg uma string referente a tag svg de criação de um círculo com opacidade modificada.  As configurações do círculo são dadas por r (raio), x (Coordenada x), y (Coordenada y), uma cor de preenchimento (corB).
+*/
 void tagCirculoOpacity(FILE *arqSvg, double r, double x, double y, char *cor);
 
 /**
@@ -52,6 +56,13 @@ O texto possui as coordenadas x e y.
 void tagTexto(FILE *arqSvg, double x, double y);
 
 /**
+Escreve no arquivo arqSvg uma string referente a tag svg de criação de um texto.
+O texto possui as coordenadas x e y, uma cor e um tamanho.
+*/
+void tagTexto2(FILE *arqSvg, char *texto, char *cor, int fontSize, double x, double y);
+
+
+/**
 Escreve no arquivo arqSvg uma string referente a tag svg de criação de um retângulo de sobreposição. As configurações do retângulo são dadas por w (Comprimento), h (altura), x (Coordenada x), y (Coordenada y). A cor de preenchimento e none e as bordas do retângulo são tracejadas.
 */
 void tagRetanguloSobreposicao(FILE *arqSvg, double x, double y, double w, double h);
@@ -61,6 +72,10 @@ Escreve no arquivo arqSvg uma string referente a um comando para criação de um
 */
 void pontos(FILE *arqSvg, double x, double y, char *cor);
 
+
+/**
+Escreve no arquivo arqSvg uma string referente a um comando para criação de um linha. A linha conecta dois pontos. As coordenadas x1, y1 e x2, y2 representam os pontos que seram ligados pela linha. A linha também recebe uma cor de preenchimento.
+*/
 void linha(FILE *arqSvg, double x1, double y1, double x2, double y2, char *cor);
 
 /**

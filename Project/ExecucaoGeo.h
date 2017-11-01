@@ -21,12 +21,12 @@ void executarConvexHull(List list, Canvas canvas, int type);
 /*
 Executa o comando C. Faz a leitura dos parâmetros do comando C no arquivo arqEntradaGeo e cria um círculo e o armazena no canvas.
 */
-void executarAuxC(FILE *arqEntradaGeo, List list);
+void executarC(FILE *arqEntradaGeo, List list);
 
 /*
 Executa o comando R. Faz a leitura dos parâmetros do comando R no arquivo arqEntradaGeo e cria um retângulo e o armazena no canvas.
 */
-void executarAuxR(FILE *arqEntradaGeo, List list);
+void executarR(FILE *arqEntradaGeo, List list);
 
 /*
 Executa o comando D. Faz a leitura dos parâmetros do comando D no arquivo arqEntradaGeo. Procura os ids i e j das figuras geométricas no canvas e escreve o resultado do comando D em arqSaidaT.
@@ -51,25 +51,25 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome,char *dirPath, 
 /*
 Executa o comando Q. Faz a leitura dos parâmetros do comando Q no arquivo arqEntradaGeo e armazena esses dados no canvas. O inteiro qtdQuadrasInseridas é incrementado a cada quadra inserida.
 */
-void executarAuxQ(FILE *arqEntradaGeo, List list, Cor cor);
+void executarQ(FILE *arqEntradaGeo, List list, Cor cor);
 
 
 /*
 Executa o comando H. Faz a leitura dos parâmetros do comando H no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarAuxH(FILE *arqEntradaGeo, List list, Cor cor);
+void executarH(FILE *arqEntradaGeo, List list, Cor cor);
 
 
 /*
 Executa o comando S. Faz a leitura dos parâmetros do comando S no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarAuxS(FILE *arqEntradaGeo, List list, Cor cor);
+void executarS(FILE *arqEntradaGeo, List list, Cor cor);
 
 
 /*
 Executa o comando T. Faz a leitura dos parâmetros do comando T no arquivo arqEntradaGeo e armazena esses dados no canvas.
 */
-void executarAuxT(FILE *arqEntradaGeo, List list, Cor cor);
+void executarT(FILE *arqEntradaGeo, List list, Cor cor);
 
 /*
 Executa o comando Cq. Faz a leitura dos parâmetros do comando Cq no arquivo arqEntradaGeo e armazena esses dados no canvas.
@@ -91,19 +91,21 @@ Executa o comando Cs. Faz a leitura dos parâmetros do comando Cs no arquivo arq
 */
 Cor executarCs(FILE *arqEntradaGeo);
 
-
+/*
+O procedimento executar o comando hI contido no arquivo arqEntradaGeo. Esse procedimento informa a vazão (l/s) do hidrante id. O hidrante de código id deve ter sido inserido anteriormente na cidade por um comando h.
+*/
 void executarHI(FILE *arqEntradaGeo, Canvas canvas);
 
+/*
+O procedimento executar o comando TI contido no arquivo arqEntradaGeo. Esse procedimento informa o raio (m) de alcance da radio- base id. A rádio-base id deve ter sido inserido anteriormente por um comando t.
+*/
 void executarTI(FILE *arqEntradaGeo, Canvas canvas);
 
+/*
+O procedimento executar o comando hI contido no arquivo arqEntradaGeo. Esse procedimento informa o tempo (s) do ciclo (verde,amarelo, vermelho) do semaforo id. O semáforo deve ter sido inserido anteriormente por um comando s.
+*/
 void executarSI(FILE *arqEntradaGeo, Canvas canvas);
 
-
-void executarHI(FILE *arqEntradaGeo, Canvas canvas);
-
-void executarTI(FILE *arqEntradaGeo, Canvas canvas);
-
-void executarSI(FILE *arqEntradaGeo, Canvas canvas);
 
 /**
 Verifica e retorna um caracter 't' ou 'f' se dois retângulos estão sobrepostos.
@@ -141,6 +143,14 @@ Utiliza procedimentos do módulo OperacoesF e procedimentos do Tad Arquivo.
 */
 void comandoIr(FILE *arqSaidaT,double w, double h, double x1, double y1,double x2,double y2);
 
+/*
+A função inicializa uma cor.
+O inteiro type pode receber um dos valores a seguir:
+1 - Cor para a quadra.
+2 - Cor para a hidrante.
+3 - Cor para a semafaro.
+4 - Cor para a torre.
+*/
 Cor setCores(int type);
 
 #endif

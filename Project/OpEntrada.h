@@ -43,7 +43,9 @@ O parâmetro -q deve ser valido.
 */
 char *parametroQ(char **argv, int argc);
 
-
+/**
+O procedimento imprime na saida do usuário informações sobre o autor do projeto.
+*/
 void parametroId(char **argv, int argc);
 
 

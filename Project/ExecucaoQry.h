@@ -63,9 +63,15 @@ Executa o comando Crd? presente no arquivo arqEntradaQry. Caso for necessário �
 void executarCrd(FILE *arqEntradaQry , FILE **arqSaidaT, char *path, Canvas canvas);
 
 
+/*
+Executa o comando pc? presente no arquivo arqEntradaQry. Esse procedimento calcula o polígono de cobertura das rádio-bases da cidade (ou daquelas contidas na região retangular definida pelos parâmetros definidos em arqEntradaQry). Produz um arquivo svg mostrando a cidade e o polígono de cobertura.
+*/
 void executarPc(FILE *arqEntradaQry, char *arqNome, char *dirPath, char *extensao2, Canvas canvas);
 
-
+/*
+Executa o comando ac? presente no arquivo arqEntradaQry. Esse procedimento calcula e imprime no arquivo .txt a área (m2) do polígono de cobertura das rádio-bases da cidade (ou daquelas contidas na região retangular definida pelos
+parâmetros definidos em arqEntradaQry).
+*/
 void executarAc(FILE *arqEntradaQry , FILE **arqSaidaT, char *path, Canvas canvas);
 
 
