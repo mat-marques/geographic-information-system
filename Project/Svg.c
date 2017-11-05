@@ -150,8 +150,13 @@ void tagTexto(FILE *arqSvg, double x, double y) {
 
   fprintf(arqSvg, " %s\n", "fill=\"red\"");
 
+  fprintf(arqSvg, "%s", "font-size=\"");
+  fprintf(arqSvg, "%d", 20);
+  fprintf(arqSvg, "%s\n", "\"");
+
   fprintf(arqSvg, " %s", ">");
-  fprintf(arqSvg, "%s", "sobrepoe");
+
+  fprintf(arqSvg, "%s", "SOBREPÕEM");
   fprintf(arqSvg, "%s\n", "</text>");
 }
 

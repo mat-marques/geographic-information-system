@@ -1,7 +1,7 @@
 #ifndef QUADTREE_H
 #define QUADTREE_H
 
-#include "DoubleLinkedList.h"
+#include "List.h"
 typedef void* QuadTree;
 typedef void* ItemQt;
 typedef void* Region;
@@ -30,8 +30,9 @@ QuadTree createQuadTree();
 
 /*
 O procedimento insere um item com as coordenadas x e y na QuadTree.
+Retorna a quantidade de comparações para inserir um item na árvore.
 */
-void insertQuadTree(QuadTree tree, ItemQt item, double x, double y);
+long int insertQuadTree(QuadTree tree, ItemQt item, double x, double y);
 
 
 /*
@@ -44,13 +45,14 @@ void showQuadTree(QuadTree tree, showItem function);
 A função retorna a quantidade de elementos presente na QuadTree.
 Retorna zero caso a QuadTree seja vazia.
 */
-int lenghtQuadTree(QuadTree tree);
+long int lenghtQuadTree(QuadTree tree);
 
 
 /*
 A função remove apenas o nó da QuadTree e retorna o elemento contido nesse nó ao usuário. A função que compara se um elemento contido na árvore é igual a variável item deve ser implementado pelo usuário. A função "function" deve retornar 1 caso os elementos sejam iguais e zero caso contrário.
+qtdR é a quantidade de comparações feitas para ser removido um item da QuadTree.
 */
-ItemQt removeQuadTreeItemI(QuadTree tree, ItemQt item, compareToQt function);
+ItemQt removeQuadTreeItemI(QuadTree tree, ItemQt item, compareToQt function, long int *qtdR);
 
 
 /*

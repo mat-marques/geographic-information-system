@@ -1,7 +1,7 @@
 #ifndef CONVEXHULL_H
 #define CONVEXHULL_H
 #include "Stack.h"
-#include "DoubleLinkedList.h"
+#include "List.h"
 typedef void* Vector;
 
 /*

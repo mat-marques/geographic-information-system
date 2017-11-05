@@ -1,4 +1,4 @@
-#include "DoubleLinkedList.h"
+#include "List.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,7 +14,7 @@ typedef struct Base {
   int size;
 } Base;
 
-List createDLL() {
+List createL() {
   Base *base = NULL;
   base = (Base *)malloc(sizeof(Base));
   if (base != NULL) {
@@ -27,14 +27,167 @@ List createDLL() {
   return (List)base;
 }
 
-int lengthDLL(List list) {
+int lengthL(List list) {
   Base *base = (Base *)list;
-  if(base == NULL)
-    return 0;
-  return base->size;
+  if(list != NULL)
+    return base->size;
+
+  return 0;
 }
 
-int insertBeginDLL(List list, Item item) {
+int isEmpty(List list){
+    Base *L1 = (Base *) list;
+    if(L1->first==NULL){
+        return 1;
+    }
+    return 0;
+}
+
+Posic insertL(List list, Item info){
+    Element *No=NULL;
+    Base *L1;
+    if(isEmpty(list)==1){
+        L1 = (Base *) list;
+        No = (Element*) malloc(sizeof(Element));
+        No->info = info;
+        No->next = NULL;
+        No->previous = NULL;
+        L1->first = No;
+        L1->last = No;
+        L1->size++;
+        return No;
+    }else{
+        L1 = (Base *) list;
+        No = (Element*) malloc(sizeof(Element));
+        No->info = info;
+        No->next = NULL;
+        No->previous = L1->last;
+        L1->last->next = No;
+        L1->last = No;
+        L1->size++;
+        return No;
+    }
+    return NULL;
+}
+
+void removeItemL(List list, Posic p){
+    Base *L1 = (Base*) list;
+    Element *No = (Element*) p;
+    Element *aux, *aux2;
+    if(isEmpty(list)==0){
+        if(No->previous==NULL){
+            aux = No->next;
+            L1->first = aux;
+            if(L1->first!=NULL) {
+                L1->first->previous = NULL;
+            }
+        }else if(No->next==NULL){
+            aux = No->previous;
+            L1->last = aux;
+            if(L1->last!=NULL) {
+                L1->last->next = NULL;
+            }
+        }else {
+            aux = No->previous;
+            aux2 = No->next;
+            aux->next = aux2;
+            aux2->previous = aux;
+        }
+
+        if(No!=NULL){
+            free(No);
+        }
+        L1->size--;
+    }
+}
+
+Item get(List list, Posic p){
+    Element *No = (Element*) p;
+    if(isEmpty(list)==0){
+        if(No->info!=NULL) {
+            return No->info;
+        }
+    }
+    return NULL;
+}
+
+Posic insertBefore(List list, Posic p, Item info){
+    Base *L1 = (Base*) list;
+    Element *No = (Element*) p;
+    Element *aux, *aux2;
+    aux = (Element*) malloc(sizeof(Element));
+    if(isEmpty(list)==0){
+        if(No->previous==NULL){
+            aux->info = info;
+            aux->next = No;
+            No->previous = aux;
+            aux->previous = NULL;
+            L1->size++;
+            L1->first = aux;
+        } else {
+            aux->info = info;
+            aux2 = No->previous;
+            aux2->next = aux;
+            aux->previous = aux2;
+            aux->next = No;
+            No->previous = aux;
+            L1->size++;
+        }
+    } else {
+        insertL(list, info);
+        L1->size++;
+    }
+    return aux;
+}
+
+Posic insertAfter(List list, Posic p, Item info){
+    Base *L1 = (Base*) list;
+    Element *No = (Element*) p;
+    Element *aux;
+    aux = (Element*) malloc(sizeof(Element));
+    if(isEmpty(list)==0){
+        if(No->next==NULL){
+            aux->info = info;
+            aux->next = NULL;
+            aux->previous = No;
+            No->next = aux;
+            L1->size++;
+            L1->last = aux;
+        } else {
+            aux->info = info;
+            aux->next = No->next;
+            aux->previous = No;
+            No->next = aux;
+            L1->size++;
+        }
+    } else {
+        insertL(list, info);
+        L1->size++;
+    }
+    return aux;
+}
+
+Posic getFirst(List list){
+    Base *L1 = (Base *) list;
+    return L1->first;
+}
+
+Posic getNext(List list, Posic p){
+    Element *No = (Element *) p;
+    return No->next;
+}
+
+Posic getLast(List list){
+    Base *L1 = (Base *) list;
+    return L1->last;
+}
+
+Posic getPrevious(List list, Posic p){
+    Element *No = (Element *) p;
+    return No->previous;
+}
+
+int insertBeginL(List list, Item item) {
   Base *base = (Base *)list;
   Element *element = NULL;
   if (base != NULL) {
@@ -60,7 +213,7 @@ int insertBeginDLL(List list, Item item) {
   return 0;
 }
 
-int insertEndDLL(List list, Item item) {
+int insertEndL(List list, Item item) {
   Base *base = (Base *)list;
   Element *element = NULL;
   if (base != NULL) {
@@ -86,7 +239,7 @@ int insertEndDLL(List list, Item item) {
   return 0;
 }
 
-int insertMiddleDLL(List list, int p, Item item) {
+int insertMiddleL(List list, int p, Item item) {
   Base *base = (Base *)list;
   Element *element = NULL;
   Element *aux = NULL;
@@ -94,12 +247,12 @@ int insertMiddleDLL(List list, int p, Item item) {
   if (p <= 0) {
     return 0;
   }
-  j = lengthDLL(list);
+  j = lengthL(list);
   if (base != NULL) {
     if (p == 1) {
-      insertBeginDLL(list, item);
+      insertBeginL(list, item);
     } else if (p >= j) {
-      insertEndDLL(list, item);
+      insertEndL(list, item);
     } else {
       element = (Element *)malloc(sizeof(Element));
       if (element == NULL) {
@@ -131,7 +284,7 @@ int insertMiddleDLL(List list, int p, Item item) {
   return 0;
 }
 
-void showDLL(List list, showDLLI func){
+void showL(List list, showLI func){
   Base *base = (Base *)list;
   Element *aux = NULL;
   int i=0, j=0;
@@ -147,7 +300,7 @@ void showDLL(List list, showDLLI func){
   }
 }
 
-Item searchItemDLL(List list, Item item, compareToDLL func) {
+Item searchItemL(List list, Item item, compareToL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
   Item info = NULL;
@@ -168,7 +321,7 @@ Item searchItemDLL(List list, Item item, compareToDLL func) {
   return info;
 }
 
-Item removeItemDLL(List list, Item item, compareToDLL func){
+Item removeItemL2(List list, Item item, compareToL func){
   Base *base = (Base *)list;
   Element *aux = NULL;
   Item info = NULL;
@@ -192,7 +345,7 @@ Item removeItemDLL(List list, Item item, compareToDLL func){
   return info;
 }
 
-int removeBeginDLL(List list, eraseItemDLL func) {
+int removeBeginL(List list, eraseItemL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
   if (base != NULL) {
@@ -220,7 +373,7 @@ int removeBeginDLL(List list, eraseItemDLL func) {
   return 0;
 }
 
-int removeEndDLL(List list, eraseItemDLL func) {
+int removeEndL(List list, eraseItemL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
   if (base != NULL) {
@@ -248,19 +401,19 @@ int removeEndDLL(List list, eraseItemDLL func) {
   return 0;
 }
 
-int removeMiddleDLL(List list, int p, eraseItemDLL func) {
+int removeMiddleL(List list, int p, eraseItemL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
   int i, j;
   if (p <= 0) {
     return 0;
   }
-  j = lengthDLL(list);
+  j = lengthL(list);
   if (p == 1) {
-    removeBeginDLL(list, func);
+    removeBeginL(list, func);
     return 1;
   } else if (p >= j) {
-    removeEndDLL(list, func);
+    removeEndL(list, func);
     return 1;
   } else {
     if (base != NULL) {
@@ -285,8 +438,7 @@ int removeMiddleDLL(List list, int p, eraseItemDLL func) {
   return 0;
 }
 
-
-Item getBeginItemDLL(List list) {
+Item getBeginItemL(List list) {
   Base *base = (Base *)list;
   if (base != NULL) {
     if (base->first != NULL) {
@@ -296,7 +448,7 @@ Item getBeginItemDLL(List list) {
   return NULL;
 }
 
-Item getEndItemDLL(List list) {
+Item getEndItemL(List list) {
   Base *base = (Base *)list;
   if (base != NULL) {
     if (base->first != NULL) {
@@ -306,7 +458,7 @@ Item getEndItemDLL(List list) {
   return NULL;
 }
 
-Item getItemDLL(List list, int p) {
+Item getItemL(List list, int p) {
   Base *base = (Base *)list;
   int i, j;
   Element *aux = NULL;
@@ -314,7 +466,7 @@ Item getItemDLL(List list, int p) {
   if (base != NULL) {
     if (base->first != NULL) {
       aux = base->first;
-      j = lengthDLL(list);
+      j = lengthL(list);
       if (p <= 0 || p > j) {
         return NULL;
       }
@@ -330,7 +482,7 @@ Item getItemDLL(List list, int p) {
   return NULL;
 }
 
-void concatDLL(List listOne, List listTwo){
+void concatL(List listOne, List listTwo){
   if(listOne!=NULL && listTwo!=NULL){
     Base *base1 = (Base *)listOne;
     Base *base2 = (Base *)listTwo;
@@ -349,15 +501,14 @@ void concatDLL(List listOne, List listTwo){
   }
 }
 
-
-int eraseListDLL(List list, eraseItemDLL func) {
+int eraseListL(List list, eraseItemL func) {
   Base *base = (Base *)list;
   Element *aux, *aux2;
   int i, j;
   if (base != NULL) {
     if (base->first != NULL) {
       aux = base->first;
-      j = lengthDLL(list);
+      j = lengthL(list);
       for (i = 1; i <= j; i++) {
         aux2 = aux;
         aux = aux->next;

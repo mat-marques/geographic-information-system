@@ -48,38 +48,45 @@ FILE *createArqA(char *path){
 }
 
 void fillArq(FILE *arq, char caracter){
+  if(arq != NULL)
     fprintf(arq, "%c", caracter);
 }
 
 
 void fillArq1(FILE *arq, char *palavra){
+  if(arq != NULL)
     fprintf(arq, "%s", palavra);
 }
 
 
 void fillArq2(FILE *arq, float out){
+  if(arq != NULL)
     fprintf(arq, "%f", out);
 }
 
 
 void fillArq3(FILE *arq, int out){
+  if(arq != NULL)
     fprintf(arq, "%d", out);
 }
 
 void fillArq4(FILE *arq, double out){
+  if(arq != NULL)
     fprintf(arq, "%f", out);
 }
 
 void fillSpace(FILE *arq){
+  if(arq != NULL)
     fprintf(arq, "%c", ' ');
 }
 
 void fillTab(FILE *arq){
-
+  if(arq != NULL)
     fprintf(arq, "%s", "   ");
 }
 
 void fillBreakLine(FILE *arqSaida){
+  if(arqSaida != NULL)
     fprintf(arqSaida, "%c", '\n');
 }
 

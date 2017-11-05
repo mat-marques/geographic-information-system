@@ -3,145 +3,135 @@
 #include <string.h>
 
 #include "Cidade.h"
-#include "Hidrante.h"
-#include "Semafaro.h"
-#include "Torre.h"
-#include "QuadTree.h"
-#include "DoubleLinkedList.h"
-#include "Stack.h"
 #include "ConvexHull.h"
+#include "Hidrante.h"
+#include "List.h"
+#include "QuadTree.h"
+#include "Semafaro.h"
+#include "Stack.h"
 #include "Svg.h"
+#include "Torre.h"
 
+FILE *newArqCity = NULL;
 
-typedef struct City{
-   QuadTree listaQ, listaS, listaT, listaH;
-   char *nome;
-}City;
+typedef struct City {
+  QuadTree listaQ, listaS, listaT, listaH;
+  char *nome;
+} City;
 
 void ConvexHullAuxC(Stack stack, Cidade cidade, int type);
 
-Cidade criaCidade(char *name){
-      City *city = NULL;
-      city = (City*) malloc(sizeof(City));
-      city->nome = name;
-      city->listaQ = createQuadTree();
-      city->listaS = createQuadTree();
-      city->listaT = createQuadTree();
-      city->listaH = createQuadTree();
-      return city;
+Cidade criaCidade(char *name) {
+  City *city = NULL;
+  city = (City *)malloc(sizeof(City));
+  city->nome = name;
+  city->listaQ = createQuadTree();
+  city->listaS = createQuadTree();
+  city->listaT = createQuadTree();
+  city->listaH = createQuadTree();
+  return city;
 }
 
-void insertQuadra(Cidade cidade, ElementoUrbano item){
-     City *city = (City*) cidade;
-     insertQuadTree(city->listaQ, item, getXQ(item), getYQ(item));
+long int quantityElementsICity(Cidade cidade){
+  City *city = (City *)cidade;
+  long int myLength = 0;
+  if(city != NULL){
+    myLength = lenghtQuadTree(city->listaQ);
+    myLength = myLength + lenghtQuadTree(city->listaH);
+    myLength = myLength + lenghtQuadTree(city->listaS);
+    myLength = myLength + lenghtQuadTree(city->listaT);
+  }
+  return myLength;
+}
+long int insertQuadra(Cidade cidade, ElementoUrbano item) {
+  City *city = (City *)cidade;
+  return insertQuadTree(city->listaQ, item, getXQ(item), getYQ(item));
 }
 
-void removeQuadra(Cidade cidade, char *cep){
-    City *city = (City*) cidade;
-    Quadra quadra;
-    Stack stack = NULL;
-    List list = createDLL();
-    quadra = removeQuadTreeItem(city->listaQ, cep, compareQ, list);
-    removeQ(quadra);
-    stack = convexHullOfAll(list, 1);
-    ConvexHullAuxC(stack, cidade, 2);
-    eraseStack(stack, NULL);
-    eraseBaseStack(stack);
+long int removeQuadra(Cidade cidade, char *cep) {
+  City *city = (City *)cidade;
+  long int qtd;
+  Quadra quadra;
+  quadra = removeQuadTreeItemI(city->listaQ, cep, compareQ, &qtd);
+  removeQ(quadra);
+  return qtd;
 }
 
-void insertSemafaro(Cidade cidade, ElementoUrbano item){
-   City *city = (City*) cidade;
-  insertQuadTree(city->listaS, item, getXS(item), getYS(item));
+long int insertSemafaro(Cidade cidade, ElementoUrbano item) {
+  City *city = (City *)cidade;
+  return insertQuadTree(city->listaS, item, getXS(item), getYS(item));
 }
 
-void removeSemafaro(Cidade cidade, char *id){
-   City *city = (City*) cidade;
-   Semafaro semafaro;
-   Stack stack = NULL;
-   List list = createDLL();
-   semafaro = removeQuadTreeItem(city->listaS, id, compareS, list);
-   removeS(semafaro);
-   stack = convexHullOfAll(list, 3);
-   ConvexHullAuxC(stack, cidade, 3);
-   eraseStack(stack, NULL);
-   eraseBaseStack(stack);
+long int removeSemafaro(Cidade cidade, char *id) {
+  City *city = (City *)cidade;
+  Semafaro semafaro;
+  long int qtd;
+  semafaro = removeQuadTreeItemI(city->listaS, id, compareS, &qtd);
+  removeS(semafaro);
+  return qtd;
 }
 
-void insertTorre(Cidade cidade, ElementoUrbano item){
-   City *city = (City*) cidade;
-  insertQuadTree(city->listaT, item, getXT(item), getYT(item));
+long int insertTorre(Cidade cidade, ElementoUrbano item) {
+  City *city = (City *)cidade;
+  return insertQuadTree(city->listaT, item, getXT(item), getYT(item));
 }
 
-void removeTorre(Cidade cidade, char *id){
-   City *city = (City*) cidade;
-   Torre torre;
-   Stack stack = NULL;
-   List list = createDLL();
-   torre = removeQuadTreeItem(city->listaT, id, compareT, list);
-   removeT(torre);
-   stack = convexHullOfAll(list, 4);
-   ConvexHullAuxC(stack, cidade, 4);
-   eraseStack(stack, NULL);
-   eraseBaseStack(stack);
+long int removeTorre(Cidade cidade, char *id) {
+  City *city = (City *)cidade;
+  Torre torre;
+  long int qtd;
+  torre = removeQuadTreeItemI(city->listaT, id, compareT, &qtd);
+  removeT(torre);
+  return qtd;
 }
 
-void insertHidrante(Cidade cidade, ElementoUrbano item){
-   City *city = (City*) cidade;
-  insertQuadTree(city->listaH, item, getXH(item), getYH(item));
+long int insertHidrante(Cidade cidade, ElementoUrbano item) {
+  City *city = (City *)cidade;
+  return insertQuadTree(city->listaH, item, getXH(item), getYH(item));
 }
 
-void removeHidrante(Cidade cidade, char *id){
-   City *city = (City*) cidade;
-   Hidrante hidrante;
-   Stack stack = NULL;
-   List list = createDLL();
-   hidrante = removeQuadTreeItem(city->listaH, id, compareH, list);
-   removeQ(hidrante);
-   stack = convexHullOfAll(list, 2);
-   ConvexHullAuxC(stack, cidade, 2);
-   eraseStack(stack, NULL);
-   eraseBaseStack(stack);
+long int removeHidrante(Cidade cidade, char *id) {
+  City *city = (City *)cidade;
+  Hidrante hidrante;
+  long int qtd;
+  hidrante = removeQuadTreeItemI(city->listaH, id, compareH, &qtd);
+  removeQ(hidrante);
+  return qtd;
 }
 
-char *getNome(Cidade cidade){
-   City *city = (City*) cidade;
-   return city->nome;
+char *getNome(Cidade cidade) {
+  City *city = (City *)cidade;
+  return city->nome;
 }
 
-void setNome(Cidade cidade, char *nome){
-      City *city = (City*) cidade;
-      free(city->nome);
-      city->nome = nome;
+void setNome(Cidade cidade, char *nome) {
+  City *city = (City *)cidade;
+  free(city->nome);
+  city->nome = nome;
 }
 
-QuadTree getListaQ(Cidade cidade){
-   City *city = (City*) cidade;
-   return city->listaQ;
+QuadTree getListaQ(Cidade cidade) {
+  City *city = (City *)cidade;
+  return city->listaQ;
 }
 
-QuadTree getListaS(Cidade cidade){
-   City *city = (City*) cidade;
-   return city->listaS;
+QuadTree getListaS(Cidade cidade) {
+  City *city = (City *)cidade;
+  return city->listaS;
 }
 
-QuadTree getListaT(Cidade cidade){
-   City *city = (City*) cidade;
-   return city->listaT;
+QuadTree getListaT(Cidade cidade) {
+  City *city = (City *)cidade;
+  return city->listaT;
 }
 
-QuadTree getListaH(Cidade cidade){
-   City *city = (City*) cidade;
-   return city->listaH;
+QuadTree getListaH(Cidade cidade) {
+  City *city = (City *)cidade;
+  return city->listaH;
 }
 
-Quadra getQuadra(Cidade cidade, char *cep){
-   Quadra quadra = NULL;
-   City *city = (City*) cidade;
-   quadra = searchQuadTreeItem(city->listaQ, cep, compareQ);
-   return quadra;
-}
 
-void showQ(Quadra quadra){
+void showQ(Quadra quadra) {
   double x, y, w, h;
   char *corP, *corB;
   char cor[] = "red";
@@ -156,7 +146,7 @@ void showQ(Quadra quadra){
   tagTexto2(newArqCity, text, cor, 5, x, y);
 }
 
-void showH(Hidrante hidrante){
+void showH(Hidrante hidrante) {
   double x, y;
   char *corP, *corB;
   char cor[] = "red";
@@ -166,10 +156,10 @@ void showH(Hidrante hidrante){
   corP = getCorpH(hidrante);
   corB = getCorbH(hidrante);
   tagCirculo2(newArqCity, 5, x, y, corP, corB);
-  tagTexto2(newArqCity, text, cor, 5, x-1.5, y+1.5);
+  tagTexto2(newArqCity, text, cor, 5, x - 1.5, y + 1.5);
 }
 
-void showS(Semafaro semafaro){
+void showS(Semafaro semafaro) {
   double x, y;
   char *corP, *corB;
   char cor[] = "red";
@@ -179,10 +169,10 @@ void showS(Semafaro semafaro){
   corP = getCorpS(semafaro);
   corB = getCorbS(semafaro);
   tagCirculo2(newArqCity, 5, x, y, corP, corB);
-  tagTexto2(newArqCity, text, cor, 5, x-1.5, y+1.5);
+  tagTexto2(newArqCity, text, cor, 5, x - 1.5, y + 1.5);
 }
 
-void showT(Torre torre){
+void showT(Torre torre) {
   double x, y, r;
   char *corP, *corB;
   char cor[] = "red";
@@ -192,38 +182,72 @@ void showT(Torre torre){
   corP = getCorpT(torre);
   corB = getCorbT(torre);
   r = getRaio(torre);
-  if(r > 0){
+  if (r > 0) {
     tagCirculoOpacity(newArqCity, r, x, y, cor);
   }
   tagCirculo2(newArqCity, 5, x, y, corP, corB);
-  tagTexto2(newArqCity, text, cor, 5, x-1.5, y+1.5);
+  tagTexto2(newArqCity, text, cor, 5, x - 1.5, y + 1.5);
 }
 
+void showQuadras(Cidade cidade, FILE *file){
+  City *city = (City *)cidade;
+  newArqCity = file;
+  showQuadTree(city->listaQ, showQ);
+  newArqCity = NULL;
+}
 
-ElementoUrbano getTorre(Cidade cidade, char *id){
+void showHidrantes(Cidade cidade, FILE *file){
+  City *city = (City *)cidade;
+  newArqCity = file;
+  showQuadTree(city->listaH, showH);
+  newArqCity = NULL;
+}
+
+void showSemafaros(Cidade cidade, FILE *file){
+  City *city = (City *)cidade;
+  newArqCity = file;
+  showQuadTree(city->listaS, showS);
+  newArqCity = NULL;
+}
+
+void showTorres(Cidade cidade, FILE *file){
+  City *city = (City *)cidade;
+  newArqCity = file;
+  showQuadTree(city->listaT, showT);
+  newArqCity = NULL;
+}
+
+Quadra getQuadra(Cidade cidade, char *cep) {
+  Quadra quadra = NULL;
+  City *city = (City *)cidade;
+  quadra = searchQuadTreeItem(city->listaQ, cep, compareQ);
+  return quadra;
+}
+
+ElementoUrbano getTorre(Cidade cidade, char *id) {
   Torre torre = NULL;
-  City *city = (City*) cidade;
+  City *city = (City *)cidade;
   torre = searchQuadTreeItem(city->listaT, id, compareT);
   return torre;
 }
 
-ElementoUrbano getSemafaro(Cidade cidade, char *id){
-   Semafaro semafaro = NULL;
-   City *city = (City*) cidade;
-   semafaro = searchQuadTreeItem(city->listaS, id, compareS);
-   return semafaro;
+ElementoUrbano getSemafaro(Cidade cidade, char *id) {
+  Semafaro semafaro = NULL;
+  City *city = (City *)cidade;
+  semafaro = searchQuadTreeItem(city->listaS, id, compareS);
+  return semafaro;
 }
 
-ElementoUrbano getHidrante(Cidade cidade, char *id){
-   Hidrante hidrante = NULL;
-   City *city = (City*) cidade;
-   hidrante = searchQuadTreeItem(city->listaH, id, compareH);
-   return hidrante;
+ElementoUrbano getHidrante(Cidade cidade, char *id) {
+  Hidrante hidrante = NULL;
+  City *city = (City *)cidade;
+  hidrante = searchQuadTreeItem(city->listaH, id, compareH);
+  return hidrante;
 }
 
-void eraseListaQ(Cidade cidade){
+void eraseListaQ(Cidade cidade) {
 
-  City *city = (City*) cidade;
+  City *city = (City *)cidade;
 
   eraseQuadTreeNode(city->listaQ, removeQ);
   eraseQuadTreeBase(city->listaQ);
@@ -231,9 +255,9 @@ void eraseListaQ(Cidade cidade){
   city->listaQ = NULL;
 }
 
-void eraseListaS(Cidade cidade){
+void eraseListaS(Cidade cidade) {
 
-  City *city = (City*) cidade;
+  City *city = (City *)cidade;
 
   eraseQuadTreeNode(city->listaS, removeS);
   eraseQuadTreeBase(city->listaS);
@@ -241,9 +265,9 @@ void eraseListaS(Cidade cidade){
   city->listaS = NULL;
 }
 
-void eraseListaT(Cidade cidade){
+void eraseListaT(Cidade cidade) {
 
-  City *city = (City*) cidade;
+  City *city = (City *)cidade;
 
   eraseQuadTreeNode(city->listaT, removeT);
   eraseQuadTreeBase(city->listaT);
@@ -251,9 +275,9 @@ void eraseListaT(Cidade cidade){
   city->listaT = NULL;
 }
 
-void eraseListaH(Cidade cidade){
+void eraseListaH(Cidade cidade) {
 
-  City *city = (City*) cidade;
+  City *city = (City *)cidade;
 
   eraseQuadTreeNode(city->listaH, removeH);
   eraseQuadTreeBase(city->listaH);
@@ -261,13 +285,13 @@ void eraseListaH(Cidade cidade){
   city->listaH = NULL;
 }
 
-void eraseCidade(Cidade cidade){
-  City *city = (City*) cidade;
+void eraseCidade(Cidade cidade) {
+  City *city = (City *)cidade;
   eraseListaQ(cidade);
   eraseListaS(cidade);
   eraseListaT(cidade);
   eraseListaH(cidade);
-  if(city->nome!=NULL){
+  if (city->nome != NULL) {
     free(city->nome);
   }
   free(cidade);

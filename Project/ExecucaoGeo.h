@@ -12,10 +12,21 @@
 Autor:Matheus Augusto Marques.
 Módulo: ExecucaoGeo
 Definição:
-O módulo ExecucaoGeo tem por objetivo abrigar todos os procedimentos necessários para execução dos comandos presentes em um arquivo '.geo'.
-
+O módulo ExecucaoGeo tem por objetivo abrigar todos os procedimentos ou funções necessárias para execução dos comandos presentes em um arquivo '.geo'.
 */
-void executarConvexHull(List list, Canvas canvas, int type);
+
+
+/*
+Calcula a envoltória convexa. A função retorna a quantidade de comparações para inserir um elemento no canvas.
+O argumento type pode receber os inteiros:
+1 : Quadra;
+2 : Hidrante;
+3 : Semáfaro.
+4 : Torre;
+5 : Retângulo;
+6 : Círculo;
+*/
+long int executarConvexHull(List list, Canvas canvas, int type);
 
 
 /*
@@ -29,22 +40,22 @@ Executa o comando R. Faz a leitura dos parâmetros do comando R no arquivo arqEn
 void executarR(FILE *arqEntradaGeo, List list);
 
 /*
-Executa o comando D. Faz a leitura dos parâmetros do comando D no arquivo arqEntradaGeo. Procura os ids i e j das figuras geométricas no canvas e escreve o resultado do comando D em arqSaidaT.
+Executa o comando D. Faz a leitura dos parâmetros do comando D no arquivo arqEntradaGeo. Procura os ids i e j das figuras geométricas no canvas e escreve o resultado do comando D em arqSaidaT. O comando D calcula a distância dos centros de massa de duas figuras geométricas.
 */
 void executarD(FILE *arqEntradaGeo,  FILE *arqSaidaT, Canvas canvas);
 
 /*
-Executa o comando I. Faz a leitura dos parâmetros do comando I no arquivo arqEntradaGeo. Procura o id j de uma figura geométrica no canvas e escreve o resultado do comando I em arqSaidaT.
+Executa o comando I. Faz a leitura dos parâmetros do comando I no arquivo arqEntradaGeo. Procura o id j de uma figura geométrica no canvas e escreve o resultado do comando I em arqSaidaT. O comando I verifica se uma dados ponto no plano está dentro de uma figura geométrica.
 */
 void executarI(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas);
 
 /*
-Executa o comando O. Faz a leitura dos parâmetros do comando O no arquivo arqEntradaGeo. Procura os ids i e j das figuras geométricas no canvas e escreve o resultado do comando O em arqSaidaT.
+Executa o comando O. Faz a leitura dos parâmetros do comando O no arquivo arqEntradaGeo. Procura os ids i e j das figuras geométricas no canvas e escreve o resultado do comando O em arqSaidaT. Ou seja, verifica se duas figuras geométricas se spbrepõem.
 */
 void executarO(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas);
 
 /*
-Executa o comando A. Faz a leitura dos parâmetros do comando A no arquivo arqEntradaGeo e armazena os dados do canvas referente a círculos e retângulos em um arquivo de saída obtido com a concatenação de dirPath + arqNome + extensao.
+Executa o comando A. Faz a leitura dos parâmetros do comando A no arquivo arqEntradaGeo e armazena os dados do canvas referente a círculos e retângulos em um arquivo de saída obtido com a concatenação de dirPath + arqNome + extensao. O comando A gera um arquivo svg que contém os vertices das figuras geométrica representadas.
 */
 void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome,char *dirPath, char *extensao2);
 

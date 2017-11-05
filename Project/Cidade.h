@@ -9,7 +9,6 @@
 typedef void* ElementoUrbano;
 typedef void* Cidade;
 
-FILE *newArqCity;
 
 /**
 Autor: Matheus Augusto Marques
@@ -24,53 +23,10 @@ Cria uma cidade vazia com o nome na string name.
 */
 Cidade criaCidade(char *name);
 
-
 /*
-Insere uma quadra em uma cidade.
+Retorna a quantidade de elementos dentro de uma cidade.
 */
-void insertQuadra(Cidade cidade, ElementoUrbano item);
-
-
-/*
-Remove uma quadra presente em uma cidade em uma posição indicada por p.
-*/
-void removeQuadra(Cidade cidade, char *cep);
-
-
-/*
-Insere um semafaro em uma cidade.
-*/
-void insertSemafaro(Cidade cidade, ElementoUrbano item);
-
-
-/*
-Remove um semafaro presente em uma cidade em uma posição indicada por p.
-*/
-void removeSemafaro(Cidade cidade, char *id);
-
-
-/*
-Insere uma torre celular em uma cidade.
-*/
-void insertTorre(Cidade cidade, ElementoUrbano item);
-
-
-/*
-Remove uma torre celular presente em uma cidade em uma posição indicada por p.
-*/
-void removeTorre(Cidade cidade, char *id);
-
-
-/*
-Insere um hidrante em uma cidade.
-*/
-void insertHidrante(Cidade cidade, ElementoUrbano item);
-
-
-/*
-Remove um hidrante de uma cidade em uma posição indicada por p.
-*/
-void removeHidrante(Cidade cidade, char *id);
+long int quantityElementsICity(Cidade cidade);
 
 
 /*
@@ -83,6 +39,80 @@ char *getNome(Cidade cidade);
 Troca o nome de uma cidade por outro nome contido na string nome.
 */
 void setNome(Cidade cidade, char *nome);
+
+
+/*
+Insere uma quadra em uma cidade.
+Retorna a quantidade de comparações para inserir uma quadra em cidade.
+*/
+long int insertQuadra(Cidade cidade, ElementoUrbano item);
+
+
+/*
+Remove uma quadra presente em uma cidade em uma posição indicada por p.
+*/
+long int removeQuadra(Cidade cidade, char *cep);
+
+
+/*
+Insere um semafaro em uma cidade.
+Retorna a quantidade de comparações para inserir um semáfaro em cidade.
+*/
+long int insertSemafaro(Cidade cidade, ElementoUrbano item);
+
+/*
+Remove um semafaro presente em uma cidade em uma posição indicada por p.
+*/
+long int removeSemafaro(Cidade cidade, char *id);
+
+
+/*
+Insere uma torre celular em uma cidade.
+Retorna a quantidade de comparações para inserir uma torre em cidade.
+*/
+long int insertTorre(Cidade cidade, ElementoUrbano item);
+
+/*
+Remove uma torre celular presente em uma cidade em uma posição indicada por p.
+*/
+long int removeTorre(Cidade cidade, char *id);
+
+
+/*
+Insere um hidrante em uma cidade.
+Retorna a quantidade de comparações para inserir uma hidrante em cidade.
+*/
+long int insertHidrante(Cidade cidade, ElementoUrbano item);
+
+
+/*
+Remove um hidrante de uma cidade em uma posição indicada por p.
+*/
+long int removeHidrante(Cidade cidade, char *id);
+
+
+/*
+Escreve em um arquivo file (Arquivo svg) todas as quadras presentes na cidade.
+*/
+void showQuadras(Cidade cidade, FILE *file);
+
+
+/*
+Escreve em um arquivo file (Arquivo svg) todos os hidrantes presentes na cidade.
+*/
+void showHidrantes(Cidade cidade, FILE *file);
+
+
+/*
+Escreve em um arquivo file (Arquivo svg) todos os semafaros presentes na cidade.
+*/
+void showSemafaros(Cidade cidade, FILE *file);
+
+
+/*
+Escreve em um arquivo file (Arquivo svg) todas as torres presentes na cidade.
+*/
+void showTorres(Cidade cidade, FILE *file);
 
 
 /*
@@ -112,35 +142,6 @@ Retorna null caso não exista hidrantes na cidade.
 */
 QuadTree getListaH(Cidade cidade);
 
-
-/*
- Escreve as propriedades de uma quadra em um arquivo no formato svg.
-O arquivo é expecificado pelo usúario através da variável newArqCity.
-O arquivo svg deve existir e estar aberto.
-*/
-void showQ(Quadra quadra);
-
-
-/*
- Escreve as propriedades de um hidrante em um arquivo no formato svg.
-O arquivo é expecificado pelo usúario através da variável newArqCity.
-O arquivo svg deve existir e estar aberto.
-*/
-void showH(Hidrante hidrante);
-
-
-/*
- Escreve as propriedades de um semafaro em um arquivo no formato svg.
-O arquivo é expecificado pelo usúario através da variável newArqCity.
-O arquivo svg deve existir e estar aberto.
-*/
-void showS(Semafaro semafaro);
-
-
-/*A funcão escreve as propriedades de uma torre em um arquivo no formato svg.
-O arquivo é expecificado pelo usúario através da variável newArqCanvas.
-O arquivo svg deve existir e estar aberto.*/
-void showT(Torre torre);
 
 /*
 Retorna uma quadra presente em uma cidade com o título de identificação definido pela string cep.

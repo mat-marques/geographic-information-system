@@ -13,14 +13,15 @@
 
 #include "Canvas.h"
 #include "ConvexHull.h"
-#include "DoubleLinkedList.h"
+#include "List.h"
 #include "QuadTree.h"
 #include "Stack.h"
 #include "StringO.h"
 #include "Svg.h"
 
-void executarConvexHull(List list, Canvas canvas, int type) {
+long int executarConvexHull(List list, Canvas canvas, int type) {
   int i, n;
+  long int qtdCompararacoesI = 0;
   void *element = NULL;
   Stack stack = NULL;
   double x, y, w, h;
@@ -33,7 +34,7 @@ void executarConvexHull(List list, Canvas canvas, int type) {
     for (i = 0; i < n; i++) {
       element = getItemTop(stack);
       removeTop(stack, NULL);
-      insertQuadra(getCidade(canvas), element);
+      qtdCompararacoesI = qtdCompararacoesI + insertQuadra(getCidade(canvas), element);
       x = getXQ(element);
       y = getYQ(element);
       x = x + getLargQ(element);
@@ -54,7 +55,7 @@ void executarConvexHull(List list, Canvas canvas, int type) {
     for (i = 0; i < n; i++) {
       element = getItemTop(stack);
       removeTop(stack, NULL);
-      insertHidrante(getCidade(canvas), element);
+      qtdCompararacoesI = qtdCompararacoesI + insertHidrante(getCidade(canvas), element);
       x = getXH(element);
       y = getYH(element);
       if (w < x) {
@@ -73,7 +74,7 @@ void executarConvexHull(List list, Canvas canvas, int type) {
     for (i = 0; i < n; i++) {
       element = getItemTop(stack);
       removeTop(stack, NULL);
-      insertSemafaro(getCidade(canvas), element);
+      qtdCompararacoesI = qtdCompararacoesI + insertSemafaro(getCidade(canvas), element);
       x = getXS(element);
       y = getYS(element);
       if (w < x) {
@@ -92,7 +93,7 @@ void executarConvexHull(List list, Canvas canvas, int type) {
     for (i = 0; i < n; i++) {
       element = getItemTop(stack);
       removeTop(stack, NULL);
-      insertTorre(getCidade(canvas), element);
+      qtdCompararacoesI = qtdCompararacoesI + insertTorre(getCidade(canvas), element);
       x = getXT(element);
       y = getYT(element);
       if (w < x) {
@@ -111,7 +112,7 @@ void executarConvexHull(List list, Canvas canvas, int type) {
     for (i = 0; i < n; i++) {
       element = getItemTop(stack);
       removeTop(stack, NULL);
-      insertRetangulo(canvas, element);
+      qtdCompararacoesI = qtdCompararacoesI + insertRetangulo(canvas, element);
       x = getRx(element);
       y = getRy(element);
       x = x + getRw(element);
@@ -132,7 +133,7 @@ void executarConvexHull(List list, Canvas canvas, int type) {
     for (i = 0; i < n; i++) {
       element = getItemTop(stack);
       removeTop(stack, NULL);
-      insertCirculo(canvas, element);
+      qtdCompararacoesI = qtdCompararacoesI + insertCirculo(canvas, element);
       x = getCx(element);
       y = getCy(element);
       x = x + getCr(element);
@@ -150,6 +151,7 @@ void executarConvexHull(List list, Canvas canvas, int type) {
   }
   eraseStack(stack, NULL);
   eraseBaseStack(stack);
+  return qtdCompararacoesI;
 }
 
 void executarC(FILE *arqEntradaGeo, List list) {
@@ -159,7 +161,7 @@ void executarC(FILE *arqEntradaGeo, List list) {
   Circulo circulo = NULL;
   fscanf(arqEntradaGeo, "%d %lf %lf %lf %s\n", &i, &r, &x, &y, cor);
   circulo = createCircle(i, r, x, y, cor);
-  insertEndDLL(list, circulo);
+  insertEndL(list, circulo);
 }
 
 void executarR(FILE *arqEntradaGeo, List list) {
@@ -169,7 +171,7 @@ void executarR(FILE *arqEntradaGeo, List list) {
   Retangulo retangulo = NULL;
   fscanf(arqEntradaGeo, "%d %lf %lf %lf %lf %s\n", &i, &w, &h, &x, &y, cor);
   retangulo = createRectangle(i, w, h, x, y, cor);
-  insertEndDLL(list, retangulo);
+  insertEndL(list, retangulo);
 }
 
 void executarD(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
@@ -220,7 +222,7 @@ void executarD(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
       } else
         printf("ERRO EM COMANDO D.\n");
     } else {
-      printf("Poligono não encontrado.\n");
+      printf("Poligono não encontrado d.\n");
       fillArq1(arqSaidaT, stringAux);
       fillBreakLine(arqSaidaT);
     }
@@ -258,6 +260,7 @@ void executarI(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
       voidPointer1 = getCirculo(canvas, i);
       caracter = 'c';
     }
+
     if (voidPointer1 != NULL) {
       if (caracter == 'c') {
         comandoIc(arqSaidaT, x, y, getCx(voidPointer1), getCy(voidPointer1),
@@ -269,7 +272,7 @@ void executarI(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
         }
       }
     } else {
-      printf("Poligono não encontrado.\n");
+      printf("Poligono não encontrado i.\n");
       fillArq1(arqSaidaT, stringAux);
       fillBreakLine(arqSaidaT);
     }
@@ -369,9 +372,9 @@ void executarO(FILE *arqEntradaGeo, FILE *arqSaidaT, Canvas canvas) {
           insertRetangulo2(canvas, retangulo);
         }
       } else
-        printf("ERRO EM COMANDO D.\n");
+        printf("ERRO EM COMANDO O.\n");
     } else {
-      printf("Poligono não encontrado.\n");
+      printf("Poligono não encontrado o.\n");
       fillArq1(arqSaidaT, stringAux2);
       fillBreakLine(arqSaidaT);
     }
@@ -418,14 +421,14 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome, char *dirPath,
   desalocar(string3);
   string3 = NULL;
 
-  newArqCanvas = arqSaidaSvg2;
   /* Escreve no arquivo de saida os retângulos. */
-  showCanvasR(canvas, arqSaidaSvg2);
+  showCanvasRV(canvas, cor, arqSaidaSvg2);
 
   /* Escreve no arquivo de saida os círculos. */
-  showCanvasC(canvas, arqSaidaSvg2);
+  showCanvasCV(canvas, cor, arqSaidaSvg2);
 
   tagFechamento(arqSaidaSvg2);
+  fclose(arqSaidaSvg2);
 }
 
 void executarQ(FILE *arqEntradaGeo, List list, Cor cor) {
@@ -440,7 +443,7 @@ void executarQ(FILE *arqEntradaGeo, List list, Cor cor) {
 
   quadra = criaQuadra(x, y, w, h, string, getCorP(cor), getCorC(cor));
 
-  insertEndDLL(list, quadra);
+  insertEndL(list, quadra);
 
   desalocar(string);
   string = NULL;
@@ -459,7 +462,7 @@ void executarH(FILE *arqEntradaGeo, List list, Cor cor) {
 
   hidrante = criaHidrante(x, y, string, getCorP(cor), getCorC(cor));
 
-  insertEndDLL(list, hidrante);
+  insertEndL(list, hidrante);
 
   desalocar(string);
   string = NULL;
@@ -478,7 +481,7 @@ void executarS(FILE *arqEntradaGeo, List list, Cor cor) {
 
   semafaro = criaSemafaro(x, y, string, getCorP(cor), getCorC(cor));
 
-  insertEndDLL(list, semafaro);
+  insertEndL(list, semafaro);
 
   desalocar(string);
   string = NULL;
@@ -497,7 +500,7 @@ void executarT(FILE *arqEntradaGeo, List list, Cor cor) {
 
   torre = criaTorre(x, y, string, getCorP(cor), getCorC(cor));
 
-  insertEndDLL(list, torre);
+  insertEndL(list, torre);
 
   desalocar(string);
   string = NULL;
@@ -541,15 +544,14 @@ void executarHI(FILE *arqEntradaGeo, Canvas canvas) {
   char *id;
   double vazao;
   int i;
-  QuadTree quadT;
   i = qtdCaracteres(arqEntradaGeo);
   id = alocarString(i);
   fscanf(arqEntradaGeo, "%s %lf\n", id, &vazao);
 
-  quadT = getListaH(getCidade(canvas));
+  hidrante = getHidrante(getCidade(canvas), id);
 
-  hidrante = searchQuadTreeItem(quadT, id, compareH);
   free(id);
+
   if (hidrante != NULL) {
     setVazao(hidrante, vazao);
   }
@@ -561,15 +563,14 @@ void executarTI(FILE *arqEntradaGeo, Canvas canvas) {
   char *id;
   double raio;
   int i;
-  QuadTree quadT;
   i = qtdCaracteres(arqEntradaGeo);
   id = alocarString(i);
   fscanf(arqEntradaGeo, "%s %lf\n", id, &raio);
 
-  quadT = getListaT(getCidade(canvas));
+  torre = getTorre(getCidade(canvas), id);
 
-  torre = searchQuadTreeItem(quadT, id, compareT);
   free(id);
+
   if (torre != NULL) {
     setRaio(torre, raio);
   }
@@ -581,18 +582,18 @@ void executarSI(FILE *arqEntradaGeo, Canvas canvas) {
   char *id;
   double tempo;
   int i;
-  QuadTree quadT;
   i = qtdCaracteres(arqEntradaGeo);
   id = alocarString(i);
   fscanf(arqEntradaGeo, "%s %lf\n", id, &tempo);
 
-  quadT = getListaS(getCidade(canvas));
+  semafaro = getSemafaro(getCidade(canvas), id);
 
-  semafaro = searchQuadTreeItem(quadT, id, compareT);
   free(id);
+
   if (semafaro != NULL) {
     setTempo(semafaro, tempo);
   }
+
 }
 
 char comandoOrr(FILE *arqSaidaT, double w1, double h1, double x1, double y1,

@@ -25,13 +25,14 @@ O procedimento tem a finalidade de apresentar no arquivo de saída svg (arqSaida
 void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas);
 
 /*
-O procedimento tem a finalidade de executar todos os comando necessários para processar o arquivo '.geo'. Etapa 2.
+A função tem a finalidade de executar todos os comando necessários para processar o arquivo '.geo'. Etapa 2.
 Arquivo de entrada arqEntradaGeo.
 Nome do arquivo de entrada arqNome.
 Diretório de saida dirPath.
 Quantidade de quadra inseridas.
+retorna a quantidade de comparações para inserir retangulos, círculos, quadras, semafaros, torres e hidrantes no canvas.
 */
-void executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canvas canvas , int *qtdQuadrasInseridas);
+long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath, Canvas canvas , int *qtdQuadrasInseridas, long int *qtdCompararacoesI);
 
 /*
 O procedimento tem a finalidade de executar todos os comando necessários para processar o arquivo '.qry'. Etapa 3.
@@ -39,8 +40,9 @@ Arquivo de entrada arqEntradaQry.
 Nome do arquivo de entrada arqNome.
 Diretório de saida dirPath.
 Quantidade de quadra removidas.
+retorna a quantidade de comparações para remover quadras, semafaros, torres e hidrantes do canvas.
 */
-void executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath, Canvas canvas, int *qtdQuadrasRemovidas);
+long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath, Canvas canvas, int *qtdQuadrasRemovidas, long int *qtdCompararacoesR, int *qtdElementosRemovidos);
 
 /*
 O procedimento tem a finalidade de organizar dentro de si todas as chamadas das 4 etapas do problema.

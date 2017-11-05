@@ -3,38 +3,44 @@
 
 #include "Circulo.h"
 #include "Retangulo.h"
-#include "DoubleLinkedList.h"
+#include "List.h"
 #include "Cidade.h"
 
 typedef void* Canvas;
 typedef void* figuraGeometrica;
-FILE *newArqCanvas;
 
 /***
 Autor: Matheus Augusto Marques.
 Tad: Canvas
 Definição:
-Um canvas é um plano bidimensional composto por um comprimento e uma altura e que aloja dentro de si componentes específicos. Os componentes que podem compor um canvas são retângulos, círculos , uma lista de cores e uma cidade.
+Um canvas é um plano bidimensional composto por um comprimento e uma altura e que aloja dentro de si componentes específicos. Os componentes que podem compor um canvas são retângulos, círculos e uma cidade.
 */
 
 
 
 /*
-Cria um canvas vazio e com comprimento e altura iguais a 100.
+Cria um canvas vazio e com comprimento e altura iguais a 100 metros.
 */
 Canvas criaCanvas(int id);
 
 
 /*
-Insere no canvas passado como parâmetro um retângulo.
+Retorna a quantidade de elementos dentro de uma cidade.
 */
-void insertRetangulo(Canvas canvas, Retangulo retangulo);
+long int quantityElementsICanvas(Canvas canvas);
+
+
+/*
+Insere no canvas passado como parâmetro um retângulo.
+Retorna a quantidade de comparações para inserir um retângulo no canvas.
+*/
+long int insertRetangulo(Canvas canvas, Retangulo retangulo);
 
 
 /*
 Remove do canvas passado como parâmetro um retângulo com uma posição específica.
 */
-void removeRetangulo(Canvas canvas, int id);
+long int removeRetangulo(Canvas canvas, int id);
 
 
 /*
@@ -51,29 +57,38 @@ void removeRetangulo2(Canvas canvas, int id);
 
 /*
 Insere no canvas passado como parâmetro um círculo.
+Retorna a quantidade de comparações para inserir um círculo no canvas.
 */
-void insertCirculo(Canvas canvas, Circulo circulo);
+long int insertCirculo(Canvas canvas, Circulo circulo);
 
 
 /*
 Remove do canvas passado como parâmetro um círculo em uma posição indicada por p.
 */
-void removeCirculo(Canvas canvas, int id);
+long int removeCirculo(Canvas canvas, int id);
+
+/*
+Escreve no arquivo file todos os retângulos dentro do canvas.
+*/
+void showCanvasR(Canvas canvas, FILE *file);
 
 
-/*A funcão escreve as propriedades de um retângulo em um arquivo no formato svg.
-O arquivo é expecificado pelo usúario através da variável newArqCanvas.
-O arquivo svg deve existir e estar aberto.*/
-void showR(Retangulo retangulo);
-
-/*A funcão escreve as propriedades de um retângulo de sobreposição em um arquivo no formato svg. O arquivo é expecificado pelo usúario através da variável newArqCanvas.
-O arquivo svg deve existir e estar aberto.*/
-void showR2(Retangulo retangulo);
+/*
+Escreve no arquivo file todos os círculos dentro do canvas.
+*/
+void showCanvasC(Canvas canvas, FILE *file);
 
 
-/*A funcão escreve as propriedades de um retângulo de sobreposição em um arquivo no formato svg. O arquivo é expecificado pelo usúario através da variável newArqCanvas.
-O arquivo svg deve existir e estar aberto.*/
-void showC(Circulo circulo);
+/*
+Escreve no arquivo file todos os vertices de um retângulo dentro do canvas.
+*/
+void showCanvasRV(Canvas canvas, char cor[30], FILE *file);
+
+
+/*
+Escreve no arquivo file todos os vertices de um círculo dentro do canvas.
+*/
+void showCanvasCV(Canvas canvas, char cor[30], FILE *file);
 
 
 /*
@@ -107,17 +122,6 @@ O argumento type pode receber os inteiros:
 */
 List getElementsListInsideC(Canvas canvas, int type, double x, double y, double r);
 
-
-/*
-Escreve no arquivo file o todos os retângulos dentro do canvas.
-*/
-void showCanvasR(Canvas canvas, FILE *file);
-
-
-/*
-Escreve no arquivo file o todos os retângulos dentro do canvas.
-*/
-void showCanvasC(Canvas canvas, FILE *file);
 
 
 /*
@@ -234,7 +238,7 @@ Apaga o canvas e todos os seus componentes.
 void eraseCanvas(Canvas canvas);
 
 
-/*A funcão escreve as propriedades de um retângulo, círculo ou retângulo de sobreposição - pertencentes ao objeto Canvas- em um arquivo no formato svg. O arquivo é expecificado pelo usúario através da variável newArqCanvas.
+/*A funcão escreve as propriedades de um retângulo, círculo, retângulo de sobreposição ou elementos de uma cidade - pertencentes ao objeto Canvas- em um arquivo no formato svg.
 O argumento type pode receber um dos seguintes valores:
 1 : Quadra;
 2 : Hidrante;
@@ -244,6 +248,6 @@ O argumento type pode receber um dos seguintes valores:
 6 : Círculo;
 7 : Retângulo de sobreposição.
 O arquivo svg deve existir e estar aberto.*/
-void showCanvasElements(Canvas canvas, int type);
+void showCanvasElements(Canvas canvas, FILE *file, int type);
 
 #endif

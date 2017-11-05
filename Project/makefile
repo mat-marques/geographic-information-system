@@ -2,14 +2,14 @@
 #		Autor: Matheus Augusto Marques
 
 objects = main.o Arquivo.o StringO.o Retangulo.o Circulo.o Svg.o \
-          OpEntrada.o OperacoesF.o DoubleLinkedList.o Processamento.o \
+          OpEntrada.o OperacoesF.o List.o Processamento.o \
           Quadra.o Semafaro.o Torre.o Hidrante.o Cidade.o Canvas.o \
  		  		ExecucaoGeo.o ExecucaoQry.o QuadTree.o ConvexHull.o Stack.o \
 					Ordination.o Cor.o
 
 dependenciasP = Processamento.h Processamento.c Arquivo.h Arquivo.c \
                 StringO.h StringO.c Svg.h Svg.c \
-                OpEntrada.h OpEntrada.c DoubleLinkedList.h DoubleLinkedList.c \
+                OpEntrada.h OpEntrada.c List.h List.c \
                 Circulo.h Circulo.c Retangulo.h Retangulo.c \
                 OperacoesF.h OperacoesF.c Quadra.h Quadra.c \
                 Semafaro.h Semafaro.c Torre.h Torre.c \
@@ -19,7 +19,7 @@ dependenciasP = Processamento.h Processamento.c Arquivo.h Arquivo.c \
 
 dependenciasEg = Arquivo.h Arquivo.c StringO.h StringO.c Svg.h Svg.c \
                  OpEntrada.h OpEntrada.c Circulo.h Circulo.c \
-								 DoubleLinkedList.h DoubleLinkedList.c  \
+								 List.h List.c  \
                  Retangulo.h Retangulo.c OperacoesF.h OperacoesF.c \
                  Quadra.h Quadra.c Semafaro.h Semafaro.c Torre.h Torre.c \
                  Hidrante.h Hidrante.c Cidade.h Cidade.c Canvas.h Canvas.c \
@@ -28,7 +28,7 @@ dependenciasEg = Arquivo.h Arquivo.c StringO.h StringO.c Svg.h Svg.c \
 
 dependenciasEq = Arquivo.h Arquivo.c StringO.h StringO.c \
                  Svg.h Svg.c OpEntrada.h OpEntrada.c \
-				 			 	 DoubleLinkedList.h DoubleLinkedList.c \
+				 			 	 List.h List.c \
                  Circulo.h Circulo.c Retangulo.h Retangulo.c \
                  OperacoesF.h OperacoesF.c Quadra.h Quadra.c \
                  Semafaro.h Semafaro.c Torre.h Torre.c \
@@ -38,13 +38,13 @@ dependenciasEq = Arquivo.h Arquivo.c StringO.h StringO.c \
 								 QuadTree.h QuadTree.c
 
 dependenciasCa = Canvas.h Canvas.c Circulo.h Circulo.c \
-			           Retangulo.h Retangulo.c DoubleLinkedList.h \
-				 			   DoubleLinkedList.c Cidade.h Cidade.c \
+			           Retangulo.h Retangulo.c List.h \
+				 			   List.c Cidade.h Cidade.c \
 				 			   ConvexHull.h ConvexHull.c OperacoesF.h OperacoesF.c \
 				 			   QuadTree.h QuadTree.c
 
 dependenciasCi = Cidade.h Cidade.c Quadra.h Quadra.c\
-				 				 DoubleLinkedList.h DoubleLinkedList.c \
+				 				 List.h List.c \
    				 			 Hidrante.h Hidrante.c Semafaro.h Semafaro.c \
 						     Torre.h Torre.c QuadTree.h QuadTree.c Svg.h Svg.c \
 				 			 	 ConvexHull.h ConvexHull.c Stack.h Stack.c
@@ -78,12 +78,12 @@ Stack.o: Stack.h Stack.c
 	gcc -c $(CFLAGS) Stack.c -o Stack.o
 
 
-QuadTree.o: QuadTree.h QuadTree.c DoubleLinkedList.h DoubleLinkedList.c
+QuadTree.o: QuadTree.h QuadTree.c List.h List.c
 	gcc -c $(CFLAGS) QuadTree.c -o QuadTree.o
 
 
-DoubleLinkedList.o: DoubleLinkedList.h DoubleLinkedList.c
-	gcc -c $(CFLAGS) DoubleLinkedList.c -o DoubleLinkedList.o
+List.o: List.h List.c
+	gcc -c $(CFLAGS) List.c -o List.o
 
 
 Ordination.o: Ordination.h Ordination.c

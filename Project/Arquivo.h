@@ -6,22 +6,23 @@ Autor: Matheus Augusto Marques.
 TAD: Arquivo.
 Definição:
 Um arquivo é um documento textual que é composto por um conjunto de símbolos. Um símbolo pode ser determinado por uma letra de um alfabeto, números etc.
+Os símbolos estão no formado ascii.
 */
 
 /*
-Abre um arquivo referente ao caminho path para leitura.
+Abre um arquivo referente ao caminho path do computador do usário para leitura.
 Fecha a aplicação se path for inválido ou o arquivo não existir.
 */
 FILE *createArqR(char *path);
 
 /**
-Cria ou abre um arquivo referente ao caminho path para escrita. Caso o arquivo já exista, então o conteúdo em seu interior será apagado.
+Cria ou abre um arquivo referente ao caminho path do computador do usário para escrita. Caso o arquivo já exista, então o conteúdo em seu interior será apagado.
 Fecha a aplicação se path for inválido ou a abertura do arquivo for inválida.
 */
 FILE *createArqW(char *path);
 
 /**
-Cria ou abre um arquivo referente ao path para ser acrescentado informação no conteúdo que já existe no arquivo.
+Cria ou abre um arquivo referente ao path do computador do usário para ser acrescentado informação no conteúdo que já existe no arquivo.
 Fecha a aplicação se path for inválido ou a abertura do arquivo for inválida.
 */
 FILE *createArqA(char *path);
