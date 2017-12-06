@@ -6,6 +6,13 @@
 #include "Semafaro.h"
 #include "Torre.h"
 #include "QuadTree.h"
+#include "HashTable.h"
+
+#include "Pessoa.h"
+#include "EstabelecimentoComercial.h"
+#include "Operadora.h"
+#include "Dicionario.h"
+
 typedef void* ElementoUrbano;
 typedef void* Cidade;
 
@@ -89,6 +96,21 @@ long int insertHidrante(Cidade cidade, ElementoUrbano item);
 Remove um hidrante de uma cidade em uma posição indicada por p.
 */
 long int removeHidrante(Cidade cidade, char *id);
+
+
+Dicionario getDicionario(Cidade cidade);
+
+
+void insertOperadora(Cidade cidade, Operadora operadora);
+
+
+void removeOperadora(Cidade cidade, char *nome);
+
+
+List getListaOperadoras(Cidade cidade);
+
+
+Operadora getOperadoraC(Cidade cidade, char *nome);
 
 
 /*

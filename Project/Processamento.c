@@ -386,19 +386,27 @@ void processarDados(char **argv, int argc){
   char acc0='f', acc='f';
   char extensao1[] = ".txt";
   int qtdQuadrasInseridas=0, qtdQuadrasRemovidas=0, qtdElementosRemovidos = 0;
-  long int  qtdCompararacoesI=0, qtdCompararacoesR=0;
+  long int  qtdCompararacoesI=0, qtdCompararacoesR=0, x = 0, y = 0, qtd;
   FILE *arqEntradaGeo=NULL, *arqEntradaQry=NULL;
-  FILE *arqSaidaSvg;
+  FILE *arqSaidaSvg, *cp = NULL;
   Canvas canvas;
 
   abrirArquivos(&arqEntradaGeo, &arqEntradaQry, &arqNome, &dirPath, &exitFileSvg, &acc0, &acc, argv, argc);
 
   canvas = criaCanvas(1);
 
-  executarComandosGeo(arqEntradaGeo, arqNome, dirPath, canvas, &qtdQuadrasInseridas, &qtdCompararacoesI);
+  x = executarComandosGeo(arqEntradaGeo, arqNome, dirPath, canvas, &qtdQuadrasInseridas, &qtdCompararacoesI);
 
-  executarComandosQry(arqEntradaQry, arqNome, dirPath, canvas, &qtdQuadrasRemovidas, &qtdCompararacoesR, &qtdElementosRemovidos);
+  qtd = quantityElementsICanvas(canvas);
+  
+  y = executarComandosQry(arqEntradaQry, arqNome, dirPath, canvas, &qtdQuadrasRemovidas, &qtdCompararacoesR, &qtdElementosRemovidos);
+  cp = NULL;
+  cp = fopen("/home/eb/Dropbox/ED/CorrTrab/2017/t03/alunos/mamarques/comparacoes/cp1.txt", "a");
 
+  if(cp != NULL){
+    fprintf(cp, "Nome: %s   qtdI: %ld   c.i: %ld   qtdR: %d   c.r: %ld\n", arqNome, qtd, x, qtdElementosRemovidos, y);
+    fclose(cp);
+  }
 
   if(acc0=='t'){
     executarAcc0(dirPath, arqNome, extensao1, qtdQuadrasInseridas, qtdCompararacoesI, qtdQuadrasRemovidas, qtdCompararacoesR);

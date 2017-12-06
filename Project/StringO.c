@@ -3,6 +3,17 @@
 #include <string.h>
 #include "StringO.h"
 
+
+char *criarString(char *char1) {
+  int i;
+  char *charR = NULL;
+  i = strlen(char1);
+  charR = (char *)malloc(i * sizeof(char));
+  charR[0] = '\0';
+  strcpy(charR, char1);
+  return charR;
+}
+
 int qtdCaracteres(FILE *file){
   char letra;
   int i=0;

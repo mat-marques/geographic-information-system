@@ -118,6 +118,14 @@ O procedimento executar o comando hI contido no arquivo arqEntradaGeo. Esse proc
 void executarSI(FILE *arqEntradaGeo, Canvas canvas);
 
 
+
+void executarGeoSu(FILE *arqEntradaGeo, Canvas canvas);
+
+
+
+void executarGeoUm(FILE *arqEntradaGeo, Canvas canvas);
+
+
 /**
 Verifica e retorna um caracter 't' ou 'f' se dois retângulos estão sobrepostos.
 Utiliza procedimentos do módulo OperacoesF e procedimentos do Tad Arquivo.

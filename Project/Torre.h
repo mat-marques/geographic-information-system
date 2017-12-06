@@ -65,6 +65,12 @@ Modifica o raio de alcance da Torre element pelo valor em raio.
 void setRaio(Torre element, double raio);
 
 
+char *getOperadora(Torre element);
+
+
+void setOperadora(Torre element, char *operadora);
+
+
 /**
 Remove uma torre da memória.
 */

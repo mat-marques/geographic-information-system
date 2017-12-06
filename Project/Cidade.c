@@ -4,6 +4,7 @@
 
 #include "Cidade.h"
 #include "ConvexHull.h"
+#include "Endereco.h"
 #include "Hidrante.h"
 #include "List.h"
 #include "QuadTree.h"
@@ -16,10 +17,38 @@ FILE *newArqCity = NULL;
 
 typedef struct City {
   QuadTree listaQ, listaS, listaT, listaH;
+  Dicionario dicionario;
+  List operadoras;
   char *nome;
 } City;
 
 void ConvexHullAuxC(Stack stack, Cidade cidade, int type);
+
+Dicionario configuraDicionario() {
+  char secao1[] = "cpfXcep";
+  char secao2[] = "numcelXpessoa";
+  char secao3[] = "codtXestabC";
+  char secao4[] = "cpfXpessoa";
+  char secao5[] = "cepXquadra";
+  char secao6[] = "cepXmoradores";
+  char secao7[] = "cepXpessoas";
+  char secao8[] = "cnpjXestabC";
+  char secao9[] = "descricaoXestabC";
+  Dicionario dicionario = NULL;
+
+  dicionario = criaDicionario(8);
+
+  insertSecaoDicionario(dicionario, secao1, 50);
+  insertSecaoDicionario(dicionario, secao2, 50);
+  insertSecaoDicionario(dicionario, secao3, 50);
+  insertSecaoDicionario(dicionario, secao4, 50);
+  insertSecaoDicionario(dicionario, secao5, 50);
+  insertSecaoDicionario(dicionario, secao6, 50);
+  insertSecaoDicionario(dicionario, secao7, 50);
+  insertSecaoDicionario(dicionario, secao8, 50);
+  insertSecaoDicionario(dicionario, secao9, 50);
+  return dicionario;
+}
 
 Cidade criaCidade(char *name) {
   City *city = NULL;
@@ -29,13 +58,14 @@ Cidade criaCidade(char *name) {
   city->listaS = createQuadTree();
   city->listaT = createQuadTree();
   city->listaH = createQuadTree();
+  city->dicionario = configuraDicionario();
   return city;
 }
 
-long int quantityElementsICity(Cidade cidade){
+long int quantityElementsICity(Cidade cidade) {
   City *city = (City *)cidade;
   long int myLength = 0;
-  if(city != NULL){
+  if (city != NULL) {
     myLength = lenghtQuadTree(city->listaQ);
     myLength = myLength + lenghtQuadTree(city->listaH);
     myLength = myLength + lenghtQuadTree(city->listaS);
@@ -43,6 +73,7 @@ long int quantityElementsICity(Cidade cidade){
   }
   return myLength;
 }
+
 long int insertQuadra(Cidade cidade, ElementoUrbano item) {
   City *city = (City *)cidade;
   return insertQuadTree(city->listaQ, item, getXQ(item), getYQ(item));
@@ -99,6 +130,33 @@ long int removeHidrante(Cidade cidade, char *id) {
   return qtd;
 }
 
+
+Dicionario getDicionario(Cidade cidade){
+  City *city = (City *)cidade;
+  return city->dicionario;
+}
+
+
+void insertOperadora(Cidade cidade, Operadora operadora) {
+  City *city = (City *)cidade;
+  insertBeginL(city->operadoras, operadora);
+}
+
+void removeOperadora(Cidade cidade, char *nome) {
+  City *city = (City *)cidade;
+  removeItemL2(city->operadoras, nome, compareOperadoras);
+}
+
+List getListaOperadoras(Cidade cidade) {
+  City *city = (City *)cidade;
+  return city->operadoras;
+}
+
+Operadora getOperadoraC(Cidade cidade, char *nome) {
+  City *city = (City *)cidade;
+  return searchItemL(city->operadoras, (void *)nome, compareOperadoras);
+}
+
 char *getNome(Cidade cidade) {
   City *city = (City *)cidade;
   return city->nome;
@@ -129,7 +187,6 @@ QuadTree getListaH(Cidade cidade) {
   City *city = (City *)cidade;
   return city->listaH;
 }
-
 
 void showQ(Quadra quadra) {
   double x, y, w, h;
@@ -189,28 +246,28 @@ void showT(Torre torre) {
   tagTexto2(newArqCity, text, cor, 5, x - 1.5, y + 1.5);
 }
 
-void showQuadras(Cidade cidade, FILE *file){
+void showQuadras(Cidade cidade, FILE *file) {
   City *city = (City *)cidade;
   newArqCity = file;
   showQuadTree(city->listaQ, showQ);
   newArqCity = NULL;
 }
 
-void showHidrantes(Cidade cidade, FILE *file){
+void showHidrantes(Cidade cidade, FILE *file) {
   City *city = (City *)cidade;
   newArqCity = file;
   showQuadTree(city->listaH, showH);
   newArqCity = NULL;
 }
 
-void showSemafaros(Cidade cidade, FILE *file){
+void showSemafaros(Cidade cidade, FILE *file) {
   City *city = (City *)cidade;
   newArqCity = file;
   showQuadTree(city->listaS, showS);
   newArqCity = NULL;
 }
 
-void showTorres(Cidade cidade, FILE *file){
+void showTorres(Cidade cidade, FILE *file) {
   City *city = (City *)cidade;
   newArqCity = file;
   showQuadTree(city->listaT, showT);

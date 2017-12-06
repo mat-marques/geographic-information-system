@@ -11,6 +11,7 @@ Módulo:STRINGO.
 O módulo stringO é composto por um conjunto de funções e precedimentos que manipulam strings.
 */
 
+char *criarString(char *char1);
 /**
 Verifica e retorna a quantidades de elementos em um linha de arquivo texto até encontra espaço.
 Retorna um inteiro.

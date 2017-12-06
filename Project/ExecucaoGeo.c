@@ -596,6 +596,45 @@ void executarSI(FILE *arqEntradaGeo, Canvas canvas) {
 
 }
 
+
+void executarGeoSu(FILE *arqEntradaGeo, Canvas canvas){
+  char *id;
+  int i;
+  Torre torre;
+  char nomeT[] = "SercomtUEL";
+  i = qtdCaracteres(arqEntradaGeo);
+  id = alocarString(i);
+  fscanf(arqEntradaGeo, "%s\n", id);
+
+  torre  = getTorre(getCidade(canvas), id);
+
+  if(torre != NULL){
+    setOperadora(torre, nomeT);
+  }
+
+}
+
+
+
+void executarGeoUm(FILE *arqEntradaGeo, Canvas canvas){
+  char *id;
+  int i;
+  Torre torre;
+  char nomeT[] = "UELMobile";
+  i = qtdCaracteres(arqEntradaGeo);
+  id = alocarString(i);
+  fscanf(arqEntradaGeo, "%s\n", id);
+
+  torre  = getTorre(getCidade(canvas), id);
+
+  if(torre != NULL){
+    setOperadora(torre, nomeT);
+  }
+}
+
+
+
+
 char comandoOrr(FILE *arqSaidaT, double w1, double h1, double x1, double y1,
                 double w2, double h2, double x2, double y2) {
   char palavra[] = "SIM";

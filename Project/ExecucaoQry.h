@@ -65,6 +65,7 @@ Remove as torres de celular dentro da região. (Reporta o id)
 */
 long int executarDt(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas, int *qtdElementosRemovidos);
 
+
 /*
 Executa o comando Crd? presente no arquivo arqEntradaQry. Caso for necessário é gerado o arquivo arqSaidaT em formato '.txt' com o nome presente na string path. A variavel canvas reuni todos os tads do problema.
 O comando Crd? imprime no arquivo .txt as coordenadas e a espécie do equipamento urbano de um determinado cep ou com uma determinada
