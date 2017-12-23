@@ -10,7 +10,7 @@ Autor: Matheus Augusto Marques.
 */
 
 
-EstabC criaEstabC(char *codt, char *cep, char *face, char *num, char *cnpj, char *nome);
+EstabC criaEstabC(char *codt, char *cep, char face, int num, char *cnpj, char *nome);
 
 
 char *getCodt(EstabC estabC);
@@ -43,7 +43,7 @@ Endereco getEnderecoEstabC(EstabC estabC);
 void setEnderecoEstabC(EstabC estabC, Endereco endereco);
 
 
-int compareEstabC(EstabC estabC1, EstabC estabC2);
+int compareEstabC(EstabC estabC1, void* cnpj);
 
 
 void removeEstabC(EstabC estabC);

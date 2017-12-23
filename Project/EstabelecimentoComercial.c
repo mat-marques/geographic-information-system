@@ -11,7 +11,7 @@ typedef struct Ecomercial {
 
 
 
-EstabC criaEstabC(char *codt, char *cep, char *face, char *num, char *cnpj,
+EstabC criaEstabC(char *codt, char *cep, char face, int num, char *cnpj,
                    char *nome) {
   char comp[] = "none";
   Ecomercial *ecomercial = NULL;
@@ -107,11 +107,10 @@ void setEnderecoEstabC(EstabC estabC, Endereco endereco){
   ecomercial->endereco = endereco;
 }
 
-
-int compareEstabC(EstabC estabC1, EstabC estabC2){
+int compareEstabC(EstabC estabC1, void* cnpj){
   Ecomercial *ecomercial = (Ecomercial*) estabC1;
-  char *codt = (char*) estabC2;
-  if(strcmp(ecomercial->codt, codt) == 0){
+  char *cnpj0 = (char*) cnpj;
+  if(strcmp(ecomercial->cnpj, cnpj0) == 0){
     return 1;
   }
   return 0;
@@ -122,7 +121,8 @@ void removeEstabC(EstabC estabC){
   Ecomercial *ecomercial = (Ecomercial*) estabC;
   free(ecomercial->cnpj);
   free(ecomercial->codt);
-  free(ecomercial->description);
+  if(ecomercial->description != NULL)
+    free(ecomercial->description);
   free(ecomercial->nome);
   removeEndereco(ecomercial->endereco);
   free(ecomercial);

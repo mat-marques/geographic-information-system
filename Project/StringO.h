@@ -18,6 +18,9 @@ Retorna um inteiro.
 */
 int qtdCaracteres(FILE *file);
 
+
+int compareStrings(void *s1, void *s2);
+
 /**
 Aloca uma string de tamanho size.
 size>0.
@@ -42,6 +45,11 @@ char *newStringElement(char *oldString, int qtd, int index);
 Desaloca um string.
 */
 void desalocar(char *valor);
+
+/**
+Desaloca um string.
+*/
+void desalocarString(void *s);
 
 /**
 Retorna uma string.

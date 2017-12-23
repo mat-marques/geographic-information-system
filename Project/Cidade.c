@@ -13,18 +13,22 @@
 #include "Svg.h"
 #include "Torre.h"
 
+#include "Morador.h"
+#include "Celular.h"
+#include "StringO.h"
+
 FILE *newArqCity = NULL;
 
 typedef struct City {
   QuadTree listaQ, listaS, listaT, listaH;
   Dicionario dicionario;
-  List operadoras;
   char *nome;
 } City;
 
 void ConvexHullAuxC(Stack stack, Cidade cidade, int type);
 
 Dicionario configuraDicionario() {
+
   char secao1[] = "cpfXcep";
   char secao2[] = "numcelXpessoa";
   char secao3[] = "codtXestabC";
@@ -34,9 +38,17 @@ Dicionario configuraDicionario() {
   char secao7[] = "cepXpessoas";
   char secao8[] = "cnpjXestabC";
   char secao9[] = "descricaoXestabC";
+  char secao10[] = "cepXestabC";
+  char secao11[] = "cpfXmorador";
+  char secao12[] = "operadoraXcelular";
+  char secao13[] = "torreXcelular";
+  char secao14[] = "numcelXtorre";
+  char secao15[] = "numcelXcelular";
+  char secao16[] = "operadoraXtorre";
+
   Dicionario dicionario = NULL;
 
-  dicionario = criaDicionario(8);
+  dicionario = criaDicionario(16);
 
   insertSecaoDicionario(dicionario, secao1, 50);
   insertSecaoDicionario(dicionario, secao2, 50);
@@ -47,6 +59,14 @@ Dicionario configuraDicionario() {
   insertSecaoDicionario(dicionario, secao7, 50);
   insertSecaoDicionario(dicionario, secao8, 50);
   insertSecaoDicionario(dicionario, secao9, 50);
+  insertSecaoDicionario(dicionario, secao10, 50);
+  insertSecaoDicionario(dicionario, secao11, 50);
+
+  insertSecaoDicionario(dicionario, secao12, 50);
+  insertSecaoDicionario(dicionario, secao13, 50);
+  insertSecaoDicionario(dicionario, secao14, 50);
+  insertSecaoDicionario(dicionario, secao15, 50);
+  insertSecaoDicionario(dicionario, secao16, 5);
   return dicionario;
 }
 
@@ -136,26 +156,6 @@ Dicionario getDicionario(Cidade cidade){
   return city->dicionario;
 }
 
-
-void insertOperadora(Cidade cidade, Operadora operadora) {
-  City *city = (City *)cidade;
-  insertBeginL(city->operadoras, operadora);
-}
-
-void removeOperadora(Cidade cidade, char *nome) {
-  City *city = (City *)cidade;
-  removeItemL2(city->operadoras, nome, compareOperadoras);
-}
-
-List getListaOperadoras(Cidade cidade) {
-  City *city = (City *)cidade;
-  return city->operadoras;
-}
-
-Operadora getOperadoraC(Cidade cidade, char *nome) {
-  City *city = (City *)cidade;
-  return searchItemL(city->operadoras, (void *)nome, compareOperadoras);
-}
 
 char *getNome(Cidade cidade) {
   City *city = (City *)cidade;
@@ -342,12 +342,83 @@ void eraseListaH(Cidade cidade) {
   city->listaH = NULL;
 }
 
+void eraseHashTables(Cidade cidade){
+  City *city = (City *)cidade;
+  char secao1[] = "cpfXcep";
+  char secao2[] = "numcelXpessoa";
+  char secao3[] = "codtXestabC";
+  char secao4[] = "cpfXpessoa";
+  char secao5[] = "cepXquadra";
+  char secao6[] = "cepXmoradores";
+  char secao7[] = "cepXpessoas";
+  char secao8[] = "cnpjXestabC";
+  char secao9[] = "descricaoXestabC";
+  char secao10[] = "cepXestabC";
+  char secao11[] = "cpfXmorador";
+  char secao12[] = "operadoraXcelular";
+  char secao13[] = "torreXcelular";
+  char secao14[] = "numcelXtorre";
+  char secao15[] = "numcelXcelular";
+  char secao16[] = "operadoraXtorre";
+  HashTable hash;
+
+  hash = getSecaoDicionario(city->dicionario, secao1);
+  eraseHT(hash, desalocarString);
+
+  hash = getSecaoDicionario(city->dicionario, secao2);
+  eraseHT(hash, removePessoa);
+
+  hash = getSecaoDicionario(city->dicionario, secao3);
+  eraseHT(hash, removeEstabC);
+
+  hash = getSecaoDicionario(city->dicionario, secao4);
+  eraseHT(hash, NULL);
+
+  hash = getSecaoDicionario(city->dicionario, secao5);
+  eraseHT(hash, NULL);
+
+  hash = getSecaoDicionario(city->dicionario, secao6);
+  eraseHT(hash, removeMorador);
+
+  hash = getSecaoDicionario(city->dicionario, secao7);
+  eraseHT(hash, NULL);
+
+  hash = getSecaoDicionario(city->dicionario, secao8);
+  eraseHT(hash, NULL);
+
+  hash = getSecaoDicionario(city->dicionario, secao9);
+  eraseHT(hash, NULL);
+
+  hash = getSecaoDicionario(city->dicionario, secao10);
+  eraseHT(hash, NULL);
+
+  hash = getSecaoDicionario(city->dicionario, secao11);
+  eraseHT(hash, NULL);
+
+  hash = getSecaoDicionario(city->dicionario, secao12);
+  eraseHT(hash, removeCelular);
+
+  hash = getSecaoDicionario(city->dicionario, secao13);
+  eraseHT(hash, NULL);
+
+  hash = getSecaoDicionario(city->dicionario, secao14);
+  eraseHT(hash, NULL);
+
+  hash = getSecaoDicionario(city->dicionario, secao15);
+  eraseHT(hash, NULL);
+
+  hash = getSecaoDicionario(city->dicionario, secao16);
+  eraseHT(hash, NULL);
+}
+
 void eraseCidade(Cidade cidade) {
   City *city = (City *)cidade;
   eraseListaQ(cidade);
   eraseListaS(cidade);
   eraseListaT(cidade);
   eraseListaH(cidade);
+  eraseHashTables(cidade);
+  removeDicionario(city->dicionario);
   if (city->nome != NULL) {
     free(city->nome);
   }

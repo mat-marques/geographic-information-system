@@ -102,6 +102,44 @@ void parametroId(char **argv, int argc){
   }
 }
 
+char *parametroEc(char **argv, int argc){
+  int i;
+  char *new0=NULL;
+  for(i=1; i<argc; i++){
+    if(strcmp(argv[i],"-ec")==0)
+    {
+      new0 = concatenarStrings(new0, *(argv+i+1));
+      break;
+    }
+  }
+  return new0;
+}
+
+char *parametroPm(char **argv, int argc){
+  int i;
+  char *new0=NULL;
+  for(i=1; i<argc; i++){
+    if(strcmp(argv[i],"-pm")==0)
+    {
+      new0 = concatenarStrings(new0, *(argv+i+1));
+      break;
+    }
+  }
+  return new0;
+}
+
+char *parametroTm(char **argv, int argc){
+  int i;
+  char *new0=NULL;
+  for(i=1; i<argc; i++){
+    if(strcmp(argv[i],"-tm")==0)
+    {
+      new0 = concatenarStrings(new0, *(argv+i+1));
+      break;
+    }
+  }
+  return new0;
+}
 
 char *nomeArquivo(char *parametro){
   char *newString0=NULL;
@@ -140,7 +178,6 @@ char *nomeArquivo(char *parametro){
   }
   return newString0;
 }
-
 
 char *concatenarElementos(char *dirPath, char *arqNome, char *extensao){
   char *newString0=NULL, *aux=NULL, *string1=NULL;

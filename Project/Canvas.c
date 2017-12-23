@@ -11,22 +11,30 @@
 #include "Retangulo.h"
 #include "Stack.h"
 #include "Svg.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "StringO.h"
 
 typedef struct reg { double w, h, x, y; } Reg;
 
-char *globalCor = NULL;
-FILE *newArqCanvas = NULL;
+typedef struct itemRow {
+  double x1, y1, x2, y2;
+} ItemRow;
+
+typedef struct itemText {
+  double x, y;
+  char *text;
+} ItemText;
+
 
 typedef struct CanvasP {
   QuadTree listaC, listaR;
-  List listaR2;
+  List listaR2, listaRow, listaText;
   Cidade cidade;
   double width, height;
   int id;
 } CanvasP;
+
+char *globalCor = NULL;
+FILE *newArqCanvas = NULL;
 
 void ConvexHullAux(Stack stack, Canvas canvas, int type) {
   /*
@@ -65,6 +73,8 @@ Canvas criaCanvas(int id) {
   canvas->listaC = createQuadTree();
   canvas->listaR = createQuadTree();
   canvas->listaR2 = createL();
+  canvas->listaRow = createL();
+  canvas->listaText = createL();
   canvas->width = 100;
   canvas->height = 100;
   canvas->id = id;
@@ -125,6 +135,63 @@ long int removeCirculo(Canvas canvas, int id) {
   f = removeQuadTreeItemI(canvasP->listaC, &id, compareC, &qtd);
   removeC(f);
   return qtd;
+}
+
+void insertItemRow(Canvas canvas, double x1, double y1, double x2, double y2){
+  CanvasP *canvasP = (CanvasP *)canvas;
+  ItemRow *item = (ItemRow*) malloc(sizeof(ItemRow));
+  item->x1 = x1;
+  item->y1 = y1;
+  item->x2 = x2;
+  item->y2 = y2;
+  insertEndL(canvasP->listaRow, item);
+}
+
+void insertItemText(Canvas canvas, double x, double y, char *text){
+  CanvasP *canvasP = (CanvasP *)canvas;
+  ItemText *item = (ItemText*) malloc(sizeof(ItemText));
+  item->x = x;
+  item->y = y;
+  item->text = criarString(text);
+  insertEndL(canvasP->listaText, item);
+}
+
+void showListaItemRow(Canvas canvas, FILE *arqSaidaSvg){
+  CanvasP *canvasP = (CanvasP *)canvas;
+  ItemRow *info;
+  char cor[] = "black";
+  int i, j;
+  j = lengthL(canvasP->listaRow);
+  for(i=1; i<=j; i++){
+    info = (ItemRow*) getItemL(canvasP->listaRow, i);
+    if(info != NULL){
+      linha(arqSaidaSvg, info->x1, info->y1, info->x2, info->y2, cor);
+    }
+  }
+
+}
+
+void showListaItemText(Canvas canvas, FILE *arqSaidaSvg){
+  CanvasP *canvasP = (CanvasP *)canvas;
+  ItemText *info;
+  char cor[] = "red";
+  char cor2[] = "white";
+  char d[] = "defunto";
+  int i, j;
+  j = lengthL(canvasP->listaText);
+  for(i=1; i<=j; i++){
+    info = (ItemText*) getItemL(canvasP->listaText, i);
+    if(info != NULL){
+      if(strcmp(info->text, d) == 0){
+        losango(arqSaidaSvg, info->x, info->y);
+        linha(arqSaidaSvg, info->x-2.5, info->y, info->x+2.5, info->y, cor2);
+        linha(arqSaidaSvg, info->x, info->y+2.5, info->x, info->y-2.5, cor2);
+      } else {
+        tagTexto2(arqSaidaSvg, info->text, cor, 15, info->x, info->y);
+      }
+    }
+  }
+
 }
 
 void showR(Retangulo retangulo) {
@@ -589,11 +656,40 @@ void eraseListaR2(Canvas canvas) {
   eraseBase(canvasP->listaR2);
 }
 
+void removeItemRow(void *item){
+  ItemRow *info = (ItemRow*) item;
+  free(info);
+  item = NULL;
+}
+
+void eraseListaInfo(Canvas canvas){
+  CanvasP *canvasP = (CanvasP *)canvas;
+  eraseListL(canvasP->listaRow, removeItemRow);
+  eraseBase(canvasP->listaRow);
+}
+
+void removeItemText(void *item){
+  ItemText *info = (ItemText*) item;
+  if(info->text != NULL){
+    free(info->text);
+  }
+  free(info);
+  item = NULL;
+}
+
+void eraseListaText(Canvas canvas){
+  CanvasP *canvasP = (CanvasP *)canvas;
+  eraseListL(canvasP->listaText, removeItemText);
+  eraseBase(canvasP->listaText);
+}
+
 void eraseCanvas(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   eraseListaR(canvas);
   eraseListaR2(canvas);
   eraseListaC(canvas);
+  eraseListaInfo(canvas);
+  eraseListaText(canvas);
   eraseCidade(canvasP->cidade);
   free(canvas);
 }

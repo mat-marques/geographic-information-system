@@ -15,10 +15,6 @@
 #include "List.h"
 #include "StringO.h"
 #include "ConvexHull.h"
-#include "Morador.h"
-#include "Endereco.h"
-#include "Pessoa.h"
-#include "Dicionario.h"
 
 long int executardq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas, int *qtdQuadrasRemovidas){
   double w=0, h=0, x=0, y=0;

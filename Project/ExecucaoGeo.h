@@ -7,6 +7,7 @@
 
 #include "Canvas.h"
 #include "Cor.h"
+#include "HashTable.h"
 
 /**
 Autor:Matheus Augusto Marques.
@@ -62,7 +63,7 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome,char *dirPath, 
 /*
 Executa o comando Q. Faz a leitura dos parâmetros do comando Q no arquivo arqEntradaGeo e armazena esses dados no canvas. O inteiro qtdQuadrasInseridas é incrementado a cada quadra inserida.
 */
-void executarQ(FILE *arqEntradaGeo, List list, Cor cor);
+void executarQ(FILE *arqEntradaGeo, List list, Cor cor, HashTable hash);
 
 
 /*
@@ -119,11 +120,11 @@ void executarSI(FILE *arqEntradaGeo, Canvas canvas);
 
 
 
-void executarGeoSu(FILE *arqEntradaGeo, Canvas canvas);
+void executarGeoSu(FILE *arqEntradaGeo, Canvas canvas, HashTable hash);
 
 
 
-void executarGeoUm(FILE *arqEntradaGeo, Canvas canvas);
+void executarGeoUm(FILE *arqEntradaGeo, Canvas canvas, HashTable hash);
 
 
 /**

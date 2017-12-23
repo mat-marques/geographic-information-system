@@ -48,6 +48,11 @@ O procedimento imprime na saida do usuário informações sobre o autor do proje
 */
 void parametroId(char **argv, int argc);
 
+char *parametroEc(char **argv, int argc);
+
+char *parametroPm(char **argv, int argc);
+
+char *parametroTm(char **argv, int argc);
 
 /**
 Retorna uma String referente ao nome do arquivo de entrada na string parametro.

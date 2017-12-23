@@ -21,6 +21,9 @@ int insertHT(HashTable hash, char *key, itemHT item);
 itemHT removeHT(HashTable hash, char *key, itemHT item, compareToL function);
 
 
+itemHT removeHT2(HashTable hash, itemHT item, compareToL function);
+
+
 itemHT itemIsInsideHT(HashTable hash, char *key, itemHT item, compareToL function);
 
 

@@ -1,6 +1,6 @@
-#include "QuadTree.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "QuadTree.h"
 
 typedef struct node {
   ItemQt info;

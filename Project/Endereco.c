@@ -1,22 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Morador.h"
 #include "StringO.h"
+#include "Endereco.h"
 
 typedef struct NovoEndereco{
   char *cep, face;
-  double num;
-  int comp;
+  int num;
+  char* comp;
 }NovoEndereco;
 
-Endereco criaEndereco(char *cep, char face,  double num, int comp){
+Endereco criaEndereco(char *cep, char face,  int num, char* comp){
   NovoEndereco *novoE;
 
   novoE = (NovoEndereco*) malloc(sizeof(NovoEndereco));
 
   novoE->cep = criarString(cep);
-  novoE->comp = comp;
+  novoE->comp = criarString(comp);
   novoE->face = face;
   novoE->num = num;
 
@@ -52,7 +52,7 @@ void setFace(Endereco endereco, char face){
 }
 
 
-double getNum(Endereco endereco){
+int getNum(Endereco endereco){
   NovoEndereco *novoE = (NovoEndereco*) endereco;
   return novoE->num;
 }
@@ -64,15 +64,19 @@ void setNum(Endereco endereco, double num){
 }
 
 
-int getComp(Endereco endereco){
+char* getComp(Endereco endereco){
   NovoEndereco *novoE = (NovoEndereco*) endereco;
   return novoE->comp;
 }
 
 
-void setComp(Endereco endereco, int comp){
+void setComp(Endereco endereco, char* comp){
     NovoEndereco *novoE = (NovoEndereco*) endereco;
-    novoE->comp = comp;
+    if(novoE->comp != NULL){
+      free(novoE->comp);
+      novoE->comp = NULL;
+    }
+    novoE->comp = criarString(comp);
 }
 
 
@@ -91,6 +95,10 @@ void removeEndereco(Endereco endereco){
     if(novoE->cep != NULL){
       free(novoE->cep);
       novoE->cep = NULL;
+    }
+    if(novoE->comp != NULL){
+      free(novoE->comp );
+      novoE->comp = NULL;
     }
     free(novoE);
 }

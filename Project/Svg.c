@@ -1,4 +1,3 @@
-#include "Torre.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -250,6 +249,30 @@ void linha(FILE *arqSvg, double x1, double y1, double x2, double y2,
   fprintf(arqSvg, " %s\"\n", "stroke-width: 2");
 
   fprintf(arqSvg, "%s\n", "/>");
+}
+
+void losango(FILE *arqSvg, double x, double y){
+  double x1, y1;
+
+  fprintf(arqSvg, "%s\n", "<polygon");
+
+  fprintf(arqSvg, "points=\"");
+
+  fprintf(arqSvg, "%f,%f \n", x, y - 5);
+  fprintf(arqSvg, "%f,%f \n", x - 5, y);
+  fprintf(arqSvg, "%f,%f \n", x, y + 5);
+  fprintf(arqSvg, "%f,%f\n", x + 5, y);
+
+  fprintf(arqSvg, "\"\n");
+
+  fprintf(arqSvg, " %s", "fill=");
+  fprintf(arqSvg, "\"black\"\n");
+
+  fprintf(arqSvg, " %s\n", "stroke=\"red\"");
+  fprintf(arqSvg, " %s\n", "stroke-width=\"1\"");
+
+  fprintf(arqSvg, "%s\n", " />");
+
 }
 
 void tagFechamento(FILE *arqSvg) { fprintf(arqSvg, "%s\n", "</svg>"); }

@@ -123,6 +123,22 @@ itemHT removeHT(HashTable hash, char *key, itemHT item, compareToL function) {
   return itemS;
 }
 
+itemHT removeHT2(HashTable hash, itemHT item, compareToL function) {
+  Hash *hBase = (Hash *)hash;
+  itemHT itemS = NULL;
+  Element *aux = hBase->array;
+  int h = 0;
+  unsigned int i;
+  for (i = 0; i < hBase->HASHSIZE; i++) {
+    if(aux[i].key != NULL){
+      itemS = removeItemL2(aux[h].list, item, function);
+      break;
+    }
+  }
+
+  return itemS;
+}
+
 
 itemHT itemIsInsideHT(HashTable hash, char *key, itemHT item,
                       compareToL function) {

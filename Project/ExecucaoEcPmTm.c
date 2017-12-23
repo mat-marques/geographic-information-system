@@ -6,27 +6,23 @@
 #include "Cidade.h"
 #include "Pessoa.h"
 #include "EstabelecimentoComercial.h"
-#include "Operadora.h"
 #include "Endereco.h"
 #include "HashTable.h"
 #include "Morador.h"
 #include "Dicionario.h"
 #include "Celular.h"
 
-char secao1[] = "cpfXcep";
-char secao2[] = "numcelXpessoa";
-char secao3[] = "codtXestabC";
-char secao4[] = "cpfXpessoa";
-char secao5[] = "cepXquadra";
-char secao6[] = "cepXmoradores";
 HashTable hash;
 Dicionario dicionario;
 
 void executarEcT(Canvas canvas, FILE *arqEntradaEc){
-  char *codt, *descricao;
-  int l;
+  char *codt, *descricao, *codt2;
+  char secao3[] = "codtXestabC";
+  char secao9[] = "descricaoXestabC";
+  int i, l;
   Cidade cidade;
   EstabC estabC;
+  List list = NULL;
   l = qtdCaracteres(arqEntradaEc);
   codt = alocarString(l);
   fscanf(arqEntradaEc, "%s ", codt);
@@ -39,10 +35,23 @@ void executarEcT(Canvas canvas, FILE *arqEntradaEc){
 
   dicionario = getDicionario(cidade);
   hash = getSecaoDicionario(dicionario, secao3);
-  estabC = itemIsInsideHT(hash, codt, codt, compareEstabC);
 
-  if(estabC != NULL){
-    setDescription(estabC, descricao);
+  list = getHtList(hash, codt);
+
+  /* Insere na secao9 - descricaoXestabC */
+  hash = getSecaoDicionario(dicionario, secao9);
+
+  if(list != NULL){
+    l = lengthL(list);
+    for(i=1; i<=l; i++){
+      estabC = getItemL(list, i);
+      codt2 = getCodt(estabC);
+      if(strcmp(codt, codt2) == 0){
+        insertHT(hash, descricao, estabC);
+        setDescription(estabC, descricao);
+      }
+      estabC = NULL;
+    }
   }
 
   desalocar(codt);
@@ -51,8 +60,13 @@ void executarEcT(Canvas canvas, FILE *arqEntradaEc){
 
 
 void executarEcE(Canvas canvas, FILE *arqEntradaEc){
-  char *codt, *cep, *face, *num, *cnpj, *nome;
-  int l;
+  char *codt, *cep, face, *cnpj, *nome;
+
+  char secao3[] = "codtXestabC";
+  char secao8[] = "cnpjXestabC";
+  char secao10[] = "cepXestabC";
+
+  int l, num;
   Cidade cidade;
   EstabC estabC;
   l = qtdCaracteres(arqEntradaEc);
@@ -63,13 +77,9 @@ void executarEcE(Canvas canvas, FILE *arqEntradaEc){
   cep = alocarString(l);
   fscanf(arqEntradaEc, "%s ", cep);
 
-  l = qtdCaracteres(arqEntradaEc);
-  face = alocarString(l);
-  fscanf(arqEntradaEc, "%s ", face);
+  fscanf(arqEntradaEc, "%c ", &face);
 
-  l = qtdCaracteres(arqEntradaEc);
-  num = alocarString(l);
-  fscanf(arqEntradaEc, "%s ", num);
+  fscanf(arqEntradaEc, "%d ", &num);
 
   l = qtdCaracteres(arqEntradaEc);
   cnpj = alocarString(l);
@@ -84,12 +94,20 @@ void executarEcE(Canvas canvas, FILE *arqEntradaEc){
   cidade = getCidade(canvas);
 
   dicionario = getDicionario(cidade);
+  /* Insere na secao3 - codtXestabC */
   hash = getSecaoDicionario(dicionario, secao3);
-  estabC = itemIsInsideHT(hash, codt, codt, compareEstabC);
+  insertHT(hash, codt, estabC);
+
+  /* Insere na secao8 - cnpjXestabC */
+  hash = getSecaoDicionario(dicionario, secao8);
+  insertHT(hash, cnpj, estabC);
+
+  /* Insere na secao10 - cepXestabC */
+  hash = getSecaoDicionario(dicionario, secao10);
+  insertHT(hash, cep, estabC);
 
   desalocar(codt);
   desalocar(cep);
-  desalocar(face);
   desalocar(cnpj);
   desalocar(nome);
 
@@ -98,6 +116,8 @@ void executarEcE(Canvas canvas, FILE *arqEntradaEc){
 
 void executarPmP(Canvas canvas, FILE *arqEntradaPm){
   char *cpf, *nome, *sobrenome, *sexo, *nasc;
+  char secao4[] = "cpfXpessoa";
+
   int l;
   Cidade cidade;
   Pessoa pessoa;
@@ -127,6 +147,8 @@ void executarPmP(Canvas canvas, FILE *arqEntradaPm){
 
   dicionario = getDicionario(cidade);
   hash = getSecaoDicionario(dicionario, secao4);
+
+  /* Insere na secao4 - cpfXpessoa */
   insertHT(hash, cpf, pessoa);
 
   desalocar(cpf);
@@ -138,11 +160,18 @@ void executarPmP(Canvas canvas, FILE *arqEntradaPm){
 
 
 void executarPmM(Canvas canvas, FILE *arqEntradaPm){
-  char *cpf, *cep, *face, *num, *comp;
+  char *cpf, *cep, face, *comp;
+  char secao1[] = "cpfXcep";
+  char secao4[] = "cpfXpessoa";
+  char secao6[] = "cepXmoradores";
+  char secao7[] = "cepXpessoas";
+  char secao11[] = "cpfXmorador";
+
   int l;
+  int num;
   Cidade cidade;
   Pessoa pessoa;
-  Endereco endereco, endereco2;
+  Endereco endereco;
   Morador morador;
   l = qtdCaracteres(arqEntradaPm);
   cpf = alocarString(l);
@@ -152,13 +181,9 @@ void executarPmM(Canvas canvas, FILE *arqEntradaPm){
   cep = alocarString(l);
   fscanf(arqEntradaPm, "%s ", cep);
 
-  l = qtdCaracteres(arqEntradaPm);
-  face = alocarString(l);
-  fscanf(arqEntradaPm, "%s ", face);
+  fscanf(arqEntradaPm, "%c ", &face);
 
-  l = qtdCaracteres(arqEntradaPm);
-  num = alocarString(l);
-  fscanf(arqEntradaPm, "%s ", num);
+  fscanf(arqEntradaPm, "%d ", &num);
 
   l = qtdCaracteres(arqEntradaPm);
   comp = alocarString(l);
@@ -169,18 +194,33 @@ void executarPmM(Canvas canvas, FILE *arqEntradaPm){
   dicionario = getDicionario(cidade);
   hash = getSecaoDicionario(dicionario, secao4);
   pessoa = itemIsInsideHT(hash, cpf, cpf, comparePessoas);
+
   if(pessoa != NULL){
     endereco = criaEndereco(cep, face, num, comp);
     setEnderecoP(pessoa, endereco);
-  }
-  hash = NULL;
-  hash = getSecaoDicionario(dicionario, secao6);
-  endereco2 = criaEndereco(cep, face, num, comp);
-  morador = criaMorador(cpf, endereco2);
-  insertHT(hash, cep, morador);
+    morador = criaMorador(cpf, endereco);
 
-  desalocar(cep);
-  desalocar(face);
+    /* Insere na secao1 - cpfXcep */
+    hash = getSecaoDicionario(dicionario, secao1);
+    insertHT(hash, cpf, cep);
+
+    /* Insere na secao6 - cepXmoradores */
+    hash = getSecaoDicionario(dicionario, secao6);
+    insertHT(hash, cep, morador);
+
+
+    /* Insere na secao7 - cepXpessoas */
+    hash = getSecaoDicionario(dicionario, secao7);
+    insertHT(hash, cep, pessoa);
+
+    /* Insere na secao11 - cpfXmorador */
+    hash = getSecaoDicionario(dicionario, secao11);
+    insertHT(hash, cpf, morador);
+
+  } else {
+    printf("Insercao de morador na cidade imposibilitada.\n");
+  }
+
   desalocar(cpf);
   desalocar(comp);
 
@@ -188,12 +228,16 @@ void executarPmM(Canvas canvas, FILE *arqEntradaPm){
 
 
 void executarTmSu(Canvas canvas, FILE *arqEntradaTm){
+  char secao2[] = "numcelXpessoa";
+  char secao4[] = "cpfXpessoa";
+  char secao12[] = "operadoraXcelular";
+  char secao15[] = "numcelXcelular";
   char *cpf, *numCel;
   int l;
-  char nome[] = "SercomtUEL";
+  char nomeO[] = "SercomtUEL";
   Pessoa pessoa;
-  Operadora operadora;
   Cidade cidade;
+  Celular celular;
   l = qtdCaracteres(arqEntradaTm);
   cpf = alocarString(l);
   fscanf(arqEntradaTm, "%s ", cpf);
@@ -204,12 +248,29 @@ void executarTmSu(Canvas canvas, FILE *arqEntradaTm){
 
   cidade = getCidade(canvas);
 
-
+  dicionario = getDicionario(cidade);
+  hash = getSecaoDicionario(dicionario, secao4);
+  pessoa = itemIsInsideHT(hash, cpf, cpf, comparePessoas);
 
   if(pessoa != NULL){
-    setNumCelular(pessoa, numCel);
-    operadora = getOperadoraC(cidade, nome);
-    insereCliente(operadora, pessoa);
+    celular = criaCelular(numCel);
+    setNomeOperadora(celular, nomeO);
+    setDonoCelular(celular, pessoa);
+    setCelular(pessoa, celular);
+
+    /* Insere na secao2 - numcelXpessoa */
+    hash = getSecaoDicionario(dicionario, secao2);
+    insertHT(hash, numCel, pessoa);
+
+    /* Insere na secao12 - operadoraXcelular */
+    hash = getSecaoDicionario(dicionario, secao12);
+    insertHT(hash, nomeO, celular);
+
+
+    /* Insere na secao15 - numcelXcelular */
+    hash = getSecaoDicionario(dicionario, secao15);
+    insertHT(hash, numCel, celular);
+
   }
 
   desalocar(cpf);
@@ -218,12 +279,17 @@ void executarTmSu(Canvas canvas, FILE *arqEntradaTm){
 
 
 void executarTmUm(Canvas canvas, FILE *arqEntradaTm){
+  char secao2[] = "numcelXpessoa";
+  char secao4[] = "cpfXpessoa";
+  char secao12[] = "operadoraXcelular";
+  char secao15[] = "numcelXcelular";
+
   char *cpf, *numCel;
   int l;
-  char nome[] = "UELMobile";
+  char nomeO[] = "UELMobile";
   Pessoa pessoa;
-  Operadora operadora;
   Cidade cidade;
+  Celular celular;
   l = qtdCaracteres(arqEntradaTm);
   cpf = alocarString(l);
   fscanf(arqEntradaTm, "%s ", cpf);
@@ -234,12 +300,29 @@ void executarTmUm(Canvas canvas, FILE *arqEntradaTm){
 
   cidade = getCidade(canvas);
 
-
+  dicionario = getDicionario(cidade);
+  hash = getSecaoDicionario(dicionario, secao4);
+  pessoa = itemIsInsideHT(hash, cpf, cpf, comparePessoas);
 
   if(pessoa != NULL){
-    setNumCelular(pessoa, numCel);
-    operadora = getOperadoraC(cidade, nome);
-    insereCliente(operadora, pessoa);
+    celular = criaCelular(numCel);
+    setNomeOperadora(celular, nomeO);
+    setDonoCelular(celular, pessoa);
+    setCelular(pessoa, celular);
+
+    /* Insere na secao2 - numcelXpessoa */
+    hash = getSecaoDicionario(dicionario, secao2);
+    insertHT(hash, numCel, pessoa);
+
+    /* Insere na secao12 - operadoraXcelular */
+    hash = getSecaoDicionario(dicionario, secao12);
+    insertHT(hash, nomeO, celular);
+
+
+    /* Insere na secao15 - numcelXcelular */
+    hash = getSecaoDicionario(dicionario, secao15);
+    insertHT(hash, numCel, celular);
+
   }
 
   desalocar(cpf);

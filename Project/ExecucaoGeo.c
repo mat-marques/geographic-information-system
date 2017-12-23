@@ -11,7 +11,6 @@
 #include "Semafaro.h"
 #include "Torre.h"
 
-#include "Canvas.h"
 #include "ConvexHull.h"
 #include "List.h"
 #include "QuadTree.h"
@@ -431,7 +430,7 @@ void executarA(FILE *arqEntradaGeo, Canvas canvas, char *arqNome, char *dirPath,
   fclose(arqSaidaSvg2);
 }
 
-void executarQ(FILE *arqEntradaGeo, List list, Cor cor) {
+void executarQ(FILE *arqEntradaGeo, List list, Cor cor, HashTable hash) {
   double w = 0, h = 0, x = 0, y = 0;
   int i;
   char *string;
@@ -444,6 +443,8 @@ void executarQ(FILE *arqEntradaGeo, List list, Cor cor) {
   quadra = criaQuadra(x, y, w, h, string, getCorP(cor), getCorC(cor));
 
   insertEndL(list, quadra);
+
+  insertHT(hash, string, quadra);
 
   desalocar(string);
   string = NULL;
@@ -597,7 +598,7 @@ void executarSI(FILE *arqEntradaGeo, Canvas canvas) {
 }
 
 
-void executarGeoSu(FILE *arqEntradaGeo, Canvas canvas){
+void executarGeoSu(FILE *arqEntradaGeo, Canvas canvas, HashTable hash){
   char *id;
   int i;
   Torre torre;
@@ -610,13 +611,14 @@ void executarGeoSu(FILE *arqEntradaGeo, Canvas canvas){
 
   if(torre != NULL){
     setOperadora(torre, nomeT);
+    insertHT(hash, nomeT, torre);
   }
-
+  free(id);
 }
 
 
 
-void executarGeoUm(FILE *arqEntradaGeo, Canvas canvas){
+void executarGeoUm(FILE *arqEntradaGeo, Canvas canvas, HashTable hash){
   char *id;
   int i;
   Torre torre;
@@ -629,7 +631,9 @@ void executarGeoUm(FILE *arqEntradaGeo, Canvas canvas){
 
   if(torre != NULL){
     setOperadora(torre, nomeT);
+    insertHT(hash, nomeT, torre);
   }
+  free(id);
 }
 
 

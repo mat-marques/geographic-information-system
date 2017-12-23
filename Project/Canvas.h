@@ -67,6 +67,18 @@ Remove do canvas passado como parâmetro um círculo em uma posição indicada p
 */
 long int removeCirculo(Canvas canvas, int id);
 
+
+void insertItemRow(Canvas canvas, double x1, double y1, double x2, double y2);
+
+
+void insertItemText(Canvas canvas, double x, double y, char *text);
+
+
+void showListaItemRow(Canvas canvas, FILE *arqSaidaSvg);
+
+
+void showListaItemText(Canvas canvas, FILE *arqSaidaSvg);
+
 /*
 Escreve no arquivo file todos os retângulos dentro do canvas.
 */
@@ -231,6 +243,11 @@ Apaga todos os retângulos com bordas tracejadas presentes em um canvas.
 */
 void eraseListaR2(Canvas canvas);
 
+
+void eraseListaInfo(Canvas canvas);
+
+
+void eraseListaText(Canvas canvas);
 
 /*
 Apaga o canvas e todos os seus componentes.

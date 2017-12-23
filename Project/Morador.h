@@ -20,6 +20,7 @@ Endereco getEndereco(Morador morador);
 void setEndereco(Morador morador, Endereco endereco);
 
 
+
 int compareMorador(Morador morador, void *cpf);
 
 

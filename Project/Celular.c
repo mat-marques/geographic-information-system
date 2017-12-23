@@ -4,6 +4,7 @@
 
 #include "Celular.h"
 #include "StringO.h"
+#include "Pessoa.h"
 
 typedef struct novoCelular{
   char *num, *idT, *operadora;
@@ -54,13 +55,13 @@ void setNomeOperadora(Celular celular, char *nomeOperadora){
 }
 
 
-Pessoa getDonoCelular(Celular celular){
+void *getDonoCelular(Celular celular){
   NovoCelular *novoC = (NovoCelular*) celular;
   return novoC->pessoa;
 }
 
 
-Pessoa setDonoCelular(Celular celular, Pessoa pessoa){
+void *setDonoCelular(Celular celular, void *pessoa){
   NovoCelular *novoC = (NovoCelular*) celular;
   Pessoa nPessoa = NULL;
   if(novoC->pessoa != NULL){
@@ -104,4 +105,5 @@ void removeCelular(Celular celular){
     free(novoC->operadora);
     novoC->pessoa = NULL;
   }
+  free(novoC);
 }

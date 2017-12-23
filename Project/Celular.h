@@ -1,7 +1,6 @@
 #ifndef CELULAR_H
 #define CELULAR_H
 
-#include "Pessoa.h"
 
 typedef void* Celular;
 
@@ -21,10 +20,10 @@ char *getNomeOperadora(Celular celular);
 void setNomeOperadora(Celular celular, char *nomeOperadora);
 
 
-Pessoa getDonoCelular(Celular celular);
+void *getDonoCelular(Celular celular);
 
 
-Pessoa setDonoCelular(Celular celular, Pessoa pessoa);
+void *setDonoCelular(Celular celular, void *pessoa);
 
 
 char *getIdTorreConexao(Celular celular);

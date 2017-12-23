@@ -26,6 +26,15 @@ int qtdCaracteres(FILE *file){
   return i+1;
 }
 
+int compareStrings(void *s1, void *s2){
+  char *string1 = (char*) s1;
+  char *string2 = (char*) s2;
+
+  if(strcmp(string1, string2) == 0){
+    return 1;
+  }
+  return 0;
+}
 
 char *alocarString(int size){
   char *newString0=NULL;
@@ -83,6 +92,15 @@ void desalocar(char *valor){
   {
     free(valor);
     valor=NULL;
+  }
+}
+
+void desalocarString(void *s){
+  char *s1 = (char*) s;
+  if(s!=NULL)
+  {
+    free(s1);
+    s1=NULL;
   }
 }
 

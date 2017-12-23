@@ -3,6 +3,7 @@
 #include <string.h>
 #include "Morador.h"
 #include "StringO.h"
+#include "Endereco.h"
 
 typedef struct novoMorador{
   char *cpf;
@@ -48,6 +49,7 @@ void setEndereco(Morador morador, Endereco endereco){
   }
   novoM->endereco = endereco;
 }
+
 
 int compareMorador(Morador morador, void *cpf){
   NovoMorador *novoM = (NovoMorador*) morador;
