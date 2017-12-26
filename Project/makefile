@@ -82,7 +82,7 @@ dependenciasEq2 = ExecucaoQry2.h ExecucaoQry2.c Canvas.h Canvas.c \
 				  Torre.h Torre.c HashTable.h HashTable.c
 
 
-CFLAGS  = -ansi -pedantic -g
+CFLAGS  = -g -ansi -pedantic
 
 siguel:	$(objects)
 	gcc -o siguel $(CFLAGS) $(objects) -lm
@@ -178,19 +178,19 @@ Circulo.o: Circulo.h Circulo.c
 	gcc -c $(CFLAGS) Circulo.c -o Circulo.o
 
 
-Quadra.o: Quadra.h Quadra.c
+Quadra.o: Quadra.h Quadra.c StringO.h StringO.c
 	gcc -c $(CFLAGS) Quadra.c -o Quadra.o
 
 
-Semafaro.o: Semafaro.h Semafaro.c
+Semafaro.o: Semafaro.h Semafaro.c StringO.h StringO.c
 	gcc -c $(CFLAGS) Semafaro.c -o Semafaro.o
 
 
-Torre.o: Torre.h Torre.c
+Torre.o: Torre.h Torre.c StringO.h StringO.c
 	gcc -c $(CFLAGS) Torre.c -o Torre.o
 
 
-Hidrante.o: Hidrante.h Hidrante.c
+Hidrante.o: Hidrante.h Hidrante.c StringO.h StringO.c
 	gcc -c $(CFLAGS) Hidrante.c -o Hidrante.o
 
 

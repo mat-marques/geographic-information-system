@@ -9,6 +9,7 @@ FILE *createArqR(char *path){
     if(path==NULL){
       exit(0);
     }
+
     file = fopen(path, "r");
     if(file == NULL){
         printf("ERRO EM ARQUIVO.");

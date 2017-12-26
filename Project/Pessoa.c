@@ -156,6 +156,8 @@ void removePessoa(Pessoa pessoa){
   free(novaPessoa->nome);
   free(novaPessoa->sexo);
   free(novaPessoa->sobrenome);
-  removeEndereco(novaPessoa->endereco);
+  if(novaPessoa->celular != NULL){
+    removeCelular(novaPessoa->celular);
+  }
   free(pessoa);
 }

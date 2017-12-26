@@ -93,6 +93,8 @@ void executarEcE(Canvas canvas, FILE *arqEntradaEc){
 
   cidade = getCidade(canvas);
 
+  insertEstabC(cidade, estabC);
+
   dicionario = getDicionario(cidade);
   /* Insere na secao3 - codtXestabC */
   hash = getSecaoDicionario(dicionario, secao3);
@@ -150,6 +152,8 @@ void executarPmP(Canvas canvas, FILE *arqEntradaPm){
 
   /* Insere na secao4 - cpfXpessoa */
   insertHT(hash, cpf, pessoa);
+
+  insertPessoas(cidade, pessoa);
 
   desalocar(cpf);
   desalocar(nome);
@@ -217,6 +221,7 @@ void executarPmM(Canvas canvas, FILE *arqEntradaPm){
     hash = getSecaoDicionario(dicionario, secao11);
     insertHT(hash, cpf, morador);
 
+    insertMorador(cidade, morador);
   } else {
     printf("Insercao de morador na cidade imposibilitada.\n");
   }
@@ -234,7 +239,7 @@ void executarTmSu(Canvas canvas, FILE *arqEntradaTm){
   char secao15[] = "numcelXcelular";
   char *cpf, *numCel;
   int l;
-  char nomeO[] = "SercomtUEL";
+  char nomeO[] = "su";
   Pessoa pessoa;
   Cidade cidade;
   Celular celular;
@@ -271,6 +276,8 @@ void executarTmSu(Canvas canvas, FILE *arqEntradaTm){
     hash = getSecaoDicionario(dicionario, secao15);
     insertHT(hash, numCel, celular);
 
+  }else {
+    printf("Pessoa nao existe\n");
   }
 
   desalocar(cpf);
@@ -286,7 +293,7 @@ void executarTmUm(Canvas canvas, FILE *arqEntradaTm){
 
   char *cpf, *numCel;
   int l;
-  char nomeO[] = "UELMobile";
+  char nomeO[] = "um";
   Pessoa pessoa;
   Cidade cidade;
   Celular celular;
@@ -322,7 +329,8 @@ void executarTmUm(Canvas canvas, FILE *arqEntradaTm){
     /* Insere na secao15 - numcelXcelular */
     hash = getSecaoDicionario(dicionario, secao15);
     insertHT(hash, numCel, celular);
-
+  } else {
+    printf("Pessoa nao existe\n");
   }
 
   desalocar(cpf);

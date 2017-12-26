@@ -63,6 +63,7 @@ int compareMorador(Morador morador, void *cpf){
 void removeMorador(Morador morador){
   NovoMorador *novoM = (NovoMorador*) morador;
   free(novoM->cpf);
-  removeEndereco(novoM->endereco);
+  if(novoM->endereco)
+    removeEndereco(novoM->endereco);
   free(novoM);
 }

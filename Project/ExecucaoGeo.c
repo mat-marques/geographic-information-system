@@ -479,7 +479,6 @@ void executarS(FILE *arqEntradaGeo, List list, Cor cor) {
   i = qtdCaracteres(arqEntradaGeo);
   string = alocarString(i);
   fscanf(arqEntradaGeo, "%s\n", string);
-
   semafaro = criaSemafaro(x, y, string, getCorP(cor), getCorC(cor));
 
   insertEndL(list, semafaro);
@@ -602,7 +601,7 @@ void executarGeoSu(FILE *arqEntradaGeo, Canvas canvas, HashTable hash){
   char *id;
   int i;
   Torre torre;
-  char nomeT[] = "SercomtUEL";
+  char nomeT[] = "su";
   i = qtdCaracteres(arqEntradaGeo);
   id = alocarString(i);
   fscanf(arqEntradaGeo, "%s\n", id);
@@ -622,7 +621,7 @@ void executarGeoUm(FILE *arqEntradaGeo, Canvas canvas, HashTable hash){
   char *id;
   int i;
   Torre torre;
-  char nomeT[] = "UELMobile";
+  char nomeT[] = "um";
   i = qtdCaracteres(arqEntradaGeo);
   id = alocarString(i);
   fscanf(arqEntradaGeo, "%s\n", id);

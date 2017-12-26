@@ -29,7 +29,7 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry,
                    char **exitFileSvg, char *acc0, char *acc, char **argv,
                    int argc) {
   char *string0 = NULL, *string1 = NULL, *string2 = NULL, *string3 = NULL;
-  char extensao2[] = ".svg";
+  char extensao2[] = ".svg", *string4 = NULL;
   char travessao[] = "-";
 
   parametroId(argv, argc);
@@ -102,15 +102,20 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry,
 
   if (string3 != NULL) {
     if (string0 != NULL) {
-      *arqEntradaEc = createArqR(concatenarStrings(string3, string0));
+      string4 = concatenarElementos2(string3, string0);
+      *arqEntradaEc = createArqR(string4);
     }
-
+    desalocar(string4);
+    string4 = NULL;
     if (string1 != NULL) {
-      *arqEntradaPm = createArqR(concatenarStrings(string3, string1));
+      string4 = concatenarElementos2(string3, string1);
+      *arqEntradaPm = createArqR(string4);
     }
-
+    desalocar(string4);
+    string4 = NULL;
     if (string2 != NULL) {
-      *arqEntradaTm = createArqR(concatenarStrings(string3, string2));
+      string4 = concatenarElementos2(string3, string2);
+      *arqEntradaTm = createArqR(string4);
     }
   } else {
     if (string0 != NULL) {
@@ -130,6 +135,7 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry,
   desalocar(string1);
   desalocar(string2);
   desalocar(string3);
+  desalocar(string4);
   string0 = NULL;
   string1 = NULL;
   string2 = NULL;
@@ -234,6 +240,12 @@ long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath,
         bool4 = 1;
       }
       executarSI(arqEntradaGeo, canvas);
+    } else if (strcmp(entradaA, "su") == 0) {
+      hash = getSecaoDicionario(dicionario, secao16);
+      executarGeoSu(arqEntradaGeo, canvas, hash);
+    } else if (strcmp(entradaA, "um") == 0) {
+      hash = getSecaoDicionario(dicionario, secao16);
+      executarGeoUm(arqEntradaGeo, canvas, hash);
     } else if (entradaA[0] == 'c') {
       executarC(arqEntradaGeo, circulos);
     } else if (entradaA[0] == 'r') {
@@ -254,12 +266,6 @@ long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath,
       executarI(arqEntradaGeo, arqSaidaT, canvas);
     } else if (entradaA[0] == 'o') {
       executarO(arqEntradaGeo, arqSaidaT, canvas);
-    } else if (strcmp(entradaA, "su") == 0) {
-      hash = getSecaoDicionario(dicionario, secao16);
-      executarGeoSu(arqEntradaGeo, canvas, hash);
-    } else if (strcmp(entradaA, "um") == 0) {
-      hash = getSecaoDicionario(dicionario, secao16);
-      executarGeoUm(arqEntradaGeo, canvas, hash);
     } else {
       if (entradaA[0] == 'a') {
         executarA(arqEntradaGeo, canvas, arqNome, dirPath, extensao2);
@@ -341,7 +347,9 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
   long int cont = 0;
   path = concatenarElementos(dirPath, arqNome, extensao1);
 
-  arqSaidaT = createArqA(path);
+  if(arqEntradaQry != NULL){
+    arqSaidaT = createArqW(path);
+  }
 
   if (arqEntradaQry != NULL) {
     while (1) {
@@ -398,7 +406,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
         executarQryDm(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "de?") == 0) {
         executarQryDe(arqEntradaQry, &arqSaidaT, canvas);
-      } else if (strcmp(entradaA, "con") == 0) {
+      } /*else if (strcmp(entradaA, "con") == 0) {
         executarQryCon(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "mse?") == 0) {
         executarQryMse(arqEntradaQry, &arqSaidaT, canvas);
@@ -428,7 +436,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
         executarQryLcc(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "dpr") == 0) {
         executarQryDpr(arqEntradaQry, &arqSaidaT, canvas);
-      } else {
+      }*/ else {
         printf("Comando invalido no qry\n");
       }
     }
@@ -501,9 +509,9 @@ void executarComandoTm(FILE *arqEntradaTm, Canvas canvas) {
       }
 
       if (strcmp(entrada, "su") == 0) {
-        executarEcE(canvas, arqEntradaTm);
+        executarTmSu(canvas, arqEntradaTm);
       } else if (strcmp(entrada, "um") == 0) {
-        executarEcT(canvas, arqEntradaTm);
+        executarTmUm(canvas, arqEntradaTm);
       } else {
         printf("Comando Invalido em arquivo Tm.\n");
       }
@@ -518,14 +526,14 @@ void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas) {
   /* Retângulos */
   showCanvasElements(canvas, arqSaidaSvg, 5);
 
-  /* Círculos */
-  showCanvasElements(canvas, arqSaidaSvg, 6);
-
   /* Retângulos de sobreposição. */
   showCanvasElements(canvas, arqSaidaSvg, 7);
 
   /* Quadra */
   showCanvasElements(canvas, arqSaidaSvg, 1);
+
+  /* Círculos */
+  showCanvasElements(canvas, arqSaidaSvg, 6);
 
   /* Hidrante */
   showCanvasElements(canvas, arqSaidaSvg, 2);
@@ -535,6 +543,14 @@ void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas) {
 
   /* Torre */
   showCanvasElements(canvas, arqSaidaSvg, 4);
+
+  showListaItemRow(canvas, arqSaidaSvg);
+
+  showListaItemText(canvas, arqSaidaSvg);
+
+  showMoradores(getCidade(canvas), arqSaidaSvg);
+
+  showEstabelecimentos(getCidade(canvas), arqSaidaSvg);
 
   showListaItemRow(canvas, arqSaidaSvg);
 

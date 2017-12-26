@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include "Quadra.h"
+#include "StringO.h"
 
 typedef struct Quadra0{
    double x, y, larg, alt;
@@ -12,24 +13,17 @@ typedef struct Quadra0{
 typedef void (*eraseElement)(void*);
 
 Quadra criaQuadra(double x, double y, double larg, double alt, char* cep, char *corP, char* corB){
-   int i;
    Quadra0 *newElement = (Quadra0*) malloc(sizeof(Quadra0));
    newElement->x = x;
    newElement->y = y;
    newElement->larg = larg;
    newElement->alt = alt;
-   newElement->cep = cep;
-   i = strlen(cep);
-   newElement->cep = (char*) malloc((i+1)*sizeof(char));
-   strcpy(newElement->cep, cep);
 
-   i = strlen(corP);
-   newElement->corP = (char*) malloc((i+1)*sizeof(char));
-   strcpy(newElement->corP, corP);
+   newElement->cep = criarString(cep);
 
-   i = strlen(corB);
-   newElement->corB = (char*) malloc((i+1)*sizeof(char));
-   strcpy(newElement->corB, corB);
+   newElement->corP = criarString(corP);
+
+   newElement->corB = criarString(corB);
    return (Quadra) newElement;
 }
 

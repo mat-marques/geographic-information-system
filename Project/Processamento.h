@@ -8,7 +8,7 @@
 
 #include "Canvas.h"
 
-/**
+/*
    Autor: Matheus Augusto Marques
    Módulo: PROCESSAMENTO.
    O módulo Processamento contém um conjunto de procedimentos que tem o objetivo de dividir a execução do problema em 4 etapas. Primeira etapa: Abertura dos arquivos de entrada. Segunda etapa: Execução dos comando do arquivo '.geo'. Terceira etapa (Pode existir ou não): Execução dos comando do arquivo '.qry'. Quarta etapa: Resultado dos arquivos de entrada.

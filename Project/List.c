@@ -310,7 +310,7 @@ Item searchItemL(List list, Item item, compareToL func) {
       j = base->size;
       aux = base->first;
       for (i = 1; i <= j; i++) {
-        if (func(item ,aux->info) == 1){
+        if (func(aux->info, item) == 1){
           info = aux->info;
           break;
         }
@@ -330,7 +330,7 @@ Item removeItemL2(List list, Item item, compareToL func){
     if (base->first != NULL) {
       aux = base->first;
       for (i = 1; i <= j; i++) {
-        if (func(item ,aux->info) == 1){
+        if (func(aux->info, item) == 1){
           info = aux->info;
           aux->previous->next = aux->next;
           aux->next->previous = aux->previous;

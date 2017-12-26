@@ -5,11 +5,10 @@
 
 
 char *criarString(char *char1) {
-  int i;
+  int i = 0;
   char *charR = NULL;
-  i = strlen(char1);
+  i = strlen(char1) + 1;
   charR = (char *)malloc(i * sizeof(char));
-  charR[0] = '\0';
   strcpy(charR, char1);
   return charR;
 }

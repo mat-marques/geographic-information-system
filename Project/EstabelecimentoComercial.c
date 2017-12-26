@@ -21,6 +21,8 @@ EstabC criaEstabC(char *codt, char *cep, char face, int num, char *cnpj,
 
   ecomercial->codt = criarString(codt);
 
+  ecomercial->cnpj = criarString(cnpj);
+
   ecomercial->description = NULL;
 
   ecomercial->endereco = criaEndereco(cep, face, num, comp);

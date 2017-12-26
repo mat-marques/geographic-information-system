@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include <string.h>
 #include "Hidrante.h"
+#include "StringO.h"
 
 typedef struct hidrante0{
   double x, y;
@@ -12,22 +13,17 @@ typedef struct hidrante0{
 
 Hidrante criaHidrante(double x, double y, char *id, char *corP, char *corB){
    hidrante0 *newElement;
-   int i;
    newElement = (hidrante0*) malloc(sizeof(hidrante0));
    newElement->x = x;
    newElement->y = y;
    newElement->vazao = 0;
-   i = strlen(id);
-   newElement->id = (char*) malloc((i+1)*sizeof(char));
-   strcpy(newElement->id, id);
 
-   i = strlen(corP);
-   newElement->corP = (char*) malloc((i+1)*sizeof(char));
-   strcpy(newElement->corP, corP);
+   newElement->id = criarString(id);
 
-   i = strlen(corB);
-   newElement->corB = (char*) malloc((i+1)*sizeof(char));
-   strcpy(newElement->corB, corB);
+   newElement->corP = criarString(corP);
+
+   newElement->corB = criarString(corB);
+
    return (Hidrante) newElement;
 }
 

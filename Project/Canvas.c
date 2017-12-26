@@ -24,10 +24,15 @@ typedef struct itemText {
   char *text;
 } ItemText;
 
+typedef struct itemPolygon {
+  double *points;
+  char t;
+} ItemPolygon;
+
 
 typedef struct CanvasP {
   QuadTree listaC, listaR;
-  List listaR2, listaRow, listaText;
+  List listaR2, listaRow, listaText, listaPolygon;
   Cidade cidade;
   double width, height;
   int id;
@@ -75,6 +80,7 @@ Canvas criaCanvas(int id) {
   canvas->listaR2 = createL();
   canvas->listaRow = createL();
   canvas->listaText = createL();
+  canvas->listaPolygon = createL();
   canvas->width = 100;
   canvas->height = 100;
   canvas->id = id;
@@ -156,7 +162,15 @@ void insertItemText(Canvas canvas, double x, double y, char *text){
   insertEndL(canvasP->listaText, item);
 }
 
-void showListaItemRow(Canvas canvas, FILE *arqSaidaSvg){
+void insertItemPolygon(Canvas canvas, double *points, char t){
+  CanvasP *canvasP = (CanvasP *)canvas;
+  ItemPolygon *item = (ItemPolygon*) malloc(sizeof(ItemPolygon));
+  item->points = points;
+  item->t = t;
+  insertEndL(canvasP->listaPolygon, item);
+}
+
+void showListaItemRow(Canvas canvas, FILE *file){
   CanvasP *canvasP = (CanvasP *)canvas;
   ItemRow *info;
   char cor[] = "black";
@@ -165,13 +179,13 @@ void showListaItemRow(Canvas canvas, FILE *arqSaidaSvg){
   for(i=1; i<=j; i++){
     info = (ItemRow*) getItemL(canvasP->listaRow, i);
     if(info != NULL){
-      linha(arqSaidaSvg, info->x1, info->y1, info->x2, info->y2, cor);
+      linha(file, info->x1, info->y1, info->x2, info->y2, cor);
     }
   }
 
 }
 
-void showListaItemText(Canvas canvas, FILE *arqSaidaSvg){
+void showListaItemText(Canvas canvas, FILE *file){
   CanvasP *canvasP = (CanvasP *)canvas;
   ItemText *info;
   char cor[] = "red";
@@ -183,16 +197,17 @@ void showListaItemText(Canvas canvas, FILE *arqSaidaSvg){
     info = (ItemText*) getItemL(canvasP->listaText, i);
     if(info != NULL){
       if(strcmp(info->text, d) == 0){
-        losango(arqSaidaSvg, info->x, info->y);
-        linha(arqSaidaSvg, info->x-2.5, info->y, info->x+2.5, info->y, cor2);
-        linha(arqSaidaSvg, info->x, info->y+2.5, info->x, info->y-2.5, cor2);
+        losango(file, info->x, info->y);
+        linha(file, info->x-2.5, info->y, info->x+2.5, info->y, cor2);
+        linha(file, info->x, info->y+2.5, info->x, info->y-2.5, cor2);
       } else {
-        tagTexto2(arqSaidaSvg, info->text, cor, 15, info->x, info->y);
+        tagTexto2(file, info->text, cor, 6, info->x, info->y);
       }
     }
   }
 
 }
+
 
 void showR(Retangulo retangulo) {
   /* Escreve em um arquivo svg as propriedades de um retângulo.
@@ -662,7 +677,7 @@ void removeItemRow(void *item){
   item = NULL;
 }
 
-void eraseListaInfo(Canvas canvas){
+void eraseListaRow(Canvas canvas){
   CanvasP *canvasP = (CanvasP *)canvas;
   eraseListL(canvasP->listaRow, removeItemRow);
   eraseBase(canvasP->listaRow);
@@ -688,7 +703,7 @@ void eraseCanvas(Canvas canvas) {
   eraseListaR(canvas);
   eraseListaR2(canvas);
   eraseListaC(canvas);
-  eraseListaInfo(canvas);
+  eraseListaRow(canvas);
   eraseListaText(canvas);
   eraseCidade(canvasP->cidade);
   free(canvas);

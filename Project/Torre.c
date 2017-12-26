@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include <string.h>
 #include "Torre.h"
+#include "StringO.h"
 
 /**
   Estrutura que representa uma torre
@@ -17,23 +18,17 @@ typedef struct torre0{
 
 Torre criaTorre(double x, double y, char *id, char *corP, char *corB){
    torre0 *newElement;
-   int i;
    newElement = (torre0*) malloc(sizeof(torre0));
    newElement->x = x;
    newElement->y = y;
    newElement->raio = 0;
    newElement->operadora = NULL;
-   i = strlen(id);
-   newElement->id = (char*) malloc((i+1)*sizeof(char));
-   strcpy(newElement->id, id);
 
-   i = strlen(corP);
-   newElement->corP = (char*) malloc((i+1) * sizeof(char));
-   strcpy(newElement->corP, corP);
+   newElement->id = criarString(id);
 
-   i = strlen(corB);
-   newElement->corB = (char*) malloc((i+1) * sizeof(char));
-   strcpy(newElement->corB, corB);
+   newElement->corP = criarString(corP);
+
+   newElement->corB = criarString(corB);
 
    return (Torre) newElement;
 }

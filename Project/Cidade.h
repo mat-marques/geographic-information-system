@@ -11,6 +11,7 @@
 #include "Pessoa.h"
 #include "EstabelecimentoComercial.h"
 #include "Dicionario.h"
+#include "Morador.h"
 
 typedef void* ElementoUrbano;
 typedef void* Cidade;
@@ -97,6 +98,21 @@ Remove um hidrante de uma cidade em uma posição indicada por p.
 long int removeHidrante(Cidade cidade, char *id);
 
 
+void insertPessoas(Cidade cidade, Pessoa pessoa);
+
+
+void insertMorador(Cidade cidade, Morador morador);
+
+
+void insertEstabC(Cidade cidade, EstabC estabC);
+
+void removePessoasCidade(Cidade cidade, char *cpf);
+
+void removeMoradorCidade(Cidade cidade, char *cpf);
+
+void removeEstabCidade(Cidade cidade, char *cnpj);
+
+
 Dicionario getDicionario(Cidade cidade);
 
 
@@ -124,6 +140,13 @@ Escreve em um arquivo file (Arquivo svg) todas as torres presentes na cidade.
 */
 void showTorres(Cidade cidade, FILE *file);
 
+
+void calculaCoordenadaM(Quadra quadra, int num, char face, double *x,
+double *y);
+
+void showMoradores(Cidade cidade, FILE *file);
+
+void showEstabelecimentos(Cidade cidade, FILE *file);
 
 /*
 Retorna um lista contendo todas as quadras de uma cidade.

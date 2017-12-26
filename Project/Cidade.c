@@ -13,7 +13,6 @@
 #include "Svg.h"
 #include "Torre.h"
 
-#include "Morador.h"
 #include "Celular.h"
 #include "StringO.h"
 
@@ -22,6 +21,7 @@ FILE *newArqCity = NULL;
 typedef struct City {
   QuadTree listaQ, listaS, listaT, listaH;
   Dicionario dicionario;
+  List listaMoradores, listaEstabComerciais, listaPessoas;
   char *nome;
 } City;
 
@@ -78,6 +78,9 @@ Cidade criaCidade(char *name) {
   city->listaS = createQuadTree();
   city->listaT = createQuadTree();
   city->listaH = createQuadTree();
+  city->listaPessoas = createL();
+  city->listaMoradores = createL();
+  city->listaEstabComerciais = createL();
   city->dicionario = configuraDicionario();
   return city;
 }
@@ -150,6 +153,47 @@ long int removeHidrante(Cidade cidade, char *id) {
   return qtd;
 }
 
+void insertPessoas(Cidade cidade, Pessoa pessoa){
+  City *city = (City *)cidade;
+  insertEndL(city->listaPessoas, pessoa);
+}
+
+void insertMorador(Cidade cidade, Morador morador){
+  City *city = (City *)cidade;
+  insertEndL(city->listaMoradores, morador);
+}
+
+void insertEstabC(Cidade cidade, EstabC estabC){
+  City *city = (City *)cidade;
+  insertEndL(city->listaEstabComerciais, estabC);
+}
+
+void removePessoasCidade(Cidade cidade, char *cpf){
+  City *city = (City *)cidade;
+  Pessoa pessoa;
+  pessoa = removeItemL2(city->listaPessoas, cpf, comparePessoas);
+  if(pessoa != NULL){
+    removePessoa(pessoa);
+  }
+}
+
+void removeMoradorCidade(Cidade cidade, char *cpf){
+  City *city = (City *)cidade;
+  Morador morador;
+  morador = removeItemL2(city->listaMoradores, cpf, compareMorador);
+  if(morador != NULL){
+    removeMorador(morador);
+  }
+}
+
+void removeEstabCidade(Cidade cidade, char *cnpj){
+  City *city = (City *)cidade;
+  EstabC estabC;
+  estabC = removeItemL2(city->listaEstabComerciais, cnpj, compareEstabC);
+  if(estabC != NULL){
+    removeEstabC(estabC);
+  }
+}
 
 Dicionario getDicionario(Cidade cidade){
   City *city = (City *)cidade;
@@ -274,6 +318,95 @@ void showTorres(Cidade cidade, FILE *file) {
   newArqCity = NULL;
 }
 
+void calculaCoordenadaM(Quadra quadra, int num, char face, double *x,
+double *y) {
+  double xQ, yQ, wQ, hQ;
+  xQ = getXQ(quadra);
+  yQ = getYQ(quadra);
+  wQ = getLargQ(quadra);
+  hQ = getAltQ(quadra);
+  switch (face) {
+  case 'N':
+    *x = xQ + num;
+    *y = yQ + hQ;
+    break;
+  case 'S':
+    *x = xQ + num;
+    *y = yQ;
+    break;
+  case 'L':
+    *x = xQ;
+    *y = yQ + num;
+    break;
+  case 'O':
+    *x = xQ + wQ;
+    *y = yQ + num;
+    break;
+  default:
+    printf("Face nao existe.\n");
+  }
+}
+
+void showMoradores(Cidade cidade, FILE *file){
+  City *city = (City *)cidade;
+  int i, j;
+  char *cep, cor[] = "green", cor2[] = "red", m[] = "M";
+  Endereco endereco;
+  Morador morador;
+  Quadra quadra;
+  double x = 0, y = 0;
+  j = lengthL(city->listaMoradores);
+  for(i=1; i<=j; i++){
+    morador = getItemL(city->listaMoradores, i);
+    if(morador != NULL){
+      endereco = getEndereco(morador);
+      cep = getCep(endereco);
+      quadra = getQuadra(cidade, cep);
+      if(quadra != NULL){
+        calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x, &y);
+        tagCirculo(file, 3, x, y, cor);
+        tagTexto2(file, m, cor2, 5, x, y);
+      }
+    }
+  }
+
+}
+
+void showEstabelecimentos(Cidade cidade, FILE *file){
+  City *city = (City *)cidade;
+  int i, j;
+  char *cep, cor[] = "yellow", cor2[] = "red", e[] = "E", face;
+  Endereco endereco;
+  EstabC estabC;
+  Quadra quadra;
+
+  double x = 0, y = 0;
+  j = lengthL(city->listaEstabComerciais);
+  for(i=1; i<=j; i++){
+    estabC = getItemL(city->listaEstabComerciais, i);
+    if(estabC != NULL){
+      endereco = getEnderecoEstabC(estabC);
+      cep = getCep(endereco);
+      quadra = getQuadra(cidade, cep);
+      if(quadra != NULL){
+        face = getFace(endereco);
+        calculaCoordenadaM(quadra, getNum(endereco), face, &x, &y);
+        if(face == 'N'){
+          tagRetangulo(file, 5, 5, x, y-5, cor);
+          tagTexto2(file, e, cor2, 5, x, y-5);
+        } else if(face == 'O'){
+          tagRetangulo(file, 5, 5, x-5, y, cor);
+          tagTexto2(file, e, cor2, 5, x-5, y);
+        } else {
+          tagRetangulo(file, 5, 5, x, y, cor);
+          tagTexto2(file, e, cor2, 5, x, y);
+        }
+      }
+    }
+  }
+
+}
+
 Quadra getQuadra(Cidade cidade, char *cep) {
   Quadra quadra = NULL;
   City *city = (City *)cidade;
@@ -366,10 +499,10 @@ void eraseHashTables(Cidade cidade){
   eraseHT(hash, desalocarString);
 
   hash = getSecaoDicionario(city->dicionario, secao2);
-  eraseHT(hash, removePessoa);
+  eraseHT(hash, NULL);
 
   hash = getSecaoDicionario(city->dicionario, secao3);
-  eraseHT(hash, removeEstabC);
+  eraseHT(hash, NULL);
 
   hash = getSecaoDicionario(city->dicionario, secao4);
   eraseHT(hash, NULL);
@@ -378,7 +511,7 @@ void eraseHashTables(Cidade cidade){
   eraseHT(hash, NULL);
 
   hash = getSecaoDicionario(city->dicionario, secao6);
-  eraseHT(hash, removeMorador);
+  eraseHT(hash, NULL);
 
   hash = getSecaoDicionario(city->dicionario, secao7);
   eraseHT(hash, NULL);
@@ -396,7 +529,7 @@ void eraseHashTables(Cidade cidade){
   eraseHT(hash, NULL);
 
   hash = getSecaoDicionario(city->dicionario, secao12);
-  eraseHT(hash, removeCelular);
+  eraseHT(hash, NULL);
 
   hash = getSecaoDicionario(city->dicionario, secao13);
   eraseHT(hash, NULL);
@@ -411,6 +544,24 @@ void eraseHashTables(Cidade cidade){
   eraseHT(hash, NULL);
 }
 
+void eraseListaPessoas(Cidade cidade) {
+  City *city = (City *)cidade;
+  eraseListL(city->listaPessoas, removePessoa);
+  eraseBase(city->listaPessoas);
+}
+
+void eraseListaMoradores(Cidade cidade) {
+  City *city = (City *)cidade;
+  eraseListL(city->listaMoradores, removeMorador);
+  eraseBase(city->listaMoradores);
+}
+
+void eraseListaEstabC(Cidade cidade) {
+  City *city = (City *)cidade;
+  eraseListL(city->listaEstabComerciais, removeEstabC);
+  eraseBase(city->listaEstabComerciais);
+}
+
 void eraseCidade(Cidade cidade) {
   City *city = (City *)cidade;
   eraseListaQ(cidade);
@@ -418,6 +569,9 @@ void eraseCidade(Cidade cidade) {
   eraseListaT(cidade);
   eraseListaH(cidade);
   eraseHashTables(cidade);
+  eraseListaPessoas(cidade);
+  eraseListaMoradores(cidade);
+  eraseListaEstabC(cidade);
   removeDicionario(city->dicionario);
   if (city->nome != NULL) {
     free(city->nome);
