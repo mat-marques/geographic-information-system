@@ -36,13 +36,13 @@ int insertPointsPolygon(Polygon polygon, double x, double y);
 /*
    A função retorna o vetor de pontos de polygon.
  */
-double *getPoints(Polygon polygon);
+double *getPointsPolygon(Polygon polygon);
 
 /*
    O procedimento define um novo conjunto de ponto para polygon.
    nPoints > 0.
  */
-void setPoints(Polygon polygon, double *points, int nPoints);
+void setPointsPolygon(Polygon polygon, double *points, int nPoints);
 
 /*
    A função retorna a quantidade de pontos que compõem o vetor de pontos de polygon.
@@ -54,7 +54,7 @@ int getqtdPointsPolygon(Polygon polygon);
    A função retorna a quantidade de pontos que foram inseridos atualmente no vetor de pontos de polygon.
    O tamanho do vetor é (2 * nPoints).
  */
-int getnPoints2(Polygon polygon);
+int getnPointsPolygon(Polygon polygon);
 
 /*
    A função retorna a coordenada x de polygon.
@@ -76,15 +76,41 @@ double getYPolygon(Polygon polygon, int position);
  */
 void setYPolygon(Polygon polygon, int position, double y);
 
-/*
-   A função retorna o nome da cor que compõe a estrutura polygon.
- */
-char *getColourPolygon(Polygon polygon);
 
 /*
-   O procedimento define uma nova cor para polygon.
+   A função retorna a espessura das linhas de polygon.
  */
-void setColourPolygon(Polygon polygon, char *colour);
+int getLineSizePolygon(Polygon polygon);
+
+
+/*
+   O procedimento define uma nova espessura para as linhas de polygon.
+ */
+void setLineSizePolygon(Polygon polygon, int lineSize);
+
+
+/*
+   A função retorna o nome da cor de preenchimento da estrutura polygon.
+ */
+char *getColourFillPolygon(Polygon polygon);
+
+/*
+   O procedimento define uma nova de preenchimento para polygon.
+ */
+void setColourFillPolygon(Polygon polygon, char *colourFill);
+
+
+/*
+   A função retorna o nome da cor da linha da estrutura polygon.
+ */
+char *getColourLinePolygon(Polygon polygon);
+
+
+/*
+   O procedimento define uma nova cor para a linha de polygon.
+ */
+void setColourLinePolygon(Polygon polygon, char *colourLine);
+
 
 /*
    A função verifica se o id de polygon é igual ao valor da variável id.

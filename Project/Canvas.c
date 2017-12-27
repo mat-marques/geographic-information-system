@@ -10,29 +10,14 @@
 #include "QuadTree.h"
 #include "Retangulo.h"
 #include "Stack.h"
-#include "Svg.h"
 #include "StringO.h"
+#include "Svg.h"
 
 typedef struct reg { double w, h, x, y; } Reg;
 
-typedef struct itemRow {
-  double x1, y1, x2, y2;
-} ItemRow;
-
-typedef struct itemText {
-  double x, y;
-  char *text;
-} ItemText;
-
-typedef struct itemPolygon {
-  double *points;
-  char t;
-} ItemPolygon;
-
-
 typedef struct CanvasP {
   QuadTree listaC, listaR;
-  List listaR2, listaRow, listaText, listaPolygon;
+  List listaR2, listLines, listTexts, listPolygons, listPolyLines, listEllipses;
   Cidade cidade;
   double width, height;
   int id;
@@ -78,9 +63,11 @@ Canvas criaCanvas(int id) {
   canvas->listaC = createQuadTree();
   canvas->listaR = createQuadTree();
   canvas->listaR2 = createL();
-  canvas->listaRow = createL();
-  canvas->listaText = createL();
-  canvas->listaPolygon = createL();
+  canvas->listLines = createL();
+  canvas->listPolygons = createL();
+  canvas->listPolyLines = createL();
+  canvas->listTexts = createL();
+  canvas->listPolyLines = createL();
   canvas->width = 100;
   canvas->height = 100;
   canvas->id = id;
@@ -90,10 +77,49 @@ Canvas criaCanvas(int id) {
   return canvas;
 }
 
-long int quantityElementsICanvas(Canvas canvas){
+double getWidth(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  return canvasP->width;
+}
+
+void setWidth(Canvas canvas, double width) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  canvasP->width = width;
+}
+
+double getHeight(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  return canvasP->height;
+}
+
+void setHeight(Canvas canvas, double height) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  canvasP->height = height;
+}
+
+Cidade getCidade(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  return canvasP->cidade;
+}
+
+void setCidade(Canvas canvas, Cidade cidade) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  if (canvasP->cidade != NULL) {
+    eraseCidade(canvasP->cidade);
+    canvasP->cidade = NULL;
+  }
+  canvasP->cidade = cidade;
+}
+
+int getIdCanvas(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  return canvasP->id;
+}
+
+long int quantityElementsICanvas(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   long int myLength = 0;
-  if(canvasP != NULL){
+  if (canvasP != NULL) {
     myLength = lenghtQuadTree(canvasP->listaR);
     myLength = myLength + lenghtQuadTree(canvasP->listaC);
     myLength = myLength + quantityElementsICity(canvasP->cidade);
@@ -143,71 +169,65 @@ long int removeCirculo(Canvas canvas, int id) {
   return qtd;
 }
 
-void insertItemRow(Canvas canvas, double x1, double y1, double x2, double y2){
+void insertLineCanvas(Canvas canvas, Line line) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  ItemRow *item = (ItemRow*) malloc(sizeof(ItemRow));
-  item->x1 = x1;
-  item->y1 = y1;
-  item->x2 = x2;
-  item->y2 = y2;
-  insertEndL(canvasP->listaRow, item);
+  insertEndL(canvasP->listLines, line);
 }
 
-void insertItemText(Canvas canvas, double x, double y, char *text){
+void removeLineCanvas(Canvas canvas, int id) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  ItemText *item = (ItemText*) malloc(sizeof(ItemText));
-  item->x = x;
-  item->y = y;
-  item->text = criarString(text);
-  insertEndL(canvasP->listaText, item);
+  Item item;
+  item = removeItemL2(canvasP->listLines, &id, compareLines);
+  eraseLine(item);
 }
 
-void insertItemPolygon(Canvas canvas, double *points, char t){
+void insertTextCanvas(Canvas canvas, Text text) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  ItemPolygon *item = (ItemPolygon*) malloc(sizeof(ItemPolygon));
-  item->points = points;
-  item->t = t;
-  insertEndL(canvasP->listaPolygon, item);
+  insertEndL(canvasP->listTexts, text);
 }
 
-void showListaItemRow(Canvas canvas, FILE *file){
+void removeTextCanvas(Canvas canvas, int id) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  ItemRow *info;
-  char cor[] = "black";
-  int i, j;
-  j = lengthL(canvasP->listaRow);
-  for(i=1; i<=j; i++){
-    info = (ItemRow*) getItemL(canvasP->listaRow, i);
-    if(info != NULL){
-      linha(file, info->x1, info->y1, info->x2, info->y2, cor);
-    }
-  }
-
+  Item item;
+  item = removeItemL2(canvasP->listTexts, &id, compareText);
+  eraseText(item);
 }
 
-void showListaItemText(Canvas canvas, FILE *file){
+void insertPolygonCanvas(Canvas canvas, Polygon polygon) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  ItemText *info;
-  char cor[] = "red";
-  char cor2[] = "white";
-  char d[] = "defunto";
-  int i, j;
-  j = lengthL(canvasP->listaText);
-  for(i=1; i<=j; i++){
-    info = (ItemText*) getItemL(canvasP->listaText, i);
-    if(info != NULL){
-      if(strcmp(info->text, d) == 0){
-        losango(file, info->x, info->y);
-        linha(file, info->x-2.5, info->y, info->x+2.5, info->y, cor2);
-        linha(file, info->x, info->y+2.5, info->x, info->y-2.5, cor2);
-      } else {
-        tagTexto2(file, info->text, cor, 6, info->x, info->y);
-      }
-    }
-  }
-
+  insertEndL(canvasP->listPolygons, polygon);
 }
 
+void removePolygonCanvas(Canvas canvas, int id) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  Item item;
+  item = removeItemL2(canvasP->listPolygons, &id, comparePolygon);
+  erasePolygon(item);
+}
+
+void insertEllipseCanvas(Canvas canvas, Ellipse ellipse) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  insertEndL(canvasP->listEllipses, ellipse);
+}
+
+void removeEllipseCanvas(Canvas canvas, int id) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  Item item;
+  item = removeItemL2(canvasP->listEllipses, &id, compareEllipses);
+  eraseEllipse(item);
+}
+
+void insertPolyLinesCanvas(Canvas canvas, PolyLine polyLine) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  insertEndL(canvasP->listPolyLines, polyLine);
+}
+
+void removePolyLinesCanvas(Canvas canvas, int id) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  Item item;
+  item = removeItemL2(canvasP->listPolyLines, &id, comparePolyLine);
+  erasePolyLine(item);
+}
 
 void showR(Retangulo retangulo) {
   /* Escreve em um arquivo svg as propriedades de um retângulo.
@@ -311,43 +331,86 @@ void showCanvasCV(Canvas canvas, char cor[30], FILE *file) {
   globalCor = NULL;
 }
 
-double getWidth(Canvas canvas) {
+void showListLines(Canvas canvas, FILE *file) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  return canvasP->width;
-}
-
-void setWidth(Canvas canvas, double width) {
-  CanvasP *canvasP = (CanvasP *)canvas;
-  canvasP->width = width;
-}
-
-double getHeight(Canvas canvas) {
-  CanvasP *canvasP = (CanvasP *)canvas;
-  return canvasP->height;
-}
-
-void setHeight(Canvas canvas, double height) {
-  CanvasP *canvasP = (CanvasP *)canvas;
-  canvasP->height = height;
-}
-
-Cidade getCidade(Canvas canvas) {
-  CanvasP *canvasP = (CanvasP *)canvas;
-  return canvasP->cidade;
-}
-
-void setCidade(Canvas canvas, Cidade cidade) {
-  CanvasP *canvasP = (CanvasP *)canvas;
-  if (canvasP->cidade != NULL) {
-    eraseCidade(canvasP->cidade);
-    canvasP->cidade = NULL;
+  int i, j;
+  Item item;
+  j = lengthL(canvasP->listLines);
+  for (i = 1; i <= j; i++) {
+    item = getItemL(canvasP->listLines, i);
+    if (item != NULL) {
+      tagLinha2(file, getIdLine(item), getX1Line(item), getY1Line(item),
+                getX2Line(item), getY2Line(item), getColourLine(item),
+                getSizeLine(item));
+    }
+    item = NULL;
   }
-  canvasP->cidade = cidade;
 }
 
-int getIdCanvas(Canvas canvas) {
+void showListTexts(Canvas canvas, FILE *file) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  return canvasP->id;
+  int i, j;
+  Item item;
+  j = lengthL(canvasP->listTexts);
+  for (i = 1; i <= j; i++) {
+    item = getItemL(canvasP->listTexts, i);
+    if (item != NULL) {
+      tagTexto3(file, getIdText(item), getText(item), getColourText(item),
+                getFontSizeText(item), getFontFamilyText(item), getXText(item),
+                getYText(item));
+    }
+    item = NULL;
+  }
+}
+
+void showListPolygons(Canvas canvas, FILE *file) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  int i, j;
+  Item item;
+  j = lengthL(canvasP->listPolygons);
+  for (i = 1; i <= j; i++) {
+    item = getItemL(canvasP->listPolygons, i);
+    if (item != NULL) {
+      tagPoligono(file, getIdPolygon(item), getPointsPolygon(item),
+                  getqtdPointsPolygon(item) * 2, getColourLinePolygon(item),
+                  getColourFillPolygon(item), getLineSizePolygon(item));
+    }
+    item = NULL;
+  }
+}
+
+void showListPolyLines(Canvas canvas, FILE *file) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  int i, j;
+  Item item;
+  j = lengthL(canvasP->listPolyLines);
+  for (i = 1; i <= j; i++) {
+    item = getItemL(canvasP->listPolyLines, i);
+    if (item != NULL) {
+      tagMultiplasLinhas(
+          file, getIdPolyLine(item), getPointsPolyLine(item),
+          getqtdPointsPolyLine(item) * 2, getColourLinePolyLine(item),
+          getColourFillPolyLine(item), getLineSizePolyLine(item));
+    }
+    item = NULL;
+  }
+}
+
+void showListEllipses(Canvas canvas, FILE *file) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  int i, j;
+  Item item;
+  j = lengthL(canvasP->listEllipses);
+  for (i = 1; i <= j; i++) {
+    item = getItemL(canvasP->listEllipses, i);
+    if (item != NULL) {
+      tagEllipse(file, getIdEllipse(item), getCXEllipse(item),
+                 getCYEllipse(item), getRXEllipse(item), getRYEllipse(item),
+                 getColourLineFillEllipse(item), getColourFillEllipse(item),
+                 getLineSizeEllipse(item));
+    }
+    item = NULL;
+  }
 }
 
 QuadTree getListaR(Canvas canvas) {
@@ -358,6 +421,31 @@ QuadTree getListaR(Canvas canvas) {
 List getListaR2(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   return canvasP->listaR2;
+}
+
+List getListLines(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  return canvasP->listLines;
+}
+
+List getListEllipses(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  return canvasP->listEllipses;
+}
+
+List getListPolygons(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  return canvasP->listPolygons;
+}
+
+List getListPolyLines(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  return canvasP->listPolyLines;
+}
+
+List getListTexts(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  return canvasP->listTexts;
 }
 
 QuadTree getListaC(Canvas canvas) {
@@ -671,31 +759,29 @@ void eraseListaR2(Canvas canvas) {
   eraseBase(canvasP->listaR2);
 }
 
-void removeItemRow(void *item){
-  ItemRow *info = (ItemRow*) item;
-  free(info);
-  item = NULL;
-}
-
-void eraseListaRow(Canvas canvas){
+void eraseListLines(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  eraseListL(canvasP->listaRow, removeItemRow);
-  eraseBase(canvasP->listaRow);
+  eraseListL(canvasP->listLines, eraseLine);
 }
 
-void removeItemText(void *item){
-  ItemText *info = (ItemText*) item;
-  if(info->text != NULL){
-    free(info->text);
-  }
-  free(info);
-  item = NULL;
-}
-
-void eraseListaText(Canvas canvas){
+void eraseListEllipses(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
-  eraseListL(canvasP->listaText, removeItemText);
-  eraseBase(canvasP->listaText);
+  eraseListL(canvasP->listEllipses, eraseEllipse);
+}
+
+void eraseListPolygons(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  eraseListL(canvasP->listPolygons, erasePolygon);
+}
+
+void eraseListPolyLines(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  eraseListL(canvasP->listPolyLines, erasePolyLine);
+}
+
+void eraseListTexts(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  eraseListL(canvasP->listTexts, eraseText);
 }
 
 void eraseCanvas(Canvas canvas) {
@@ -703,8 +789,11 @@ void eraseCanvas(Canvas canvas) {
   eraseListaR(canvas);
   eraseListaR2(canvas);
   eraseListaC(canvas);
-  eraseListaRow(canvas);
-  eraseListaText(canvas);
+  eraseListLines(canvas);
+  eraseListPolygons(canvas);
+  eraseListEllipses(canvas);
+  eraseListPolyLines(canvas);
+  eraseListTexts(canvas);
   eraseCidade(canvasP->cidade);
   free(canvas);
 }

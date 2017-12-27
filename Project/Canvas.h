@@ -5,6 +5,11 @@
 #include "Retangulo.h"
 #include "List.h"
 #include "Cidade.h"
+#include "Linha.h"
+#include "Poligono.h"
+#include "MultiplasLinhas.h"
+#include "Texto.h"
+#include "Elipse.h"
 
 typedef void* Canvas;
 typedef void* figuraGeometrica;
@@ -13,7 +18,7 @@ typedef void* figuraGeometrica;
    Autor: Matheus Augusto Marques.
    Tad: Canvas
    Definição:
-   Um canvas é um plano bidimensional composto por um comprimento e uma altura e que aloja dentro de si componentes específicos. Os componentes que podem compor um canvas são retângulos, círculos e uma cidade.
+   Um canvas é um plano bidimensional composto por um comprimento e uma altura e que aloja dentro de si componentes específicos. Os componentes que podem compor um canvas são retângulos, círculos, elipses, textos, linhas, polígonos, multiplas linhas e uma cidade. Um canvas tem com configuração interna um comprimento e uma altura. Ele possui um número de identificação representado único representado por id.
  */
 
 
@@ -22,6 +27,47 @@ typedef void* figuraGeometrica;
    Cria um canvas vazio e com comprimento e altura iguais a 100 metros.
  */
 Canvas criaCanvas(int id);
+
+
+/*
+   Retorna o comprimento do canvas passado como parâmetro.
+ */
+double getWidth(Canvas canvas);
+
+
+/*
+   Substitui o comprimento atual de um canvas pelo número real width.
+ */
+void setWidth(Canvas canvas, double width);
+
+
+/*
+   Retorna a altura de um canvas.
+ */
+double getHeight(Canvas canvas);
+
+
+/*
+   Substitui a altura atual de um canvas pelo número real heigth.
+ */
+void setHeight(Canvas canvas, double height);
+
+
+/*
+   Retorna uma cidade presente em um canvas.
+ */
+Cidade getCidade(Canvas canvas);
+
+/*
+   Substitui uma cidade presente em um canvas pela cidade passada por parâmetro.
+ */
+void setCidade(Canvas canvas, Cidade cidade);
+
+
+/*
+   Retorna o número de identificação de um canvas.
+ */
+int getIdCanvas(Canvas canvas);
 
 
 /*
@@ -67,25 +113,40 @@ long int insertCirculo(Canvas canvas, Circulo circulo);
  */
 long int removeCirculo(Canvas canvas, int id);
 
-/*
-   Insere no canvas passado como parâmetro uma linha que conectam dois pontos.
- */
-void insertItemRow(Canvas canvas, double x1, double y1, double x2, double y2);
 
-/*
-   Insere no canvas passado como parâmetro um texto em uma dada coordenada x e y do canvas.
- */
-void insertItemText(Canvas canvas, double x, double y, char *text);
 
-/*
-   Escreve no arquivo file todas as linhas que conectam dois pontos dentro do canvas.
- */
-void showListaItemRow(Canvas canvas, FILE *file);
 
-/*
-   Escreve no arquivo file todos os textos dentro do canvas.
- */
-void showListaItemText(Canvas canvas, FILE *file);
+void insertLineCanvas(Canvas canvas, Line line);
+
+
+void removeLineCanvas(Canvas canvas, int id);
+
+
+void insertTextCanvas(Canvas canvas, Text text);
+
+
+void removeTextCanvas(Canvas canvas, int id);
+
+
+void insertPolygonCanvas(Canvas canvas, Polygon polygon);
+
+
+void removePolygonCanvas(Canvas canvas, int id);
+
+
+void insertEllipseCanvas(Canvas canvas, Ellipse ellipse);
+
+
+void removeEllipseCanvas(Canvas canvas, int id);
+
+
+void insertPolyLinesCanvas(Canvas canvas, PolyLine polyLine);
+
+
+void removePolyLinesCanvas(Canvas canvas, int id);
+
+
+
 
 /*
    Escreve no arquivo file todos os retângulos dentro do canvas.
@@ -109,6 +170,36 @@ void showCanvasRV(Canvas canvas, char cor[30], FILE *file);
    Escreve no arquivo file todos os vertices de um círculo dentro do canvas.
  */
 void showCanvasCV(Canvas canvas, char cor[30], FILE *file);
+
+
+/*
+   Escreve no arquivo file todas as linhas dentro do canvas.
+ */
+void showListLines(Canvas canvas, FILE *file);
+
+
+/*
+   Escreve no arquivo file todos os textos dentro do canvas.
+ */
+void showListTexts(Canvas canvas, FILE *file);
+
+
+/*
+   Escreve no arquivo file todos os polígonos dentro do canvas.
+ */
+void showListPolygons(Canvas canvas, FILE *file);
+
+
+/*
+   Escreve no arquivo file todas as multiplas linhas dentro do canvas.
+ */
+void showListPolyLines(Canvas canvas, FILE *file);
+
+
+/*
+   Escreve no arquivo file todas as elipses dentro do canvas.
+ */
+void showListEllipses(Canvas canvas, FILE *file);
 
 
 /*
@@ -141,48 +232,6 @@ List getElementsListInsideR(Canvas canvas, int type, double x, double y, double 
    6 : Círculo;
  */
 List getElementsListInsideC(Canvas canvas, int type, double x, double y, double r);
-
-
-
-/*
-   Retorna o comprimento do canvas passado como parâmetro.
- */
-double getWidth(Canvas canvas);
-
-
-/*
-   Substitui o comprimento atual de um canvas pelo número real width.
- */
-void setWidth(Canvas canvas, double width);
-
-
-/*
-   Retorna a altura de um canvas.
- */
-double getHeight(Canvas canvas);
-
-
-/*
-   Substitui a altura atual de um canvas pelo número real heigth.
- */
-void setHeight(Canvas canvas, double height);
-
-
-/*
-   Retorna uma cidade presente em um canvas.
- */
-Cidade getCidade(Canvas canvas);
-
-/*
-   Substitui uma cidade presente em um canvas pela cidade passada por parâmetro.
- */
-void setCidade(Canvas canvas, Cidade cidade);
-
-
-/*
-   Retorna o número de identificação de um canvas.
- */
-int getIdCanvas(Canvas canvas);
 
 
 /*
@@ -234,32 +283,6 @@ figuraGeometrica getCirculo(Canvas canvas, int id);
 figuraGeometrica getCirculo2(Canvas canvas, double x, double y, double r);
 
 
-/*
-   Apaga todos os retângulos genéricos presentes em um canvas.
- */
-void eraseListaR(Canvas canvas);
-
-
-/*
-   Apaga todos os círculos presentes em um canvas.
- */
-void eraseListaC(Canvas canvas);
-
-
-/*
-   Apaga todos os retângulos com bordas tracejadas presentes em um canvas.
- */
-void eraseListaR2(Canvas canvas);
-
-/*
-   Apaga todas as linhas que conectam dois pontos presentes em um canvas.
- */
-void eraseListaRow(Canvas canvas);
-
-/*
-   Apaga todas os textos presentes em um canvas.
- */
-void eraseListaText(Canvas canvas);
 
 /*
    Apaga o canvas e todos os seus componentes.

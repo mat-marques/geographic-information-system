@@ -6,7 +6,7 @@ typedef void* Ellipse;
 /*
 Autor: Matheus Augusto Marques.
 Tad Elipse:
-  Uma elipse é composta por um ponto central com coordenadas cx, cy e também possui dois raios. Um raio (rx) está relacionado ao eixo x e o outro (ry) está relacionado ao eixo y. Opcionalmente a elipse pode ter uma cor. Além disso, uma elipse possui um número (id) de identificação único e exclusivo com a finalidade de diferenciar as elipses no espaço. 
+  Uma elipse é composta por um ponto central com coordenadas cx, cy e também possui dois raios. Um raio (rx) está relacionado ao eixo x e o outro (ry) está relacionado ao eixo y. Opcionalmente a elipse pode ter uma cor. Além disso, uma elipse possui um número (id) de identificação único e exclusivo com a finalidade de diferenciar as elipses no espaço.
  */
 
 /*
@@ -64,16 +64,43 @@ double getRYEllipse(Ellipse ellipse);
  */
 void setRYEllipse(Ellipse ellipse, double ry);
 
+
+/*
+   A função retorna o valor lineSize configurado na ellipse.
+ */
+int getLineSizeEllipse(Ellipse ellipse);
+
+
+/*
+   O procedimento define uma novo valor lineSize para a ellipse.
+ */
+void setLineSizeEllipse(Ellipse ellipse, int lineSize);
+
+
 /*
    A função retorna a cor configurada na ellipse.
    Retorna null caso a cor não foi definida.
  */
-char *getColourEllipse(Ellipse ellipse);
+char *getColourFillEllipse(Ellipse ellipse);
 
 /*
    O procedimento define uma nova cor para a ellipse.
  */
-void setColourEllipse(Ellipse ellipse, char *colour);
+void setColourFillEllipse(Ellipse ellipse, char *colourFill);
+
+
+/*
+   A função retorna a cor das linhas configurada na ellipse.
+   Retorna null caso a cor não foi definida.
+ */
+char *getColourLineFillEllipse(Ellipse ellipse);
+
+
+/*
+   O procedimento define uma nova cor para as linhas da ellipse.
+ */
+void setColourLineEllipse(Ellipse ellipse, char *colourLine);
+
 
 /*
    A função verifica se o id de ellipse é igual ao valor da variável id.

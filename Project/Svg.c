@@ -1,7 +1,7 @@
+#include "Svg.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Svg.h"
 
 FILE *createSvg(char *arqName) {
   FILE *file;
@@ -21,7 +21,8 @@ void tagAbertura(FILE *arqSvg, double w, double h) {
   fprintf(arqSvg, "%s\n", ">");
 }
 
-void tagRetangulo(FILE *arqSvg, double w, double h, double x, double y, char *cor) {
+void tagRetangulo(FILE *arqSvg, double w, double h, double x, double y,
+                  char *cor) {
   fprintf(arqSvg, "%s\n", "<rect");
 
   fprintf(arqSvg, " %s", "x=");
@@ -45,7 +46,8 @@ void tagRetangulo(FILE *arqSvg, double w, double h, double x, double y, char *co
   fprintf(arqSvg, "%s\n", " />");
 }
 
-void tagRetangulo2(FILE *arqSvg,double w, double h, double x, double y, char *corB, char *corS) {
+void tagRetangulo2(FILE *arqSvg, double w, double h, double x, double y,
+                   char *corB, char *corS) {
 
   fprintf(arqSvg, "%s\n", "<rect");
 
@@ -71,7 +73,8 @@ void tagRetangulo2(FILE *arqSvg,double w, double h, double x, double y, char *co
   fprintf(arqSvg, "%s\n", " />");
 }
 
-void tagCirculo2(FILE *arqSvg,double r, double x, double y, char corB[60], char corS[60]) {
+void tagCirculo2(FILE *arqSvg, double r, double x, double y, char corB[60],
+                 char corS[60]) {
 
   fprintf(arqSvg, "%s\n", "<circle");
 
@@ -159,7 +162,8 @@ void tagTexto(FILE *arqSvg, double x, double y) {
   fprintf(arqSvg, "%s\n", "</text>");
 }
 
-void tagTexto2(FILE *arqSvg, char *texto, char *cor, int fontSize, double x, double y) {
+void tagTexto2(FILE *arqSvg, char *texto, char *cor, int fontSize, double x,
+               double y) {
   fprintf(arqSvg, "%s", "<text");
 
   fprintf(arqSvg, " %s", "x=");
@@ -183,6 +187,36 @@ void tagTexto2(FILE *arqSvg, char *texto, char *cor, int fontSize, double x, dou
   fprintf(arqSvg, "%s\n", "</text>");
 }
 
+void tagTexto3(FILE *arqSvg, int id, char *texto, char *cor, int fontSize,
+               char *fontFamily, double x, double y) {
+  fprintf(arqSvg, "%s", "<text");
+
+  fprintf(arqSvg, " id= \"%d\"\n", id);
+
+  fprintf(arqSvg, " %s", "x=");
+  fprintf(arqSvg, "\"%f\"", x);
+
+  fprintf(arqSvg, " %s", "y=");
+  fprintf(arqSvg, "\"%f\"", y);
+
+  fprintf(arqSvg, "\n%s\n", "stroke-width=\"1\"");
+
+  fprintf(arqSvg, "%s", "fill=\"");
+  fprintf(arqSvg, "%s", cor);
+  fprintf(arqSvg, "%s\n", "\"");
+
+  fprintf(arqSvg, "%s", "font-size=\"");
+  fprintf(arqSvg, "%d", fontSize);
+  fprintf(arqSvg, "%s\n", "\"");
+
+  fprintf(arqSvg, "%s", "font-family=\"");
+  fprintf(arqSvg, "%s", fontFamily);
+  fprintf(arqSvg, "%s\n", "\"");
+
+  fprintf(arqSvg, " %s", ">");
+  fprintf(arqSvg, "%s", texto);
+  fprintf(arqSvg, "%s\n", "</text>");
+}
 
 void tagRetanguloSobreposicao(FILE *arqSvg, double x, double y, double w,
                               double h) {
@@ -251,27 +285,102 @@ void linha(FILE *arqSvg, double x1, double y1, double x2, double y2,
   fprintf(arqSvg, "%s\n", "/>");
 }
 
-void losango(FILE *arqSvg, double x, double y){
-  double x1, y1;
+void tagLinha2(FILE *arqSvg, int id, double x1, double y1, double x2, double y2, char *cor, int sizeLine) {
+
+  fprintf(arqSvg, "%s\n", "<line");
+
+  fprintf(arqSvg, " id= \"%d\"\n", id);
+
+  fprintf(arqSvg, " %s", "x1=");
+  fprintf(arqSvg, "\"%.5f\"\n", x1);
+
+  fprintf(arqSvg, " %s", "y1=");
+  fprintf(arqSvg, "\"%f\"\n", y1);
+
+  fprintf(arqSvg, " %s", "x2=");
+  fprintf(arqSvg, "\"%.5f\"\n", x2);
+
+  fprintf(arqSvg, " %s", "y2=");
+  fprintf(arqSvg, "\"%f\"\n", y2);
+
+  fprintf(arqSvg, " %s", "style=");
+  fprintf(arqSvg, "\"%s", "stroke: ");
+  fprintf(arqSvg, " %s;", cor);
+  fprintf(arqSvg, " %s %d\"\n", "stroke-width:", sizeLine);
+
+  fprintf(arqSvg, "%s\n", "/>");
+}
+
+void tagMultiplasLinhas(FILE *arqSvg, int id, double *pontos, int n, char *corL, char *corF, int lineSize)
+{
+  int i;
+
+  fprintf(arqSvg, "%s\n", "<polyline");
+  fprintf(arqSvg, "points=\"");
+  for(i = 0; i < n; i = i + 2){
+    fprintf(arqSvg, "%f,%f", *(pontos + i), *(pontos + i + 1));
+    if(i < n){
+      fprintf(arqSvg, " ");
+    }
+  }
+  fprintf(arqSvg, "\"\n");
+  fprintf(arqSvg, "style=\"");
+
+  fprintf(arqSvg, "fill:%s;", corF);
+  fprintf(arqSvg, "stroke:%s;", corL);
+  fprintf(arqSvg, "stroke-width:%d;", lineSize);
+
+  fprintf(arqSvg, "%s\n", "/>");
+
+}
+
+void tagPoligono(FILE *arqSvg, int id, double *pontos, int n, char *corL, char *corF, int lineSize)
+{
+  int i;
 
   fprintf(arqSvg, "%s\n", "<polygon");
-
   fprintf(arqSvg, "points=\"");
-
-  fprintf(arqSvg, "%f,%f \n", x, y - 5);
-  fprintf(arqSvg, "%f,%f \n", x - 5, y);
-  fprintf(arqSvg, "%f,%f \n", x, y + 5);
-  fprintf(arqSvg, "%f,%f\n", x + 5, y);
-
+  for(i = 0; i < n; i = i + 2){
+    fprintf(arqSvg, "%f,%f", *(pontos + i), *(pontos + i + 1));
+    if(i < n){
+      fprintf(arqSvg, " ");
+    }
+  }
   fprintf(arqSvg, "\"\n");
+  fprintf(arqSvg, "style=\"");
 
-  fprintf(arqSvg, " %s", "fill=");
-  fprintf(arqSvg, "\"black\"\n");
+  fprintf(arqSvg, "fill:%s;", corF);
+  fprintf(arqSvg, "stroke:%s;", corL);
+  fprintf(arqSvg, "stroke-width:%d;", lineSize);
 
-  fprintf(arqSvg, " %s\n", "stroke=\"red\"");
-  fprintf(arqSvg, " %s\n", "stroke-width=\"1\"");
+  fprintf(arqSvg, "%s\n", "/>");
 
-  fprintf(arqSvg, "%s\n", " />");
+}
+
+
+void tagEllipse(FILE *arqSvg, int id, double cx, double cy, double rx, double ry, char *corL, char *corF, int lineSize)
+{
+
+  fprintf(arqSvg, "%s\n", "<ellipse");
+
+
+  fprintf(arqSvg, " %s", "cx=");
+  fprintf(arqSvg, "\"%.5f\"\n", cx);
+
+  fprintf(arqSvg, " %s", "cy=");
+  fprintf(arqSvg, "\"%f\"\n", cy);
+
+  fprintf(arqSvg, " %s", "rx=");
+  fprintf(arqSvg, "\"%.5f\"\n", rx);
+
+  fprintf(arqSvg, " %s", "ry=");
+  fprintf(arqSvg, "\"%f\"\n", ry);
+
+  fprintf(arqSvg, "fill:%s;", corF);
+  fprintf(arqSvg, "stroke:%s;", corL);
+  fprintf(arqSvg, "stroke-width:%d;", lineSize);
+
+  fprintf(arqSvg, "%s\n", "/>");
 
 }
 

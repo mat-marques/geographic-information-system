@@ -14,14 +14,15 @@ typedef struct myText{
 
 Text createText(int id, char *text, double x, double y){
   newText *myText = NULL;
+  char colour1[] = "red", family[] = "Arial";
   myText = (newText*) malloc(sizeof(newText));
   if(myText != NULL){
     myText->id = id;
     myText->text = criarString(text);
     myText->x = x;
     myText->y = y;
-    myText->colour = NULL;
-    myText->fontFamily = NULL;
+    myText->colour = criarString(colour1);
+    myText->fontFamily = criarString(family);
     myText->fontSize = 12;
   }
   return myText;

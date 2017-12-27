@@ -7,12 +7,13 @@
 
 typedef struct myPolyLine {
   double *points;
-  int id, nPoints, qtdPoints;
-  char *colourLine, *colourPoint;
+  int id, nPoints, qtdPoints, lineSize;
+  char *colourLine, *colourFill;
 } newPolyLine;
 
 PolyLine createPolyLine(int id, int nPoints) {
   newPolyLine *myPolyLine = NULL;
+  char colour1[] = "red", colour2[] = "black";
   int i;
   myPolyLine = (newPolyLine *)malloc(sizeof(newPolyLine));
   if (myPolyLine != NULL) {
@@ -25,7 +26,9 @@ PolyLine createPolyLine(int id, int nPoints) {
 
     myPolyLine->qtdPoints = 0;
     myPolyLine->nPoints = nPoints;
-    myPolyLine->colourLine = NULL;
+    myPolyLine->lineSize = 2;
+    myPolyLine->colourLine = criarString(colour1);
+    myPolyLine->colourFill = criarString(colour2);
   }
   return myPolyLine;
 }
@@ -64,7 +67,7 @@ int insertPointsPolyLine(PolyLine polyLine, double x, double y){
 }
 
 
-double *getPoints(PolyLine polyLine) {
+double *getPointsPolyLine(PolyLine polyLine) {
   newPolyLine *myPolyLine = (newPolyLine *)polyLine;
   if (polyLine != NULL) {
     return myPolyLine->points;
@@ -73,7 +76,7 @@ double *getPoints(PolyLine polyLine) {
 }
 
 
-void setPoints(PolyLine polyLine, double *points, int nPoints) {
+void setPointsPolyLine(PolyLine polyLine, double *points, int nPoints) {
   newPolyLine *myPolyLine = (newPolyLine *)polyLine;
   if (polyLine != NULL) {
     free(myPolyLine->points);
@@ -83,7 +86,7 @@ void setPoints(PolyLine polyLine, double *points, int nPoints) {
 }
 
 
-int getnPoints(PolyLine polyLine) {
+int getnPointsPolyLine(PolyLine polyLine) {
   newPolyLine *myPolyLine = (newPolyLine *)polyLine;
   if (polyLine != NULL) {
     return myPolyLine->nPoints;
@@ -152,6 +155,23 @@ char *getColourLinePolyLine(PolyLine polyLine) {
 }
 
 
+int getLineSizePolyLine(PolyLine polyLine) {
+  newPolyLine *myPolyLine = (newPolyLine *)polyLine;
+  if (polyLine != NULL) {
+    return myPolyLine->lineSize;
+  }
+  return 0;
+}
+
+
+void setLineSizePolyLine(PolyLine polyLine, int lineSize) {
+  newPolyLine *myPolyLine = (newPolyLine *)polyLine;
+  if (polyLine != NULL) {
+    myPolyLine->lineSize = lineSize;
+  }
+}
+
+
 void setColourLinePolyLine(PolyLine polyLine, char *colour) {
   newPolyLine *myPolyLine = (newPolyLine *)polyLine;
   if (polyLine != NULL) {
@@ -163,22 +183,22 @@ void setColourLinePolyLine(PolyLine polyLine, char *colour) {
 }
 
 
-char *getColourPointPolyLine(PolyLine polyLine) {
+char *getcolourFillPolyLine(PolyLine polyLine) {
   newPolyLine *myPolyLine = (newPolyLine *)polyLine;
   if (polyLine != NULL) {
-    return myPolyLine->colourPoint;
+    return myPolyLine->colourFill;
   }
   return NULL;
 }
 
 
-void setColourPointPolyLine(PolyLine polyLine, char *colour) {
+void setcolourFillPolyLine(PolyLine polyLine, char *colour) {
   newPolyLine *myPolyLine = (newPolyLine *)polyLine;
   if (polyLine != NULL) {
-    if (myPolyLine->colourPoint != NULL) {
-      free(myPolyLine->colourPoint);
+    if (myPolyLine->colourFill != NULL) {
+      free(myPolyLine->colourFill);
     }
-    myPolyLine->colourPoint = criarString(colour);
+    myPolyLine->colourFill = criarString(colour);
   }
 }
 
@@ -199,8 +219,8 @@ void erasePolyLine(PolyLine polyLine) {
     if (myPolyLine->colourLine != NULL) {
       free(myPolyLine->colourLine);
     }
-    if (myPolyLine->colourPoint != NULL) {
-      free(myPolyLine->colourPoint);
+    if (myPolyLine->colourFill != NULL) {
+      free(myPolyLine->colourFill);
     }
     free(myPolyLine->points);
     free(myPolyLine);

@@ -40,19 +40,19 @@ int insertPointsPolyLine(PolyLine polyLine, double x, double y);
 /*
    A função retorna o conjunto de pontos (vetor) que estão os pontos de polyLine
  */
-double *getPoints(PolyLine polyLine);
+double *getPointsPolyLine(PolyLine polyLine);
 
 
 /*
    O procedimento define um novo conjunto de pontos para polyLine.
  */
-void setPoints(PolyLine polyLine, double *points, int nPoints);
+void setPointsPolyLine(PolyLine polyLine, double *points, int nPoints);
 
 
 /*
    A função retorna a quantidade de pontos que podem ser inseridos em polyLine.
  */
-int getnPoints(PolyLine polyLine);
+int getnPointsPolyLine(PolyLine polyLine);
 
 
 /*
@@ -86,6 +86,18 @@ void setYPolyLine(PolyLine polyLine, int position, double y);
 
 
 /*
+   A função retorna o tamanho da espessura das linhas de polyLine.
+ */
+int getLineSizePolyLine(PolyLine polyLine);
+
+
+/*
+   O procedimento define um novo valor para a espessura da linha de polyLine.
+ */
+void setLineSizePolyLine(PolyLine polyLine, int lineSize);
+
+
+/*
    A função retorna o nome da cor das linhas de polyLine
  */
 char *getColourLinePolyLine(PolyLine polyLine);
@@ -98,15 +110,15 @@ void setColourLinePolyLine(PolyLine polyLine, char *colour);
 
 
 /*
-   A função retorna o nome da cor dos pontos de polyLine
+   A função retorna o nome da cor de preenchimento de polyLine
  */
-char *getColourPointPolyLine(PolyLine polyLine);
+char *getColourFillPolyLine(PolyLine polyLine);
 
 
 /*
-   O procedimento define uma nova cor para os pontos de polyLine.
+   O procedimento define uma nova cor para a cor de preenchimento de polyLine.
  */
-void setColourPointPolyLine(PolyLine polyLine, char *colour);
+void setColourFillPolyLine(PolyLine polyLine, char *colour);
 
 
 /*

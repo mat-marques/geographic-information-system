@@ -6,13 +6,14 @@
 
 typedef struct myEllipse{
   double cx, cy, rx, ry;
-  int id;
-  char *colour;
+  int id, lineSize;
+  char *colourFill, *colourLine;
 }newEllipse;
 
 
 Ellipse createEllipse(int id, double cx, double cy, double rx, double ry){
   newEllipse *ellipse = NULL;
+  char colour1[] = "red", colour2[] = "black";
   ellipse = (newEllipse*) malloc(sizeof(newEllipse));
   if(ellipse != NULL){
     ellipse->id = id;
@@ -20,7 +21,9 @@ Ellipse createEllipse(int id, double cx, double cy, double rx, double ry){
     ellipse->cy = cy;
     ellipse->rx = rx;
     ellipse->ry = ry;
-    ellipse->colour = NULL;
+    ellipse->colourFill = criarString(colour1);
+    ellipse->colourLine = criarString(colour2);
+    ellipse->lineSize = 2;
   }
   return ellipse;
 }
@@ -111,22 +114,39 @@ void setRYEllipse(Ellipse ellipse, double ry){
 }
 
 
-char *getColourEllipse(Ellipse ellipse){
+int getLineSizeEllipse(Ellipse ellipse){
   newEllipse *myEllipse = (newEllipse*) ellipse;
   if(ellipse != NULL){
-    return myEllipse->colour;
+    return myEllipse->lineSize;
+  }
+  return 0;
+}
+
+
+void setLineSizeEllipse(Ellipse ellipse, int lineSize){
+  newEllipse *myEllipse = (newEllipse*) ellipse;
+  if(ellipse != NULL){
+    myEllipse->lineSize = lineSize;
+  }
+}
+
+
+char *getColourFillEllipse(Ellipse ellipse){
+  newEllipse *myEllipse = (newEllipse*) ellipse;
+  if(ellipse != NULL){
+    return myEllipse->colourFill;
   }
   return NULL;
 }
 
 
-void setColourEllipse(Ellipse ellipse, char *colour){
+void setColourFillEllipse(Ellipse ellipse, char *colourFill){
   newEllipse *myEllipse = (newEllipse*) ellipse;
   if(ellipse != NULL){
-    if(myEllipse->colour != NULL){
-      free(myEllipse->colour);
+    if(myEllipse->colourFill!= NULL){
+      free(myEllipse->colourFill);
     }
-    myEllipse->colour = criarString(colour);
+    myEllipse->colourFill = criarString(colourFill);
   }
 }
 
@@ -141,11 +161,35 @@ int compareEllipses(Ellipse ellipse, void *id){
 }
 
 
+
+char *getColourLineFillEllipse(Ellipse ellipse){
+  newEllipse *myEllipse = (newEllipse*) ellipse;
+  if(ellipse != NULL){
+    return myEllipse->colourLine;
+  }
+  return NULL;
+}
+
+
+void setColourLineEllipse(Ellipse ellipse, char *colourLine){
+  newEllipse *myEllipse = (newEllipse*) ellipse;
+  if(ellipse != NULL){
+    if(myEllipse->colourLine!= NULL){
+      free(myEllipse->colourLine);
+    }
+    myEllipse->colourLine = criarString(colourLine);
+  }
+}
+
+
 void eraseEllipse(Ellipse ellipse){
   newEllipse *myEllipse = (newEllipse*) ellipse;
   if(ellipse != NULL){
-    if(myEllipse->colour != NULL){
-      free(myEllipse->colour);
+    if(myEllipse->colourFill != NULL){
+      free(myEllipse->colourFill);
+    }
+    if(myEllipse->colourLine != NULL){
+      free(myEllipse->colourLine);
     }
     free(myEllipse);
   }

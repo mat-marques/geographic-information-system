@@ -13,6 +13,7 @@ typedef struct myLine {
 
 Line createLine(int id, double x1, double y1, double x2, double y2) {
   newLine *myLine = NULL;
+  char colour1[] = "red";
   myLine = (newLine *)malloc(sizeof(newLine));
   if (myLine != NULL) {
     myLine->id = id;
@@ -20,8 +21,8 @@ Line createLine(int id, double x1, double y1, double x2, double y2) {
     myLine->y1 = y1;
     myLine->x2 = x2;
     myLine->y2 = y2;
-    myLine->colour = NULL;
-    myLine->sizeLine = 1;
+    myLine->colour = criarString(colour1);
+    myLine->sizeLine = 2;
   }
   return myLine;
 }
