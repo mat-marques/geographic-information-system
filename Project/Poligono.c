@@ -13,7 +13,7 @@ typedef struct myPolygon {
 
 Polygon createPolygon(int id, int nPoints) {
   newPolygon *myPolygon = NULL;
-  char colour1[] = "red", colour2[] = "black";
+  char colour1[] = "white", colour2[] = "black";
   int i;
   myPolygon = (newPolygon *)malloc(sizeof(newPolygon));
   if (myPolygon != NULL) {
@@ -26,7 +26,7 @@ Polygon createPolygon(int id, int nPoints) {
 
     myPolygon->nPoints = nPoints;
     myPolygon->qtdPoints = 0;
-    myPolygon->lineSize = 2;
+    myPolygon->lineSize = 1;
     myPolygon->colourLine = criarString(colour1);
     myPolygon->colourFill = criarString(colour2);
   }
@@ -144,7 +144,7 @@ void setLineSizePolygon(Polygon polygon, int lineSize) {
   }
 }
 
-char *getcolourFillPolygon(Polygon polygon) {
+char *getColourFillPolygon(Polygon polygon) {
   newPolygon *myPolygon = (newPolygon *)polygon;
   if (polygon != NULL) {
     return myPolygon->colourFill;
@@ -152,7 +152,7 @@ char *getcolourFillPolygon(Polygon polygon) {
   return NULL;
 }
 
-void setcolourFillPolygon(Polygon polygon, char *colourFill) {
+void setColourFillPolygon(Polygon polygon, char *colourFill) {
   newPolygon *myPolygon = (newPolygon *)polygon;
   if (polygon != NULL) {
     if (myPolygon->colourFill != NULL) {

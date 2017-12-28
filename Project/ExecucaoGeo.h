@@ -7,7 +7,7 @@
 
 #include "Canvas.h"
 #include "Cor.h"
-#include "HashTable.h"
+#include "Cidade.h"
 
 /**
    Autor:Matheus Augusto Marques.

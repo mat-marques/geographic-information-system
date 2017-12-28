@@ -146,15 +146,6 @@ void setYPolyLine(PolyLine polyLine, int position, double y) {
 }
 
 
-char *getColourLinePolyLine(PolyLine polyLine) {
-  newPolyLine *myPolyLine = (newPolyLine *)polyLine;
-  if (polyLine != NULL) {
-    return myPolyLine->colourLine;
-  }
-  return NULL;
-}
-
-
 int getLineSizePolyLine(PolyLine polyLine) {
   newPolyLine *myPolyLine = (newPolyLine *)polyLine;
   if (polyLine != NULL) {
@@ -172,6 +163,15 @@ void setLineSizePolyLine(PolyLine polyLine, int lineSize) {
 }
 
 
+char *getColourLinePolyLine(PolyLine polyLine) {
+  newPolyLine *myPolyLine = (newPolyLine *)polyLine;
+  if (polyLine != NULL) {
+    return myPolyLine->colourLine;
+  }
+  return NULL;
+}
+
+
 void setColourLinePolyLine(PolyLine polyLine, char *colour) {
   newPolyLine *myPolyLine = (newPolyLine *)polyLine;
   if (polyLine != NULL) {
@@ -183,7 +183,7 @@ void setColourLinePolyLine(PolyLine polyLine, char *colour) {
 }
 
 
-char *getcolourFillPolyLine(PolyLine polyLine) {
+char *getColourFillPolyLine(PolyLine polyLine) {
   newPolyLine *myPolyLine = (newPolyLine *)polyLine;
   if (polyLine != NULL) {
     return myPolyLine->colourFill;
@@ -192,7 +192,7 @@ char *getcolourFillPolyLine(PolyLine polyLine) {
 }
 
 
-void setcolourFillPolyLine(PolyLine polyLine, char *colour) {
+void setColourFillPolyLine(PolyLine polyLine, char *colour) {
   newPolyLine *myPolyLine = (newPolyLine *)polyLine;
   if (polyLine != NULL) {
     if (myPolyLine->colourFill != NULL) {

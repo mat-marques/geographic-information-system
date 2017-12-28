@@ -67,7 +67,7 @@ Canvas criaCanvas(int id) {
   canvas->listPolygons = createL();
   canvas->listPolyLines = createL();
   canvas->listTexts = createL();
-  canvas->listPolyLines = createL();
+  canvas->listEllipses = createL();
   canvas->width = 100;
   canvas->height = 100;
   canvas->id = id;
@@ -339,7 +339,7 @@ void showListLines(Canvas canvas, FILE *file) {
   for (i = 1; i <= j; i++) {
     item = getItemL(canvasP->listLines, i);
     if (item != NULL) {
-      tagLinha2(file, getIdLine(item), getX1Line(item), getY1Line(item),
+      tagLinha2(file, getIdLine(item) + i, getX1Line(item), getY1Line(item),
                 getX2Line(item), getY2Line(item), getColourLine(item),
                 getSizeLine(item));
     }
@@ -355,7 +355,7 @@ void showListTexts(Canvas canvas, FILE *file) {
   for (i = 1; i <= j; i++) {
     item = getItemL(canvasP->listTexts, i);
     if (item != NULL) {
-      tagTexto3(file, getIdText(item), getText(item), getColourText(item),
+      tagTexto3(file, getIdText(item) + i, getText(item), getColourText(item),
                 getFontSizeText(item), getFontFamilyText(item), getXText(item),
                 getYText(item));
     }
@@ -371,7 +371,7 @@ void showListPolygons(Canvas canvas, FILE *file) {
   for (i = 1; i <= j; i++) {
     item = getItemL(canvasP->listPolygons, i);
     if (item != NULL) {
-      tagPoligono(file, getIdPolygon(item), getPointsPolygon(item),
+      tagPoligono(file, getIdPolygon(item) + i, getPointsPolygon(item),
                   getqtdPointsPolygon(item) * 2, getColourLinePolygon(item),
                   getColourFillPolygon(item), getLineSizePolygon(item));
     }
@@ -388,7 +388,7 @@ void showListPolyLines(Canvas canvas, FILE *file) {
     item = getItemL(canvasP->listPolyLines, i);
     if (item != NULL) {
       tagMultiplasLinhas(
-          file, getIdPolyLine(item), getPointsPolyLine(item),
+          file, getIdPolyLine(item) + i, getPointsPolyLine(item),
           getqtdPointsPolyLine(item) * 2, getColourLinePolyLine(item),
           getColourFillPolyLine(item), getLineSizePolyLine(item));
     }
@@ -404,7 +404,7 @@ void showListEllipses(Canvas canvas, FILE *file) {
   for (i = 1; i <= j; i++) {
     item = getItemL(canvasP->listEllipses, i);
     if (item != NULL) {
-      tagEllipse(file, getIdEllipse(item), getCXEllipse(item),
+      tagEllipse(file, getIdEllipse(item) + i, getCXEllipse(item),
                  getCYEllipse(item), getRXEllipse(item), getRYEllipse(item),
                  getColourLineFillEllipse(item), getColourFillEllipse(item),
                  getLineSizeEllipse(item));
@@ -762,26 +762,31 @@ void eraseListaR2(Canvas canvas) {
 void eraseListLines(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   eraseListL(canvasP->listLines, eraseLine);
+  eraseBase(canvasP->listLines);
 }
 
 void eraseListEllipses(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   eraseListL(canvasP->listEllipses, eraseEllipse);
+  eraseBase(canvasP->listEllipses);
 }
 
 void eraseListPolygons(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   eraseListL(canvasP->listPolygons, erasePolygon);
+  eraseBase(canvasP->listPolygons);
 }
 
 void eraseListPolyLines(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   eraseListL(canvasP->listPolyLines, erasePolyLine);
+  eraseBase(canvasP->listPolyLines);
 }
 
 void eraseListTexts(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   eraseListL(canvasP->listTexts, eraseText);
+  eraseBase(canvasP->listTexts);
 }
 
 void eraseCanvas(Canvas canvas) {

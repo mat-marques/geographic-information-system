@@ -81,7 +81,7 @@ void setOperadora(Torre element, char *operadora){
     free(newElement->operadora);
     newElement->operadora = NULL;
   }
-  newElement->operadora = operadora;
+  newElement->operadora = criarString(operadora);
 }
 
 void removeT(Torre element){
@@ -90,6 +90,9 @@ void removeT(Torre element){
     free(newElement->id);
     free(newElement->corP);
     free(newElement->corB);
+    if(newElement->operadora != NULL){
+      free(newElement->operadora);
+    }
     free(newElement);
   }
 }

@@ -2,17 +2,10 @@
 #include "OpEntrada.h"
 #include "OperacoesF.h"
 
-#include "Circulo.h"
-#include "Retangulo.h"
-#include "Torre.h"
-#include "Semafaro.h"
-#include "Hidrante.h"
-#include "Quadra.h"
 #include "Cidade.h"
 #include "Arquivo.h"
 #include "Cor.h"
 #include "Svg.h"
-#include "List.h"
 #include "StringO.h"
 #include "ConvexHull.h"
 

@@ -7,38 +7,26 @@ objects = Arquivo.o Cidade.o Canvas.o Celular.o Circulo.o \
 					ExecucaoQry.o ExecucaoQry2.o HashTable.o Hidrante.o \
 					List.o main.o Morador.o OpEntrada.o OperacoesF.o \
 					Ordination.o Pessoa.o Processamento.o Quadra.o QuadTree.o \
-					Retangulo.o Semafaro.o Stack.o StringO.o Svg.o Torre.o
+					Retangulo.o Semafaro.o Stack.o StringO.o Svg.o Torre.o \
+					Texto.o Poligono.o Linha.o MultiplasLinhas.o Elipse.o
 
 
 dependenciasP = Processamento.h Processamento.c Arquivo.h Arquivo.c \
                 StringO.h StringO.c Svg.h Svg.c \
-                OpEntrada.h OpEntrada.c List.h List.c \
-                Circulo.h Circulo.c Retangulo.h Retangulo.c \
-                OperacoesF.h OperacoesF.c Quadra.h Quadra.c \
-                Semafaro.h Semafaro.c Torre.h Torre.c \
-                Hidrante.h Hidrante.c Cidade.h Cidade.c \
-                Canvas.h Canvas.c ExecucaoGeo.h ExecucaoGeo.c \
-				ExecucaoQry.h ExecucaoQry.c QuadTree.h QuadTree.c Cor.h Cor.c \
-				Dicionario.h Dicionario.c ExecucaoEcPmTm.h ExecucaoEcPmTm.c \
-				ExecucaoQry2.h ExecucaoQry2.c HashTable.h HashTable.c
+                OpEntrada.h OpEntrada.c OperacoesF.h OperacoesF.c \
+				Cidade.h Cidade.c Canvas.h Canvas.c ExecucaoGeo.h ExecucaoGeo.c \
+				ExecucaoQry.h ExecucaoQry.c Cor.h Cor.c ExecucaoEcPmTm.h \
+				ExecucaoEcPmTm.c ExecucaoQry2.h ExecucaoQry2.c
 
 dependenciasEg = Arquivo.h Arquivo.c StringO.h StringO.c Svg.h Svg.c \
-                 OpEntrada.h OpEntrada.c Circulo.h Circulo.c \
-				 List.h List.c Cor.h Cor.c Stack.h Stack.c \
-                 Retangulo.h Retangulo.c OperacoesF.h OperacoesF.c \
-                 Quadra.h Quadra.c Semafaro.h Semafaro.c Torre.h Torre.c \
-                 Hidrante.h Hidrante.c Cidade.h Cidade.c Canvas.h Canvas.c \
-                 ExecucaoGeo.h ExecucaoGeo.c ConvexHull.h ConvexHull.c \
-				 QuadTree.h QuadTree.c HashTable.h HashTable.c
+                 OpEntrada.h OpEntrada.c Cor.h Cor.c Stack.h Stack.c \
+                 OperacoesF.h OperacoesF.c Cidade.h Cidade.c Canvas.h Canvas.c \
+                 ExecucaoGeo.h ExecucaoGeo.c ConvexHull.h ConvexHull.c
 
 dependenciasEq = Arquivo.h Arquivo.c StringO.h StringO.c \
                  Svg.h Svg.c OpEntrada.h OpEntrada.c \
-				 List.h List.c QuadTree.h QuadTree.c \
-                 Circulo.h Circulo.c Retangulo.h Retangulo.c \
-                 OperacoesF.h OperacoesF.c Quadra.h Quadra.c \
-                 Semafaro.h Semafaro.c Torre.h Torre.c \
-				 Hidrante.h Hidrante.c Cor.h Cor.c \
-                 Cidade.h Cidade.c Canvas.h Canvas.c \
+                 OperacoesF.h OperacoesF.c Cor.h Cor.c \
+				 Cidade.h Cidade.c Canvas.h Canvas.c \
 				 ExecucaoQry.h ExecucaoQry.c ConvexHull.h ConvexHull.c
 
 
@@ -46,7 +34,9 @@ dependenciasCa = Canvas.h Canvas.c Circulo.h Circulo.c \
 			     Retangulo.h Retangulo.c List.h \
  			     List.c Cidade.h Cidade.c \
  			     ConvexHull.h ConvexHull.c OperacoesF.h OperacoesF.c \
- 			     QuadTree.h QuadTree.c
+ 			     QuadTree.h QuadTree.c Texto.h Texto.c Linha.h Linha.c \
+				 Poligono.h Poligono.c Elipse.h Elipse.c \
+				 MultiplasLinhas.h MultiplasLinhas.c
 
 dependenciasCi = Cidade.h Cidade.c Quadra.h Quadra.c\
 				 List.h List.c Pessoa.h Pessoa.c\
@@ -66,26 +56,38 @@ dependenciasCh = ConvexHull.h ConvexHull.c Quadra.h Quadra.c \
  				 Svg.h Svg.c OperacoesF.h OperacoesF.c
 
 dependenciasEcPmTm = ExecucaoEcPmTm.h ExecucaoEcPmTm.c StringO.h StringO.c \
-					 Cidade.h Cidade.c Pessoa.h Pessoa.c Endereco.h Endereco.c \
-					 EstabelecimentoComercial.h EstabelecimentoComercial.c \
-					 HashTable.h HashTable.c Morador.h Morador.c \
-					 Dicionario.h Dicionario.c Celular.h Celular.c \
+					 Endereco.h Endereco.c Celular.h Celular.c \
 					 Canvas.h Canvas.c
 
 dependenciasEq2 = ExecucaoQry2.h ExecucaoQry2.c Canvas.h Canvas.c \
-				  OperacoesF.h OperacoesF.c Cidade.h Cidade.c \
-				  Endereco.h Endereco.c Pessoa.h Pessoa.c \
-				  EstabelecimentoComercial.h EstabelecimentoComercial.c \
-				  Hidrante.h Hidrante.c List.h List.c Morador.h Morador.c \
-				  Quadra.h Quadra.c Retangulo.h Retangulo.c \
-				  Semafaro.h Semafaro.c StringO.h StringO.c \
-				  Torre.h Torre.c HashTable.h HashTable.c
+				  OperacoesF.h OperacoesF.c Endereco.h Endereco.c \
+				  List.h List.c StringO.h StringO.c
 
 
 CFLAGS  = -g -ansi -pedantic
 
 siguel:	$(objects)
 	gcc -o siguel $(CFLAGS) $(objects) -lm
+
+
+Elipse.o: Elipse.h Elipse.c StringO.h StringO.c
+	gcc -c $(CFLAGS) Elipse.c -o Elipse.o
+
+
+Linha.o: Linha.h Linha.c StringO.h StringO.c
+	gcc -c $(CFLAGS) Linha.c -o Linha.o
+
+
+Poligono.o: Poligono.h Poligono.c StringO.h StringO.c
+	gcc -c $(CFLAGS) Poligono.c -o Poligono.o
+
+
+MultiplasLinhas.o: MultiplasLinhas.h MultiplasLinhas.c StringO.h StringO.c
+	gcc -c $(CFLAGS) MultiplasLinhas.c -o MultiplasLinhas.o
+
+
+Texto.o: Texto.h Texto.c StringO.h StringO.c
+	gcc -c $(CFLAGS) Texto.c -o Texto.o
 
 
 HashTable.o: HashTable.h HashTable.c List.h List.c

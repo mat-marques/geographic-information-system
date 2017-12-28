@@ -329,7 +329,8 @@ void tagMultiplasLinhas(FILE *arqSvg, int id, double *pontos, int n, char *corL,
   fprintf(arqSvg, "fill:%s;", corF);
   fprintf(arqSvg, "stroke:%s;", corL);
   fprintf(arqSvg, "stroke-width:%d;", lineSize);
-
+  fprintf(arqSvg, "\"\n");
+  
   fprintf(arqSvg, "%s\n", "/>");
 
 }
@@ -352,6 +353,7 @@ void tagPoligono(FILE *arqSvg, int id, double *pontos, int n, char *corL, char *
   fprintf(arqSvg, "fill:%s;", corF);
   fprintf(arqSvg, "stroke:%s;", corL);
   fprintf(arqSvg, "stroke-width:%d;", lineSize);
+  fprintf(arqSvg, "\"\n");
 
   fprintf(arqSvg, "%s\n", "/>");
 

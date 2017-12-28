@@ -3,17 +3,8 @@
 #include "OperacoesF.h"
 
 #include "Arquivo.h"
-#include "Cidade.h"
-#include "Circulo.h"
-#include "Hidrante.h"
-#include "Quadra.h"
-#include "Retangulo.h"
-#include "Semafaro.h"
-#include "Torre.h"
 
 #include "ConvexHull.h"
-#include "List.h"
-#include "QuadTree.h"
 #include "Stack.h"
 #include "StringO.h"
 #include "Svg.h"

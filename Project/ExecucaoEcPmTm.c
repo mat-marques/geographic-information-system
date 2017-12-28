@@ -3,13 +3,7 @@
 #include <string.h>
 #include "ExecucaoEcPmTm.h"
 #include "StringO.h"
-#include "Cidade.h"
-#include "Pessoa.h"
-#include "EstabelecimentoComercial.h"
 #include "Endereco.h"
-#include "HashTable.h"
-#include "Morador.h"
-#include "Dicionario.h"
 #include "Celular.h"
 
 HashTable hash;

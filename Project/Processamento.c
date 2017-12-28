@@ -1,27 +1,19 @@
+#include "Processamento.h"
+
 #include "OpEntrada.h"
 #include "OperacoesF.h"
 
 #include "Arquivo.h"
 #include "Cidade.h"
-#include "Circulo.h"
 #include "Cor.h"
-#include "Hidrante.h"
-#include "Quadra.h"
-#include "Retangulo.h"
-#include "Semafaro.h"
+
 #include "StringO.h"
 #include "Svg.h"
-#include "Torre.h"
 
-#include "Dicionario.h"
 #include "ExecucaoEcPmTm.h"
 #include "ExecucaoGeo.h"
 #include "ExecucaoQry.h"
 #include "ExecucaoQry2.h"
-#include "HashTable.h"
-#include "List.h"
-#include "Processamento.h"
-#include "QuadTree.h"
 
 void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry,
                    FILE **arqEntradaEc, FILE **arqEntradaPm,
@@ -406,7 +398,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
         executarQryDm(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "de?") == 0) {
         executarQryDe(arqEntradaQry, &arqSaidaT, canvas);
-      } /*else if (strcmp(entradaA, "con") == 0) {
+      } else if (strcmp(entradaA, "con") == 0) {
         executarQryCon(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "mse?") == 0) {
         executarQryMse(arqEntradaQry, &arqSaidaT, canvas);
@@ -418,7 +410,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
         executarQryRb(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "co?") == 0) {
         executarQryCo(arqEntradaQry, &arqSaidaT, canvas);
-      } else if (strcmp(entradaA, "lnr?") == 0) {
+      } /*else if (strcmp(entradaA, "lnr?") == 0) {
         executarQryLnr(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "ecq?") == 0) {
         executarQryEcq(arqEntradaQry, &arqSaidaT, canvas);
@@ -544,17 +536,15 @@ void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas) {
   /* Torre */
   showCanvasElements(canvas, arqSaidaSvg, 4);
 
-  showListaItemRow(canvas, arqSaidaSvg);
-
-  showListaItemText(canvas, arqSaidaSvg);
-
   showMoradores(getCidade(canvas), arqSaidaSvg);
 
   showEstabelecimentos(getCidade(canvas), arqSaidaSvg);
 
-  showListaItemRow(canvas, arqSaidaSvg);
+  showListPolygons(canvas, arqSaidaSvg);
 
-  showListaItemText(canvas, arqSaidaSvg);
+  showListTexts(canvas, arqSaidaSvg);
+
+  showListLines(canvas, arqSaidaSvg);
 
   tagFechamento(arqSaidaSvg);
 }
