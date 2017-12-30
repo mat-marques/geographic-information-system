@@ -149,7 +149,7 @@ long int removeHidrante(Cidade cidade, char *id) {
   Hidrante hidrante;
   long int qtd;
   hidrante = removeQuadTreeItemI(city->listaH, id, compareH, &qtd);
-  removeQ(hidrante);
+  removeH(hidrante);
   return qtd;
 }
 
@@ -230,6 +230,21 @@ QuadTree getListaT(Cidade cidade) {
 QuadTree getListaH(Cidade cidade) {
   City *city = (City *)cidade;
   return city->listaH;
+}
+
+List getListaMoradores(Cidade cidade){
+  City *city = (City *)cidade;
+  return city->listaMoradores;
+}
+
+List getListaPessoas(Cidade cidade){
+  City *city = (City *)cidade;
+  return city->listaPessoas;
+}
+
+List getListaEstabelecimentos(Cidade cidade){
+  City *city = (City *)cidade;
+  return city->listaEstabComerciais;
 }
 
 void showQ(Quadra quadra) {

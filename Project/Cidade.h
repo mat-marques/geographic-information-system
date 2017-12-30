@@ -208,6 +208,24 @@ QuadTree getListaH(Cidade cidade);
 
 
 /*
+   Retorna um lista contendo todos os Moradores de uma cidade.
+   Retorna uma lista vazia caso não exista moradores na cidade.
+ */
+List getListaMoradores(Cidade cidade);
+
+/*
+   Retorna um lista contendo todos as pessoas de uma cidade.
+   Retorna uma lista vazia caso não exista pessoas na cidade.
+ */
+List getListaPessoas(Cidade cidade);
+
+/*
+   Retorna um lista contendo todos os Estabelecimentos Comerciais de uma cidade.
+   Retorna uma lista vazia caso não exista Estabelecimentos Comerciais na cidade.
+ */
+List getListaEstabelecimentos(Cidade cidade);
+
+/*
    Retorna uma quadra presente em uma cidade com o título de identificação definido pela string cep.
    Retorna null caso a quadra não exista.
  */

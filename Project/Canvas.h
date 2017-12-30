@@ -115,37 +115,64 @@ long int removeCirculo(Canvas canvas, int id);
 
 
 
-
+/*
+   Insere no canvas uma linha.
+ */
 void insertLineCanvas(Canvas canvas, Line line);
 
 
+/*
+   Remove do canvas uma linha com o número de identificação id.
+ */
 void removeLineCanvas(Canvas canvas, int id);
 
 
+/*
+   Insere no canvas um texto.
+ */
 void insertTextCanvas(Canvas canvas, Text text);
 
 
+/*
+   Remove do canvas um texto com o número de identificação id.
+ */
 void removeTextCanvas(Canvas canvas, int id);
 
 
+/*
+   Insere no canvas um polígono.
+ */
 void insertPolygonCanvas(Canvas canvas, Polygon polygon);
 
 
+/*
+   Remove do canvas um polígono com o número de identificação id.
+ */
 void removePolygonCanvas(Canvas canvas, int id);
 
 
+/*
+   Insere no canvas uma elipse.
+ */
 void insertEllipseCanvas(Canvas canvas, Ellipse ellipse);
 
 
+/*
+   Remove do canvas uma elipse com o número de identificação id.
+ */
 void removeEllipseCanvas(Canvas canvas, int id);
 
 
+/*
+   Insere no canvas a estrutura multiplas linhas.
+ */
 void insertPolyLinesCanvas(Canvas canvas, PolyLine polyLine);
 
 
+/*
+   Remove do canvas a estrutura multiplas linhas com o número de identificação id.
+ */
 void removePolyLinesCanvas(Canvas canvas, int id);
-
-
 
 
 /*
@@ -215,6 +242,8 @@ void showListEllipses(Canvas canvas, FILE *file);
    4 : Torre;
    5 : Retângulo;
    6 : Círculo;
+   7 :  Moradores
+   8 : Estabelecimentos Comerciais
  */
 List getElementsListInsideR(Canvas canvas, int type, double x, double y, double w, double h);
 
@@ -230,8 +259,47 @@ List getElementsListInsideR(Canvas canvas, int type, double x, double y, double 
    4 : Torre;
    5 : Retângulo;
    6 : Círculo;
+   7 :  Moradores
+   8 : Estabelecimentos Comerciais
  */
 List getElementsListInsideC(Canvas canvas, int type, double x, double y, double r);
+
+/*
+  A função retorna uma lista de elementos do tipo especificado por type. Essa lista abriga um conjunto de elementos que estão inteira e parcialmente dentro de uma região retangular. A região retangular é especificada por
+  w : comprimento,
+  h : altura,
+  x : coordenada no espaço 2d,
+  y : coordenada no espaço 2d.
+  O argumento type pode receber os inteiros:
+  1 : Quadra;
+  2 : Hidrante;
+  3 : Semáfaro.
+  4 : Torre;
+  5 : Retângulo;
+  6 : Círculo;
+  7 : Moradores;
+  8 : Estabelecimentos Comerciais;
+*/
+List getElementsListPartialInsideR(Canvas canvas, int type, double x, double y,
+                                   double w, double h);
+
+/*
+  A função retorna uma lista de elementos do tipo especificado por type. Essa lista abriga um conjunto de elementos que estão inteira e parcialmente dentro de uma região circular. A região círcular é especificada por
+  r : raio,
+  x : coordenada no espaço 2d,
+  y : coordenada no espaço 2d.
+  O argumento type pode receber os inteiros:
+  1 : Quadra;
+  2 : Hidrante;
+  3 : Semáfaro.
+  4 : Torre;
+  5 : Retângulo;
+  6 : Círculo;
+  7 : Moradores;
+  8 : Estabelecimentos Comerciais;
+*/
+List getElementsListPartialInsideC(Canvas canvas, int type, double x, double y,
+                                   double r);
 
 
 /*

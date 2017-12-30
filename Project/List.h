@@ -137,11 +137,6 @@ void showL(List list, showLI func);
  */
 Item searchItemL(List list, Item item, compareToL func);
 
-/*
-   A função remove um nó de list. A função de comparação de Itens deve ser implementada pelo usuário. Retorna NULL caso o Item não exista em list e retorna o Item caso contrário.
-   func != NULL.
- */
-Item removeItemL2(List list, Item item, compareToL func);
 
 /*
    A função remove um nó de list na primeira posição. A função de remoção (func) deve ser implementada pelo usuário. func = NULL caso não se queira eliminar o Item no nó removido.
@@ -161,6 +156,13 @@ int removeEndL(List list, eraseItemL func);
  */
 int removeMiddleL(List list, int p, eraseItemL func);
 
+
+
+/*
+   A função remove um nó de list. A função de comparação de Itens deve ser implementada pelo usuário. Retorna NULL caso o Item não exista em list e retorna o Item caso contrário.
+   func != NULL.
+ */
+Item removeItemL2(List list, Item item, compareToL func);
 
 /*
    A função retorna um Item contido em list. Esse Item está , precisamente, no inicio de list.

@@ -453,6 +453,8 @@ QuadTree getListaC(Canvas canvas) {
   return canvasP->listaC;
 }
 
+
+/*********************************************************/
 int compareRR(Retangulo retangulo, Region region) {
   /* A função verifica se um retângulo esta dentro de um região retangular.
     Case o retângulo esteja dentro da região retangular retorna 1, caso não
@@ -649,6 +651,173 @@ int compareCS(Semafaro semafaro, Region region) {
   return 0;
 }
 
+
+List getMoradoresInsideR(Cidade cidade, Region region) {
+  double x = 0, y = 0;
+  int i, j;
+  char *cep;
+  Item item;
+  Endereco endereco;
+  Quadra quadra;
+  Reg *newReg = (Reg *)region;
+  List newList = createL();
+
+  List list = getListaMoradores(cidade);
+  j = lengthL(list);
+
+  for (i = 1; i <= j; i++) {
+    item = getItemL(list, i);
+
+    if (item != NULL) {
+
+      endereco = getEndereco(item);
+      cep = getCep(endereco);
+
+      if (cep != NULL) {
+        quadra = getQuadra(cidade, cep);
+
+        if (quadra != NULL) {
+          calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x,
+                             &y);
+
+          if (pontoInternoR(newReg->w, newReg->h, newReg->x,
+                            newReg->y, x, y) == 't') {
+            insertEndL(newList, item);
+          }
+        }
+
+      }
+
+    }
+  }
+  return newList;
+}
+
+List getMoradoresInsideC(Cidade cidade, Region region) {
+  double x = 0, y = 0;
+  int i, j;
+  char *cep;
+  Item item;
+  Endereco endereco;
+  Quadra quadra;
+  Reg *newReg = (Reg *)region;
+  List newList = createL();
+
+  List list = getListaMoradores(cidade);
+  j = lengthL(list);
+
+  for (i = 1; i <= j; i++) {
+    item = getItemL(list, i);
+
+    if (item != NULL) {
+
+      endereco = getEndereco(item);
+      cep = getCep(endereco);
+
+      if (cep != NULL) {
+        quadra = getQuadra(cidade, cep);
+
+        if (quadra != NULL) {
+          calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x,
+                             &y);
+
+          if (pontoInternoC(newReg->w, newReg->x,
+                            newReg->y, x, y) == 't') {
+            insertEndL(newList, item);
+          }
+        }
+
+      }
+
+    }
+  }
+  return newList;
+}
+
+
+List getEstabeCInsideR(Cidade cidade, Region region) {
+  double x = 0, y = 0;
+  int i, j;
+  char *cep;
+  Item item;
+  Endereco endereco;
+  Quadra quadra;
+  Reg *newReg = (Reg *)region;
+  List newList = createL();
+
+  List list = getListaEstabelecimentos(cidade);
+  j = lengthL(list);
+
+  for (i = 1; i <= j; i++) {
+    item = getItemL(list, i);
+
+    if (item != NULL) {
+
+      endereco = getEndereco(item);
+      cep = getCep(endereco);
+
+      if (cep != NULL) {
+        quadra = getQuadra(cidade, cep);
+
+        if (quadra != NULL) {
+          calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x,
+                             &y);
+
+          if (pontoInternoR(newReg->w, newReg->h, newReg->x,
+                            newReg->y, x, y) == 't') {
+            insertEndL(newList, item);
+          }
+        }
+
+      }
+
+    }
+  }
+  return newList;
+}
+
+List getEstabeCInsideC(Cidade cidade, Region region) {
+  double x = 0, y = 0;
+  int i, j;
+  char *cep;
+  Item item;
+  Endereco endereco;
+  Quadra quadra;
+  Reg *newReg = (Reg *)region;
+  List newList = createL();
+
+  List list = getListaEstabelecimentos(cidade);
+  j = lengthL(list);
+
+  for (i = 1; i <= j; i++) {
+    item = getItemL(list, i);
+
+    if (item != NULL) {
+
+      endereco = getEndereco(item);
+      cep = getCep(endereco);
+
+      if (cep != NULL) {
+        quadra = getQuadra(cidade, cep);
+
+        if (quadra != NULL) {
+          calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x,
+                             &y);
+
+          if (pontoInternoC(newReg->w, newReg->x,
+                            newReg->y, x, y) == 't') {
+            insertEndL(newList, item);
+          }
+        }
+
+      }
+
+    }
+  }
+  return newList;
+}
+
+
 List getElementsListInsideR(Canvas canvas, int type, double x, double y,
                             double w, double h) {
   CanvasP *canvasP = (CanvasP *)canvas;
@@ -682,6 +851,12 @@ List getElementsListInsideR(Canvas canvas, int type, double x, double y,
     break;
   case 6: /* Círculo */
     list = getElementsByRegion(canvasP->listaC, newReg, compareRC);
+    break;
+  case 7: /* Moradores */
+    list = getMoradoresInsideR(canvasP->cidade, newReg);
+    break;
+  case 8: /* Estabelecimentos Comerciais */
+    list = getEstabeCInsideR(canvasP->cidade, newReg);
     break;
   default:
     printf("COMANDO INVÁLIDO.\n");
@@ -724,12 +899,224 @@ List getElementsListInsideC(Canvas canvas, int type, double x, double y,
   case 6: /* Círculo */
     list = getElementsByRegion(canvasP->listaC, newReg, compareCC);
     break;
+  case 7: /* Moradores */
+    list = getMoradoresInsideC(canvasP->cidade, newReg);
+    break;
+  case 8: /* Estabelecimentos Comerciais */
+    list = getEstabeCInsideC(canvasP->cidade, newReg);
+    break;
   default:
     printf("COMANDO INVÁLIDO.\n");
   }
   free(newReg);
   return list;
 }
+
+/*********************************************************/
+/*********************************************************/
+
+int compareRR2(Retangulo retangulo, Region region) {
+  /* A função verifica se um retângulo esta inteira ou parcialmente dentro de uma região retangular.
+    Case o retângulo esteja dentro da região retangular retorna 1, caso não
+    retorna 0.
+  */
+  Reg *newReg = (Reg *)region;
+
+  double x, y, w, h;
+  w = getRw(retangulo);
+  h = getRh(retangulo);
+  x = getRx(retangulo);
+  y = getRy(retangulo);
+  if (verificarSobreposicaoRR(newReg->w, newReg->h, newReg->x,
+                                        newReg->y, w, h, x, y) == 't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareRC2(Circulo circulo, Region region) {
+  /* A função verifica se um círculo esta inteira ou parcialmente dentro de uma região retangular.
+    Case o círculo esteja dentro da região retangular retorna 1, caso não
+    retorna 0.
+  */
+  Reg *newReg = (Reg *)region;
+  double x, y, r;
+  r = getCr(circulo);
+  x = getCx(circulo);
+  y = getCy(circulo);
+  if (verificarSobreposicaoRC(newReg->w, newReg->h, newReg->x,
+                                        newReg->y, r, x, y) == 't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareRQ2(Quadra quadra, Region region) {
+  /* A função verifica se uma quadra esta inteira ou parcialmente dentro de uma região retangular.
+    Caso o quadra esteja dentro da região retangular retorna 1, caso não retorna
+    0.
+  */
+  double x, y, w, h;
+  Reg *newReg = (Reg *)region;
+  w = getLargQ(quadra);
+  h = getAltQ(quadra);
+  x = getXQ(quadra);
+  y = getYQ(quadra);
+  if (verificarSobreposicaoRR(newReg->w, newReg->h, newReg->x,
+                                        newReg->y, w, h, x, y) == 't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareCR2(Retangulo retangulo, Region region) {
+  /* A função verifica se uma retângulo esta inteira ou parcialmente dentro de uma região circular.
+    Caso o retângulo esteja dentro da região circular retorna 1, caso não
+    retorna 0.
+  */
+  Reg *newReg = (Reg *)region;
+  double x, y, w, h;
+  w = getRw(retangulo);
+  h = getRh(retangulo);
+  x = getRx(retangulo);
+  y = getRy(retangulo);
+  if (verificarSobreposicaoRC(w, h, x, y, newReg->w, newReg->x,
+                                        newReg->y) == 't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareCC2(Circulo circulo, Region region) {
+  /* A função verifica se um círculo esta inteira ou parcialmente dentro de uma regiãoo circular.
+    Caso o circulo esteja dentro da região circular retorna 1, caso não retorna
+    0.
+  */
+  Reg *newReg = (Reg *)region;
+  double x, y, r;
+  r = getCr(circulo);
+  x = getCx(circulo);
+  y = getCy(circulo);
+  if (verificarSobreposicaoCC(newReg->w, newReg->x,
+                                        newReg->y, r, x, y) == 't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareCQ2(Quadra quadra, Region region) {
+  /* A função verifica se uma quadra esta inteira ou parcialmente dentro de uma região circular.
+    Caso a quadra esteja dentro da região circular retorna 1, caso não retorna
+    0.
+  */
+  double x, y, w, h;
+  Reg *newReg = (Reg *)region;
+  w = getLargQ(quadra);
+  h = getAltQ(quadra);
+  x = getXQ(quadra);
+  y = getYQ(quadra);
+  if (verificarSobreposicaoRC(w, h, x, y, newReg->w, newReg->x,
+                                        newReg->y) == 't') {
+    return 1;
+  }
+  return 0;
+}
+
+List getElementsListPartialInsideR(Canvas canvas, int type, double x, double y,
+                            double w, double h) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  Reg *newReg;
+  List list = NULL;
+  Cidade cidade = NULL;
+  newReg = (Reg *)malloc(sizeof(Reg));
+  newReg->w = w;
+  newReg->h = h;
+  newReg->x = x;
+  newReg->y = y;
+  switch (type) {
+  case 1: /* Quadra */
+    cidade = getCidade(canvas);
+    list = getElementsByRegion(getListaQ(cidade), newReg, compareRQ2);
+    break;
+  case 2: /* Hidrante */
+    cidade = getCidade(canvas);
+    list = getElementsByRegion(getListaH(cidade), newReg, compareRH);
+    break;
+  case 3: /* Semafáro */
+    cidade = getCidade(canvas);
+    list = getElementsByRegion(getListaS(cidade), newReg, compareRS);
+    break;
+  case 4: /* Torre */
+    cidade = getCidade(canvas);
+    list = getElementsByRegion(getListaT(cidade), newReg, compareRT);
+    break;
+  case 5: /* Retângulo */
+    list = getElementsByRegion(canvasP->listaR, newReg, compareRR2);
+    break;
+  case 6: /* Círculo */
+    list = getElementsByRegion(canvasP->listaC, newReg, compareRC2);
+    break;
+  case 7: /* Moradores */
+    list = getMoradoresInsideR(canvasP->cidade, newReg);
+    break;
+  case 8: /* Estabelecimentos Comerciais */
+    list = getEstabeCInsideR(canvasP->cidade, newReg);
+    break;
+  default:
+    printf("COMANDO INVÁLIDO.\n");
+  }
+  free(newReg);
+  return list;
+}
+
+List getElementsListPartialInsideC(Canvas canvas, int type, double x, double y,
+                            double r) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  Reg *newReg;
+  List list = NULL;
+  Cidade cidade = NULL;
+  newReg = (Reg *)malloc(sizeof(Reg));
+  newReg->w = r;
+  newReg->h = 0;
+  newReg->x = x;
+  newReg->y = y;
+  switch (type) {
+  case 1: /* Quadra */
+    cidade = getCidade(canvas);
+    list = getElementsByRegion(getListaQ(cidade), newReg, compareCQ2);
+    break;
+  case 2: /* Hidrante */
+    cidade = getCidade(canvas);
+    list = getElementsByRegion(getListaH(cidade), newReg, compareCH);
+    break;
+  case 3: /* Semafáro */
+    cidade = getCidade(canvas);
+    list = getElementsByRegion(getListaS(cidade), newReg, compareCS);
+    break;
+  case 4: /* Torre */
+    cidade = getCidade(canvas);
+    list = getElementsByRegion(getListaT(cidade), newReg, compareCT);
+    break;
+  case 5: /* Retângulo */
+    list = getElementsByRegion(canvasP->listaR, newReg, compareCR2);
+    break;
+  case 6: /* Círculo */
+    list = getElementsByRegion(canvasP->listaC, newReg, compareCC);
+    break;
+  case 7: /* Moradores */
+    list = getMoradoresInsideC(canvasP->cidade, newReg);
+    break;
+  case 8: /* Estabelecimentos Comerciais */
+    list = getEstabeCInsideC(canvasP->cidade, newReg);
+    break;
+  default:
+    printf("COMANDO INVÁLIDO.\n");
+  }
+  free(newReg);
+  return list;
+}
+
+/*********************************************************/
 
 figuraGeometrica getRetangulo(Canvas canvas, int id) {
   CanvasP *canvasP = (CanvasP *)canvas;

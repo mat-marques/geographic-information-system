@@ -29,162 +29,162 @@ List createL() {
 
 int lengthL(List list) {
   Base *base = (Base *)list;
-  if(list != NULL)
+  if (list != NULL)
     return base->size;
 
   return 0;
 }
 
-int isEmpty(List list){
-    Base *L1 = (Base *) list;
-    if(L1->first==NULL){
-        return 1;
-    }
-    return 0;
+int isEmpty(List list) {
+  Base *L1 = (Base *)list;
+  if (L1->first == NULL) {
+    return 1;
+  }
+  return 0;
 }
 
-Posic insertL(List list, Item info){
-    Element *No=NULL;
-    Base *L1;
-    if(isEmpty(list)==1){
-        L1 = (Base *) list;
-        No = (Element*) malloc(sizeof(Element));
-        No->info = info;
-        No->next = NULL;
-        No->previous = NULL;
-        L1->first = No;
-        L1->last = No;
-        L1->size++;
-        return No;
-    }else{
-        L1 = (Base *) list;
-        No = (Element*) malloc(sizeof(Element));
-        No->info = info;
-        No->next = NULL;
-        No->previous = L1->last;
-        L1->last->next = No;
-        L1->last = No;
-        L1->size++;
-        return No;
-    }
-    return NULL;
+Posic insertL(List list, Item info) {
+  Element *No = NULL;
+  Base *L1;
+  if (isEmpty(list) == 1) {
+    L1 = (Base *)list;
+    No = (Element *)malloc(sizeof(Element));
+    No->info = info;
+    No->next = NULL;
+    No->previous = NULL;
+    L1->first = No;
+    L1->last = No;
+    L1->size++;
+    return No;
+  } else {
+    L1 = (Base *)list;
+    No = (Element *)malloc(sizeof(Element));
+    No->info = info;
+    No->next = NULL;
+    No->previous = L1->last;
+    L1->last->next = No;
+    L1->last = No;
+    L1->size++;
+    return No;
+  }
+  return NULL;
 }
 
-void removeItemL(List list, Posic p){
-    Base *L1 = (Base*) list;
-    Element *No = (Element*) p;
-    Element *aux, *aux2;
-    if(isEmpty(list)==0){
-        if(No->previous==NULL){
-            aux = No->next;
-            L1->first = aux;
-            if(L1->first!=NULL) {
-                L1->first->previous = NULL;
-            }
-        }else if(No->next==NULL){
-            aux = No->previous;
-            L1->last = aux;
-            if(L1->last!=NULL) {
-                L1->last->next = NULL;
-            }
-        }else {
-            aux = No->previous;
-            aux2 = No->next;
-            aux->next = aux2;
-            aux2->previous = aux;
-        }
-
-        if(No!=NULL){
-            free(No);
-        }
-        L1->size--;
-    }
-}
-
-Item get(List list, Posic p){
-    Element *No = (Element*) p;
-    if(isEmpty(list)==0){
-        if(No->info!=NULL) {
-            return No->info;
-        }
-    }
-    return NULL;
-}
-
-Posic insertBefore(List list, Posic p, Item info){
-    Base *L1 = (Base*) list;
-    Element *No = (Element*) p;
-    Element *aux, *aux2;
-    aux = (Element*) malloc(sizeof(Element));
-    if(isEmpty(list)==0){
-        if(No->previous==NULL){
-            aux->info = info;
-            aux->next = No;
-            No->previous = aux;
-            aux->previous = NULL;
-            L1->size++;
-            L1->first = aux;
-        } else {
-            aux->info = info;
-            aux2 = No->previous;
-            aux2->next = aux;
-            aux->previous = aux2;
-            aux->next = No;
-            No->previous = aux;
-            L1->size++;
-        }
+void removeItemL(List list, Posic p) {
+  Base *L1 = (Base *)list;
+  Element *No = (Element *)p;
+  Element *aux, *aux2;
+  if (isEmpty(list) == 0) {
+    if (No->previous == NULL) {
+      aux = No->next;
+      L1->first = aux;
+      if (L1->first != NULL) {
+        L1->first->previous = NULL;
+      }
+    } else if (No->next == NULL) {
+      aux = No->previous;
+      L1->last = aux;
+      if (L1->last != NULL) {
+        L1->last->next = NULL;
+      }
     } else {
-        insertL(list, info);
-        L1->size++;
+      aux = No->previous;
+      aux2 = No->next;
+      aux->next = aux2;
+      aux2->previous = aux;
     }
-    return aux;
+
+    if (No != NULL) {
+      free(No);
+    }
+    L1->size--;
+  }
 }
 
-Posic insertAfter(List list, Posic p, Item info){
-    Base *L1 = (Base*) list;
-    Element *No = (Element*) p;
-    Element *aux;
-    aux = (Element*) malloc(sizeof(Element));
-    if(isEmpty(list)==0){
-        if(No->next==NULL){
-            aux->info = info;
-            aux->next = NULL;
-            aux->previous = No;
-            No->next = aux;
-            L1->size++;
-            L1->last = aux;
-        } else {
-            aux->info = info;
-            aux->next = No->next;
-            aux->previous = No;
-            No->next = aux;
-            L1->size++;
-        }
+Item get(List list, Posic p) {
+  Element *No = (Element *)p;
+  if (isEmpty(list) == 0) {
+    if (No->info != NULL) {
+      return No->info;
+    }
+  }
+  return NULL;
+}
+
+Posic insertBefore(List list, Posic p, Item info) {
+  Base *L1 = (Base *)list;
+  Element *No = (Element *)p;
+  Element *aux, *aux2;
+  aux = (Element *)malloc(sizeof(Element));
+  if (isEmpty(list) == 0) {
+    if (No->previous == NULL) {
+      aux->info = info;
+      aux->next = No;
+      No->previous = aux;
+      aux->previous = NULL;
+      L1->size++;
+      L1->first = aux;
     } else {
-        insertL(list, info);
-        L1->size++;
+      aux->info = info;
+      aux2 = No->previous;
+      aux2->next = aux;
+      aux->previous = aux2;
+      aux->next = No;
+      No->previous = aux;
+      L1->size++;
     }
-    return aux;
+  } else {
+    insertL(list, info);
+    L1->size++;
+  }
+  return aux;
 }
 
-Posic getFirst(List list){
-    Base *L1 = (Base *) list;
-    return L1->first;
+Posic insertAfter(List list, Posic p, Item info) {
+  Base *L1 = (Base *)list;
+  Element *No = (Element *)p;
+  Element *aux;
+  aux = (Element *)malloc(sizeof(Element));
+  if (isEmpty(list) == 0) {
+    if (No->next == NULL) {
+      aux->info = info;
+      aux->next = NULL;
+      aux->previous = No;
+      No->next = aux;
+      L1->size++;
+      L1->last = aux;
+    } else {
+      aux->info = info;
+      aux->next = No->next;
+      aux->previous = No;
+      No->next = aux;
+      L1->size++;
+    }
+  } else {
+    insertL(list, info);
+    L1->size++;
+  }
+  return aux;
 }
 
-Posic getNext(List list, Posic p){
-    Element *No = (Element *) p;
-    return No->next;
+Posic getFirst(List list) {
+  Base *L1 = (Base *)list;
+  return L1->first;
 }
 
-Posic getLast(List list){
-    Base *L1 = (Base *) list;
-    return L1->last;
+Posic getNext(List list, Posic p) {
+  Element *No = (Element *)p;
+  return No->next;
 }
 
-Posic getPrevious(List list, Posic p){
-    Element *No = (Element *) p;
-    return No->previous;
+Posic getLast(List list) {
+  Base *L1 = (Base *)list;
+  return L1->last;
+}
+
+Posic getPrevious(List list, Posic p) {
+  Element *No = (Element *)p;
+  return No->previous;
 }
 
 int insertBeginL(List list, Item item) {
@@ -284,10 +284,10 @@ int insertMiddleL(List list, int p, Item item) {
   return 0;
 }
 
-void showL(List list, showLI func){
+void showL(List list, showLI func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
-  int i=0, j=0;
+  int i = 0, j = 0;
   if (base != NULL) {
     if (base->first != NULL) {
       j = base->size;
@@ -304,38 +304,14 @@ Item searchItemL(List list, Item item, compareToL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
   Item info = NULL;
-  int i=0, j=0;
+  int i = 0, j = 0;
   if (base != NULL) {
     if (base->first != NULL) {
       j = base->size;
       aux = base->first;
       for (i = 1; i <= j; i++) {
-        if (func(aux->info, item) == 1){
+        if (func(aux->info, item) == 1) {
           info = aux->info;
-          break;
-        }
-        aux = aux->next;
-      }
-    }
-  }
-  return info;
-}
-
-Item removeItemL2(List list, Item item, compareToL func){
-  Base *base = (Base *)list;
-  Element *aux = NULL;
-  Item info = NULL;
-  int i=0, j=0;
-  if (base != NULL) {
-    if (base->first != NULL) {
-      aux = base->first;
-      for (i = 1; i <= j; i++) {
-        if (func(aux->info, item) == 1){
-          info = aux->info;
-          aux->previous->next = aux->next;
-          aux->next->previous = aux->previous;
-          free(aux);
-          base->size = base->size - 1;
           break;
         }
         aux = aux->next;
@@ -349,25 +325,24 @@ int removeBeginL(List list, eraseItemL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
   if (base != NULL) {
+    if (base->first != NULL && base->size == 1) {
+      if (func != NULL)
+        func(base->last->info);
+      free(base->last);
+      base->last = NULL;
+      base->first = NULL;
+      base->size = base->size - 1;
+      return 1;
+    }
     if (base->first != NULL) {
       aux = base->first->next;
       aux->previous = NULL;
-      if(func != NULL)
+      if (func != NULL)
         func(base->first->info);
       free(base->first);
       base->first = aux;
       base->size = base->size - 1;
       return 1;
-    }else{
-      if (base->first != NULL && base->size == 1) {
-          if(func != NULL)
-            func(base->last->info);
-          free(base->last);
-          base->last = NULL;
-          base->first = NULL;
-          base->size = base->size - 1;
-          return 1;
-      }
     }
   }
   return 0;
@@ -377,26 +352,26 @@ int removeEndL(List list, eraseItemL func) {
   Base *base = (Base *)list;
   Element *aux = NULL;
   if (base != NULL) {
+    if (base->first != NULL && base->size == 1) {
+      if (func != NULL)
+        func(base->last->info);
+      free(base->last);
+      base->last = NULL;
+      base->first = NULL;
+      base->size = base->size - 1;
+      return 1;
+    }
+    
     if (base->first != NULL && base->size > 1) {
       aux = base->last->previous;
       aux->next = NULL;
-      if(func != NULL)
+      if (func != NULL)
         func(base->last->info);
       free(base->last);
       base->last = aux;
       base->size = base->size - 1;
       return 1;
-    } else {
-       if (base->first != NULL && base->size == 1) {
-          if(func != NULL)
-            func(base->last->info);
-          free(base->last);
-          base->last = NULL;
-          base->first = NULL;
-          base->size = base->size - 1;
-          return 1;
-        }
-      }
+    }
   }
   return 0;
 }
@@ -418,11 +393,11 @@ int removeMiddleL(List list, int p, eraseItemL func) {
   } else {
     if (base != NULL) {
       if (base->first != NULL) {
-        base->size = base->size - 1;
         aux = base->first;
+        base->size = base->size - 1;
         for (i = 1; i <= j; i++) {
           if (i == p) {
-            if(func != NULL)
+            if (func != NULL)
               func(aux->info);
             aux->previous->next = aux->next;
             aux->next->previous = aux->previous;
@@ -436,6 +411,37 @@ int removeMiddleL(List list, int p, eraseItemL func) {
     }
   }
   return 0;
+}
+
+Item removeItemL2(List list, Item item, compareToL func) {
+  Base *base = (Base *)list;
+  Element *aux = NULL;
+  Item info = NULL;
+  int i = 0, j = 0;
+  if (base != NULL) {
+    if (base->first != NULL) {
+      aux = base->first;
+      j = base->size;
+      for (i = 1; i <= j; i++) {
+        if (func(aux->info, item) == 1) {
+          info = aux->info;
+          if (i == 1) {
+            removeBeginL(list, NULL);
+          } else if (i == j) {
+            removeEndL(list, NULL);
+          } else {
+            aux->previous->next = aux->next;
+            aux->next->previous = aux->previous;
+            free(aux);
+            base->size = base->size - 1;
+          }
+          break;
+        }
+        aux = aux->next;
+      }
+    }
+  }
+  return info;
 }
 
 Item getBeginItemL(List list) {
@@ -482,17 +488,17 @@ Item getItemL(List list, int p) {
   return NULL;
 }
 
-void concatL(List listOne, List listTwo){
-  if(listOne!=NULL && listTwo!=NULL){
+void concatL(List listOne, List listTwo) {
+  if (listOne != NULL && listTwo != NULL) {
     Base *base1 = (Base *)listOne;
     Base *base2 = (Base *)listTwo;
-    if(base1->first != NULL && base2->first != NULL){
+    if (base1->first != NULL && base2->first != NULL) {
       base1->last->next = base2->first;
       base2->first->previous = base1->last;
       base1->last = base2->last;
       base1->size = base1->size + base2->size;
-    }else {
-      if(base1->first == NULL && base2->first != NULL) {
+    } else {
+      if (base1->first == NULL && base2->first != NULL) {
         base1->first = base2->first;
         base1->last = base2->last;
         base1->size = base2->size;
@@ -512,12 +518,12 @@ int eraseListL(List list, eraseItemL func) {
       for (i = 1; i <= j; i++) {
         aux2 = aux;
         aux = aux->next;
-        if(func != NULL)
+        if (func != NULL)
           func(aux2->info);
         free(aux2);
       }
-        base->first = NULL;
-        base->last = NULL;
+      base->first = NULL;
+      base->last = NULL;
       base->size = 0;
       return 1;
     }
@@ -525,9 +531,9 @@ int eraseListL(List list, eraseItemL func) {
   return 0;
 }
 
-void eraseBase(List list){
+void eraseBase(List list) {
   Base *base = (Base *)list;
-  if(base!=NULL){
+  if (base != NULL) {
     free(base);
   }
 }

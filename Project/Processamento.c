@@ -410,7 +410,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
         executarQryRb(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "co?") == 0) {
         executarQryCo(arqEntradaQry, &arqSaidaT, canvas);
-      } /*else if (strcmp(entradaA, "lnr?") == 0) {
+      } else if (strcmp(entradaA, "lnr?") == 0) {
         executarQryLnr(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "ecq?") == 0) {
         executarQryEcq(arqEntradaQry, &arqSaidaT, canvas);
@@ -428,7 +428,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
         executarQryLcc(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "dpr") == 0) {
         executarQryDpr(arqEntradaQry, &arqSaidaT, canvas);
-      }*/ else {
+      } else {
         printf("Comando invalido no qry\n");
       }
     }
@@ -524,8 +524,6 @@ void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas) {
   /* Quadra */
   showCanvasElements(canvas, arqSaidaSvg, 1);
 
-  /* Círculos */
-  showCanvasElements(canvas, arqSaidaSvg, 6);
 
   /* Hidrante */
   showCanvasElements(canvas, arqSaidaSvg, 2);
@@ -546,6 +544,9 @@ void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas) {
 
   showListLines(canvas, arqSaidaSvg);
 
+  /* Círculos */
+  showCanvasElements(canvas, arqSaidaSvg, 6);
+  
   tagFechamento(arqSaidaSvg);
 }
 
