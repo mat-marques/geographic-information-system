@@ -33,48 +33,42 @@ void setIdPolygon(Polygon polygon, int id);
  */
 int insertPointsPolygon(Polygon polygon, double x, double y);
 
-/*
-   A função retorna o vetor de pontos de polygon.
- */
-double *getPointsPolygon(Polygon polygon);
 
 /*
-   O procedimento define um novo conjunto de ponto para polygon.
-   nPoints > 0.
- */
-void setPointsPolygon(Polygon polygon, double *points, int nPoints);
+  A função retorna um vetor de números reais. Esse vetor contém as coordenadas x e y dos pontos que estão em polygon.
+*/
+double *getPointsPolygon(Polygon polygon);
+
 
 /*
    A função retorna a quantidade de pontos que compõem o vetor de pontos de polygon.
-   O tamanho do vetor é (2 * nPoints).
- */
-int getqtdPointsPolygon(Polygon polygon);
-
-/*
-   A função retorna a quantidade de pontos que foram inseridos atualmente no vetor de pontos de polygon.
-   O tamanho do vetor é (2 * nPoints).
  */
 int getnPointsPolygon(Polygon polygon);
 
 /*
-   A função retorna a coordenada x de polygon.
+   A função retorna a quantidade de pontos que foram inseridos atualmente no vetor de pontos de polygon.
  */
-double getXPolygon(Polygon polygon, int position);
+int getQtdPointsPolygon(Polygon polygon);
 
 /*
-   O procedimento define uma novo x para polygon.
+   A função retorna a coordenada x de polygon.
  */
-void setXPolygon(Polygon polygon, int position, double x);
+double getXPolygon(Polygon polygon, int point);
+
+/*
+   O procedimento define uma novo x para o ponto point em polygon.
+ */
+void setXPolygon(Polygon polygon, int point, double x);
 
 /*
    A função retorna a coordenada y de polygon.
  */
-double getYPolygon(Polygon polygon, int position);
+double getYPolygon(Polygon polygon, int point);
 
 /*
-   O procedimento define uma novo y para polygon.
+   O procedimento define uma novo y para o ponto point em polygon.
  */
-void setYPolygon(Polygon polygon, int position, double y);
+void setYPolygon(Polygon polygon, int point, double y);
 
 
 /*

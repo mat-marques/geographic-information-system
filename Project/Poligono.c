@@ -5,11 +5,16 @@
 #include "Poligono.h"
 #include "StringO.h"
 
+typedef struct myCoord{
+  double x, y;
+}Coord;
+
 typedef struct myPolygon {
-  double *points;
+  Coord **points;
   int nPoints, id, qtdPoints, lineSize;
   char *colourFill, *colourLine;
 } newPolygon;
+
 
 Polygon createPolygon(int id, int nPoints) {
   newPolygon *myPolygon = NULL;
@@ -19,9 +24,9 @@ Polygon createPolygon(int id, int nPoints) {
   if (myPolygon != NULL) {
     myPolygon->id = id;
 
-    myPolygon->points = (double *)malloc((2 * nPoints) * sizeof(double));
+    myPolygon->points = (Coord **)malloc(nPoints * sizeof(Coord));
     for (i = 0; i < nPoints; i++) {
-      *(myPolygon->points + i) = 0;
+      *(myPolygon->points + i) = NULL;
     }
 
     myPolygon->nPoints = nPoints;
@@ -33,6 +38,7 @@ Polygon createPolygon(int id, int nPoints) {
   return myPolygon;
 }
 
+
 int getIdPolygon(Polygon polygon) {
   newPolygon *myPolygon = (newPolygon *)polygon;
   if (polygon != NULL) {
@@ -41,6 +47,7 @@ int getIdPolygon(Polygon polygon) {
   return 0;
 }
 
+
 void setIdPolygon(Polygon polygon, int id) {
   newPolygon *myPolygon = (newPolygon *)polygon;
   if (polygon != NULL) {
@@ -48,14 +55,18 @@ void setIdPolygon(Polygon polygon, int id) {
   }
 }
 
+
 int insertPointsPolygon(Polygon polygon, double x, double y) {
   newPolygon *myPolygon = (newPolygon *)polygon;
+  Coord *newCoord = NULL;
   int i = 0;
   if (polygon != NULL) {
     if (myPolygon->qtdPoints < myPolygon->nPoints) {
-      i = 2 * myPolygon->qtdPoints;
-      *(myPolygon->points + i) = x;
-      *(myPolygon->points + (i + 1)) = y;
+      i = myPolygon->qtdPoints;
+      newCoord = (Coord*) malloc(sizeof(Coord));
+      newCoord->x = x;
+      newCoord->y = y;
+      *(myPolygon->points + i) = newCoord;
       myPolygon->qtdPoints = myPolygon->qtdPoints + 1;
       return 1;
     }
@@ -63,21 +74,24 @@ int insertPointsPolygon(Polygon polygon, double x, double y) {
   return 0;
 }
 
-double *getPointsPolygon(Polygon polygon) {
+
+double *getPointsPolygon(Polygon polygon){
   newPolygon *myPolygon = (newPolygon *)polygon;
+  Coord *newCoord = NULL;
+  double *vector = NULL;
+  int i = 0;
   if (polygon != NULL) {
-    return myPolygon->points;
+    vector = (double*) malloc((myPolygon->qtdPoints * 2) * sizeof(double));
+    for(i=0; i<myPolygon->qtdPoints; i++){
+      newCoord = *(myPolygon->points + i);
+      *(vector + (i * 2)) = newCoord->x;
+      *(vector + (i * 2) + 1) = newCoord->y;
+    }
   }
-  return 0;
+  return vector;
 }
 
-void setPointsPolygon(Polygon polygon, double *points, int nPoints) {
-  newPolygon *myPolygon = (newPolygon *)polygon;
-  if (polygon != NULL) {
-    myPolygon->nPoints = nPoints;
-    myPolygon->points = points;
-  }
-}
+
 
 int getnPointsPolygon(Polygon polygon) {
   newPolygon *myPolygon = (newPolygon *)polygon;
@@ -87,7 +101,8 @@ int getnPointsPolygon(Polygon polygon) {
   return 0;
 }
 
-int getqtdPointsPolygon(Polygon polygon) {
+
+int getQtdPointsPolygon(Polygon polygon) {
   newPolygon *myPolygon = (newPolygon *)polygon;
   if (polygon != NULL) {
     return myPolygon->qtdPoints;
@@ -95,39 +110,56 @@ int getqtdPointsPolygon(Polygon polygon) {
   return 0;
 }
 
-double getXPolygon(Polygon polygon, int position) {
+
+double getXPolygon(Polygon polygon, int point) {
   newPolygon *myPolygon = (newPolygon *)polygon;
+  Coord *newCoord = NULL;
   if (polygon != NULL) {
-    if ((position >= 0) && (position <= myPolygon->nPoints))
-      return *(myPolygon->points + position);
+    if ((point > 0) && (point <= myPolygon->nPoints)){
+      newCoord = *(myPolygon->points + (point-1));
+      return newCoord->x;
+    }
   }
   return 0;
 }
 
-void setXPolygon(Polygon polygon, int position, double x) {
+
+void setXPolygon(Polygon polygon, int point, double x) {
   newPolygon *myPolygon = (newPolygon *)polygon;
+  Coord *newCoord = NULL;
   if (polygon != NULL) {
-    if ((position >= 0) && (position <= myPolygon->nPoints))
-      *(myPolygon->points + position) = x;
+    if ((point >= 0) && (point <= myPolygon->nPoints)){
+      newCoord = *(myPolygon->points + (point-1));
+       newCoord->x = x;
+    }
   }
 }
 
-double getYPolygon(Polygon polygon, int position) {
+
+double getYPolygon(Polygon polygon, int point) {
   newPolygon *myPolygon = (newPolygon *)polygon;
+  Coord *newCoord = NULL;
   if (polygon != NULL) {
-    if ((position >= 0) && (position <= myPolygon->nPoints))
-      return *(myPolygon->points + position);
+    if ((point > 0) && (point <= myPolygon->nPoints)){
+      newCoord = *(myPolygon->points + (point-1));
+      return newCoord->y;
+    }
   }
   return 0;
 }
 
-void setYPolygon(Polygon polygon, int position, double y) {
+
+void setYPolygon(Polygon polygon, int point, double y) {
   newPolygon *myPolygon = (newPolygon *)polygon;
+  Coord *newCoord = NULL;
   if (polygon != NULL) {
-    if ((position >= 0) && (position <= myPolygon->nPoints))
-      *(myPolygon->points + position) = y;
+    if ((point >= 0) && (point <= myPolygon->nPoints)){
+      newCoord = *(myPolygon->points + (point-1));
+       newCoord->y = y;
+    }
   }
 }
+
 
 int getLineSizePolygon(Polygon polygon) {
   newPolygon *myPolygon = (newPolygon *)polygon;
@@ -137,12 +169,14 @@ int getLineSizePolygon(Polygon polygon) {
   return 0;
 }
 
+
 void setLineSizePolygon(Polygon polygon, int lineSize) {
   newPolygon *myPolygon = (newPolygon *)polygon;
   if (polygon != NULL) {
     myPolygon->lineSize = lineSize;
   }
 }
+
 
 char *getColourFillPolygon(Polygon polygon) {
   newPolygon *myPolygon = (newPolygon *)polygon;
@@ -151,6 +185,7 @@ char *getColourFillPolygon(Polygon polygon) {
   }
   return NULL;
 }
+
 
 void setColourFillPolygon(Polygon polygon, char *colourFill) {
   newPolygon *myPolygon = (newPolygon *)polygon;
@@ -162,6 +197,7 @@ void setColourFillPolygon(Polygon polygon, char *colourFill) {
   }
 }
 
+
 char *getColourLinePolygon(Polygon polygon) {
   newPolygon *myPolygon = (newPolygon *)polygon;
   if (polygon != NULL) {
@@ -169,6 +205,7 @@ char *getColourLinePolygon(Polygon polygon) {
   }
   return NULL;
 }
+
 
 void setColourLinePolygon(Polygon polygon, char *colourLine) {
   newPolygon *myPolygon = (newPolygon *)polygon;
@@ -180,6 +217,7 @@ void setColourLinePolygon(Polygon polygon, char *colourLine) {
   }
 }
 
+
 int comparePolygon(Polygon polygon, void *id) {
   newPolygon *myPolygon = (newPolygon *)polygon;
   int *myId = (int *)id;
@@ -189,7 +227,10 @@ int comparePolygon(Polygon polygon, void *id) {
   return 0;
 }
 
+
 void erasePolygon(Polygon polygon) {
+  int i;
+  Coord *newCoord = NULL;
   newPolygon *myPolygon = (newPolygon *)polygon;
   if (polygon != NULL) {
     if (myPolygon->colourFill != NULL) {
@@ -197,6 +238,10 @@ void erasePolygon(Polygon polygon) {
     }
     if (myPolygon->colourLine != NULL) {
       free(myPolygon->colourLine);
+    }
+    for(i=0; i<myPolygon->qtdPoints; i++){
+      newCoord = *(myPolygon->points + i);
+      free(newCoord);
     }
     free(myPolygon->points);
     free(myPolygon);

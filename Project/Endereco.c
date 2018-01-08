@@ -78,8 +78,7 @@ int compareEnderecos(Endereco endereco1, Endereco endereco2) {
       (novoE1->face == novoE2->face) &&
       (strcmp(novoE1->comp, novoE2->comp) == 0)) {
 
-        return 1;
-
+    return 1;
   }
 
   return 0;
@@ -87,13 +86,15 @@ int compareEnderecos(Endereco endereco1, Endereco endereco2) {
 
 void removeEndereco(Endereco endereco) {
   NovoEndereco *novoE = (NovoEndereco *)endereco;
-  if (novoE->cep != NULL) {
-    free(novoE->cep);
-    novoE->cep = NULL;
+  if (novoE != NULL) {
+    if (novoE->cep != NULL) {
+      free(novoE->cep);
+      novoE->cep = NULL;
+    }
+    if (novoE->comp != NULL) {
+      free(novoE->comp);
+      novoE->comp = NULL;
+    }
+    free(novoE);
   }
-  if (novoE->comp != NULL) {
-    free(novoE->comp);
-    novoE->comp = NULL;
-  }
-  free(novoE);
 }

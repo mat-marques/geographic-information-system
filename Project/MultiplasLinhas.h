@@ -38,15 +38,9 @@ int insertPointsPolyLine(PolyLine polyLine, double x, double y);
 
 
 /*
-   A função retorna o conjunto de pontos (vetor) que estão os pontos de polyLine
- */
+  A função retorna um vetor de números reais. Esse vetor contém as coordenadas x e y dos pontos que estão em polygon.
+*/
 double *getPointsPolyLine(PolyLine polyLine);
-
-
-/*
-   O procedimento define um novo conjunto de pontos para polyLine.
- */
-void setPointsPolyLine(PolyLine polyLine, double *points, int nPoints);
 
 
 /*
@@ -58,31 +52,31 @@ int getnPointsPolyLine(PolyLine polyLine);
 /*
    A função retorna a quantidade de pontos que foram inseridos em polyLine.
  */
-int getqtdPointsPolyLine(PolyLine polyLine);
+int getQtdPointsPolyLine(PolyLine polyLine);
 
 
 /*
    A função retorna a coordenada x de um dos pontos de polyLine na posição position.
  */
-double getXPolyLine(PolyLine polyLine, int position);
+double getXPolyLine(PolyLine polyLine, int point);
 
 
 /*
    O procedimento define um novo valor para a coordenada x de um ponto na posição position.
  */
-void setXPolyLine(PolyLine polyLine, int position, double x);
+void setXPolyLine(PolyLine polyLine, int point, double x);
 
 
 /*
    A função retorna a coordenada y de um dos pontos de polyLine na posição position.
  */
-double getYPolyLine(PolyLine polyLine, int position);
+double getYPolyLine(PolyLine polyLine, int point);
 
 
 /*
    O procedimento define um novo valor para a coordenada y de um ponto na posição position.
  */
-void setYPolyLine(PolyLine polyLine, int position, double y);
+void setYPolyLine(PolyLine polyLine, int point, double y);
 
 
 /*

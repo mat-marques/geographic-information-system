@@ -367,13 +367,17 @@ void showListPolygons(Canvas canvas, FILE *file) {
   CanvasP *canvasP = (CanvasP *)canvas;
   int i, j;
   Item item;
+  double *vetor;
   j = lengthL(canvasP->listPolygons);
   for (i = 1; i <= j; i++) {
     item = getItemL(canvasP->listPolygons, i);
     if (item != NULL) {
-      tagPoligono(file, getIdPolygon(item) + i, getPointsPolygon(item),
-                  getqtdPointsPolygon(item) * 2, getColourLinePolygon(item),
+      vetor = getPointsPolygon(item);
+      tagPoligono(file, getIdPolygon(item) + i, vetor,
+                  getQtdPointsPolygon(item) * 2, getColourLinePolygon(item),
                   getColourFillPolygon(item), getLineSizePolygon(item));
+      free(vetor);
+      vetor = NULL;
     }
     item = NULL;
   }
@@ -383,14 +387,18 @@ void showListPolyLines(Canvas canvas, FILE *file) {
   CanvasP *canvasP = (CanvasP *)canvas;
   int i, j;
   Item item;
+  double *vetor;
   j = lengthL(canvasP->listPolyLines);
   for (i = 1; i <= j; i++) {
     item = getItemL(canvasP->listPolyLines, i);
     if (item != NULL) {
+      vetor = getPointsPolyLine(item);
       tagMultiplasLinhas(
-          file, getIdPolyLine(item) + i, getPointsPolyLine(item),
-          getqtdPointsPolyLine(item) * 2, getColourLinePolyLine(item),
-          getColourFillPolyLine(item), getLineSizePolyLine(item));
+          file, getIdPolyLine(item) + i, vetor, getQtdPointsPolyLine(item) * 2,
+          getColourLinePolyLine(item), getColourFillPolyLine(item),
+          getLineSizePolyLine(item));
+      free(vetor);
+      vetor = NULL;
     }
     item = NULL;
   }
@@ -452,7 +460,6 @@ QuadTree getListaC(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   return canvasP->listaC;
 }
-
 
 /*********************************************************/
 int compareRR(Retangulo retangulo, Region region) {
@@ -651,6 +658,364 @@ int compareCS(Semafaro semafaro, Region region) {
   return 0;
 }
 
+int compareRLine(Line line, Region region) {
+  double x1, y1, x2, y2;
+  Reg *newReg = (Reg *)region;
+  x1 = getX1Line(line);
+  y1 = getY1Line(line);
+  x2 = getX2Line(line);
+  y2 = getY2Line(line);
+  if (pontoInternoR(newReg->w, newReg->h, newReg->x, newReg->y, x1, y1) ==
+          't' &&
+      pontoInternoR(newReg->w, newReg->h, newReg->x, newReg->y, x2, y2) ==
+          't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareCLine(Line line, Region region) {
+  double x1, y1, x2, y2;
+  Reg *newReg = (Reg *)region;
+  x1 = getX1Line(line);
+  y1 = getY1Line(line);
+  x2 = getX2Line(line);
+  y2 = getY2Line(line);
+  if (pontoInternoC(newReg->w, newReg->x, newReg->y, x1, y1) == 't' &&
+      pontoInternoC(newReg->w, newReg->x, newReg->y, x2, y2) == 't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareRText(Text text, Region region) {
+  double x, y;
+  Reg *newReg = (Reg *)region;
+  x = getXText(text);
+  y = getYText(text);
+  if (pontoInternoR(newReg->w, newReg->h, newReg->x, newReg->y, x, y) == 't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareCText(Text text, Region region) {
+  double x, y;
+  Reg *newReg = (Reg *)region;
+  x = getXText(text);
+  y = getYText(text);
+  if (pontoInternoC(newReg->w, newReg->x, newReg->y, x, y) == 't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareRPolyGon(Polygon polygon, Region region) {
+  double x, y;
+  int i, j, cont = 0;
+  Reg *newReg = (Reg *)region;
+  j = getQtdPointsPolygon(polygon);
+  for (i = 1; i <= j; i++) {
+    x = getXPolygon(polygon, i);
+    y = getYPolygon(polygon, i);
+    if (pontoInternoR(newReg->w, newReg->h, newReg->x, newReg->y, x, y) ==
+        't') {
+      cont++;
+    }
+  }
+  if (cont == j) {
+    return 1;
+  }
+  return 0;
+}
+
+int compareCPolyGon(Polygon polygon, Region region) {
+  double x, y;
+  int i, j, cont = 0;
+  Reg *newReg = (Reg *)region;
+  j = getQtdPointsPolygon(polygon);
+  for (i = 1; i <= j; i++) {
+    x = getXPolygon(polygon, i);
+    y = getYPolygon(polygon, i);
+    if (pontoInternoC(newReg->w, newReg->x, newReg->y, x, y) == 't') {
+      cont++;
+    }
+  }
+  if (cont == j) {
+    return 1;
+  }
+  return 0;
+}
+
+int compareRPolyLine(PolyLine polyLine, Region region) {
+  double x, y;
+  int i, j, cont = 0;
+  Reg *newReg = (Reg *)region;
+  j = getQtdPointsPolyLine(polyLine);
+  for (i = 1; i <= j; i++) {
+    x = getXPolyLine(polyLine, i);
+    y = getYPolyLine(polyLine, i);
+    if (pontoInternoR(newReg->w, newReg->h, newReg->x, newReg->y, x, y) ==
+        't') {
+      cont++;
+    }
+  }
+  if (cont == j) {
+    return 1;
+  }
+  return 0;
+}
+
+int compareCPolyLine(PolyLine polyLine, Region region) {
+  double x, y;
+  int i, j, cont = 0;
+  Reg *newReg = (Reg *)region;
+  j = getQtdPointsPolyLine(polyLine);
+  for (i = 1; i <= j; i++) {
+    x = getXPolyLine(polyLine, i);
+    y = getYPolyLine(polyLine, i);
+    if (pontoInternoC(newReg->w, newReg->x, newReg->y, x, y) == 't') {
+      cont++;
+    }
+  }
+  if (cont == j) {
+    return 1;
+  }
+  return 0;
+}
+
+int compareRLine2(Line line, Region region) {
+  double x1, y1, x2, y2;
+  Reg *newReg = (Reg *)region;
+  x1 = getX1Line(line);
+  y1 = getY1Line(line);
+  x2 = getX2Line(line);
+  y2 = getY2Line(line);
+  if (pontoInternoR(newReg->w, newReg->h, newReg->x, newReg->y, x1, y1) ==
+          't' ||
+      pontoInternoR(newReg->w, newReg->h, newReg->x, newReg->y, x2, y2) ==
+          't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareCLine2(Line line, Region region) {
+  double x1, y1, x2, y2;
+  Reg *newReg = (Reg *)region;
+  x1 = getX1Line(line);
+  y1 = getY1Line(line);
+  x2 = getX2Line(line);
+  y2 = getY2Line(line);
+  if (pontoInternoC(newReg->w, newReg->x, newReg->y, x1, y1) == 't' ||
+      pontoInternoC(newReg->w, newReg->x, newReg->y, x2, y2) == 't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareRPolyGon2(Polygon polygon, Region region) {
+  double x, y;
+  int i, j, cont = 0;
+  Reg *newReg = (Reg *)region;
+  j = getQtdPointsPolygon(polygon);
+  for (i = 1; i <= j; i++) {
+    x = getXPolygon(polygon, i);
+    y = getYPolygon(polygon, i);
+    if (pontoInternoR(newReg->w, newReg->h, newReg->x, newReg->y, x, y) ==
+        't') {
+      cont++;
+    }
+  }
+  if (cont > 1) {
+    return 1;
+  }
+  return 0;
+}
+
+int compareCPolyGon2(Polygon polygon, Region region) {
+  double x, y;
+  int i, j, cont = 0;
+  Reg *newReg = (Reg *)region;
+  j = getQtdPointsPolygon(polygon);
+  for (i = 1; i <= j; i++) {
+    x = getXPolygon(polygon, i);
+    y = getYPolygon(polygon, i);
+    if (pontoInternoC(newReg->w, newReg->x, newReg->y, x, y) == 't') {
+      cont++;
+    }
+  }
+  if (cont > 1) {
+    return 1;
+  }
+  return 0;
+}
+
+int compareRPolyLine2(PolyLine polyLine, Region region) {
+  double x, y;
+  int i, j, cont = 0;
+  Reg *newReg = (Reg *)region;
+  j = getQtdPointsPolyLine(polyLine);
+  for (i = 1; i <= j; i++) {
+    x = getXPolyLine(polyLine, i);
+    y = getYPolyLine(polyLine, i);
+    if (pontoInternoR(newReg->w, newReg->h, newReg->x, newReg->y, x, y) ==
+        't') {
+      cont++;
+    }
+  }
+  if (cont > 1) {
+    return 1;
+  }
+  return 0;
+}
+
+int compareCPolyLine2(PolyLine polyLine, Region region) {
+  double x, y;
+  int i, j, cont = 0;
+  Reg *newReg = (Reg *)region;
+  j = getQtdPointsPolyLine(polyLine);
+  for (i = 1; i <= j; i++) {
+    x = getXPolyLine(polyLine, i);
+    y = getYPolyLine(polyLine, i);
+    if (pontoInternoC(newReg->w, newReg->x, newReg->y, x, y) == 't') {
+      cont++;
+    }
+  }
+  if (cont > 1) {
+    return 1;
+  }
+  return 0;
+}
+
+List getLineInsideElement(List list, Region region, char type,
+                          char compareMode) {
+  int i, j;
+  void *item;
+  List newList = NULL;
+  j = lengthL(list);
+  newList = createL();
+
+  for (i = 0; i < j; i++) {
+    item = getItemL(list, i);
+    /*Verifica se o elemento esta inteiramente dentro da figura */
+    if (compareMode == 'i') {
+      if (type == 'r') {
+        if (compareRLine(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      } else {
+        if (compareCLine(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      }
+    } else { /*Verifica se o elemento esta parcialmente dentro da figura */
+      if (type == 'r') {
+        if (compareRLine2(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      } else {
+        if (compareCLine2(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      }
+    }
+  }
+  return newList;
+}
+
+List getTextInsideElement(List list, Region region, char type) {
+  int i, j;
+  void *item;
+  List newList = NULL;
+  j = lengthL(list);
+  newList = createL();
+
+  for (i = 0; i < j; i++) {
+    item = getItemL(list, i);
+    if (type == 'r') {
+      if (compareRText(item, region) == 1) {
+        insertEndL(newList, item);
+      }
+    } else {
+      if (compareCText(item, region) == 1) {
+        insertEndL(newList, item);
+      }
+    }
+  }
+  return newList;
+}
+
+List getPolyGonInsideElement(List list, Region region, char type,
+                             char compareMode) {
+  int i, j;
+  void *item;
+  List newList = NULL;
+  j = lengthL(list);
+  newList = createL();
+
+  for (i = 0; i < j; i++) {
+    item = getItemL(list, i);
+    /*Verifica se o elemento esta inteiramente dentro da figura */
+    if (compareMode == 'i') {
+      if (type == 'r') {
+        if (compareRPolyGon(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      } else {
+        if (compareCPolyGon(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      }
+    } else { /*Verifica se o elemento esta parcialmente dentro da figura */
+      if (type == 'r') {
+        if (compareRPolyGon2(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      } else {
+        if (compareCPolyGon2(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      }
+    }
+  }
+  return newList;
+}
+
+List getPolyLineInsideElement(List list, Region region, char type,
+                              char compareMode) {
+  int i, j;
+  void *item;
+  List newList = NULL;
+  j = lengthL(list);
+  newList = createL();
+  for (i = 0; i < j; i++) {
+    item = getItemL(list, i);
+    /*Verifica se o elemento esta inteiramente dentro da figura */
+    if (compareMode == 'i') {
+      if (type == 'r') {
+        if (compareRPolyLine(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      } else {
+        if (compareCPolyLine(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      }
+    } else { /*Verifica se o elemento esta parcialmente dentro da figura */
+      if (type == 'r') {
+        if (compareRPolyLine2(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      } else {
+        if (compareCPolyLine2(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      }
+    }
+  }
+  return newList;
+}
 
 List getMoradoresInsideR(Cidade cidade, Region region) {
   double x = 0, y = 0;
@@ -680,14 +1045,12 @@ List getMoradoresInsideR(Cidade cidade, Region region) {
           calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x,
                              &y);
 
-          if (pontoInternoR(newReg->w, newReg->h, newReg->x,
-                            newReg->y, x, y) == 't') {
+          if (pontoInternoR(newReg->w, newReg->h, newReg->x, newReg->y, x, y) ==
+              't') {
             insertEndL(newList, item);
           }
         }
-
       }
-
     }
   }
   return newList;
@@ -721,19 +1084,15 @@ List getMoradoresInsideC(Cidade cidade, Region region) {
           calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x,
                              &y);
 
-          if (pontoInternoC(newReg->w, newReg->x,
-                            newReg->y, x, y) == 't') {
+          if (pontoInternoC(newReg->w, newReg->x, newReg->y, x, y) == 't') {
             insertEndL(newList, item);
           }
         }
-
       }
-
     }
   }
   return newList;
 }
-
 
 List getEstabeCInsideR(Cidade cidade, Region region) {
   double x = 0, y = 0;
@@ -763,14 +1122,12 @@ List getEstabeCInsideR(Cidade cidade, Region region) {
           calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x,
                              &y);
 
-          if (pontoInternoR(newReg->w, newReg->h, newReg->x,
-                            newReg->y, x, y) == 't') {
+          if (pontoInternoR(newReg->w, newReg->h, newReg->x, newReg->y, x, y) ==
+              't') {
             insertEndL(newList, item);
           }
         }
-
       }
-
     }
   }
   return newList;
@@ -804,19 +1161,15 @@ List getEstabeCInsideC(Cidade cidade, Region region) {
           calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x,
                              &y);
 
-          if (pontoInternoC(newReg->w, newReg->x,
-                            newReg->y, x, y) == 't') {
+          if (pontoInternoC(newReg->w, newReg->x, newReg->y, x, y) == 't') {
             insertEndL(newList, item);
           }
         }
-
       }
-
     }
   }
   return newList;
 }
-
 
 List getElementsListInsideR(Canvas canvas, int type, double x, double y,
                             double w, double h) {
@@ -857,6 +1210,18 @@ List getElementsListInsideR(Canvas canvas, int type, double x, double y,
     break;
   case 8: /* Estabelecimentos Comerciais */
     list = getEstabeCInsideR(canvasP->cidade, newReg);
+    break;
+  case 9: /* Linha */
+    list = getLineInsideElement(canvasP->listLines, newReg, 'r', 'i');
+    break;
+  case 10: /* Texto */
+    list = getTextInsideElement(canvasP->listTexts, newReg, 'r');
+    break;
+  case 11: /* Polígono */
+    list = getPolyGonInsideElement(canvasP->listPolygons, newReg, 'r', 'i');
+    break;
+  case 12: /* Multiplas Linha */
+    list = getPolyLineInsideElement(canvasP->listPolyLines, newReg, 'r', 'i');
     break;
   default:
     printf("COMANDO INVÁLIDO.\n");
@@ -905,6 +1270,18 @@ List getElementsListInsideC(Canvas canvas, int type, double x, double y,
   case 8: /* Estabelecimentos Comerciais */
     list = getEstabeCInsideC(canvasP->cidade, newReg);
     break;
+  case 9: /* Linha */
+    list = getLineInsideElement(canvasP->listLines, newReg, 'c', 'i');
+    break;
+  case 10: /* Texto */
+    list = getTextInsideElement(canvasP->listTexts, newReg, 'c');
+    break;
+  case 11: /* Polígono */
+    list = getPolyGonInsideElement(canvasP->listPolygons, newReg, 'c', 'i');
+    break;
+  case 12: /* Multiplas Linha */
+    list = getPolyLineInsideElement(canvasP->listPolyLines, newReg, 'c', 'i');
+    break;
   default:
     printf("COMANDO INVÁLIDO.\n");
   }
@@ -916,7 +1293,8 @@ List getElementsListInsideC(Canvas canvas, int type, double x, double y,
 /*********************************************************/
 
 int compareRR2(Retangulo retangulo, Region region) {
-  /* A função verifica se um retângulo esta inteira ou parcialmente dentro de uma região retangular.
+  /* A função verifica se um retângulo esta inteira ou parcialmente dentro de
+    uma região retangular.
     Case o retângulo esteja dentro da região retangular retorna 1, caso não
     retorna 0.
   */
@@ -927,15 +1305,16 @@ int compareRR2(Retangulo retangulo, Region region) {
   h = getRh(retangulo);
   x = getRx(retangulo);
   y = getRy(retangulo);
-  if (verificarSobreposicaoRR(newReg->w, newReg->h, newReg->x,
-                                        newReg->y, w, h, x, y) == 't') {
+  if (verificarSobreposicaoRR(newReg->w, newReg->h, newReg->x, newReg->y, w, h,
+                              x, y) == 't') {
     return 1;
   }
   return 0;
 }
 
 int compareRC2(Circulo circulo, Region region) {
-  /* A função verifica se um círculo esta inteira ou parcialmente dentro de uma região retangular.
+  /* A função verifica se um círculo esta inteira ou parcialmente dentro de uma
+    região retangular.
     Case o círculo esteja dentro da região retangular retorna 1, caso não
     retorna 0.
   */
@@ -944,15 +1323,16 @@ int compareRC2(Circulo circulo, Region region) {
   r = getCr(circulo);
   x = getCx(circulo);
   y = getCy(circulo);
-  if (verificarSobreposicaoRC(newReg->w, newReg->h, newReg->x,
-                                        newReg->y, r, x, y) == 't') {
+  if (verificarSobreposicaoRC(newReg->w, newReg->h, newReg->x, newReg->y, r, x,
+                              y) == 't') {
     return 1;
   }
   return 0;
 }
 
 int compareRQ2(Quadra quadra, Region region) {
-  /* A função verifica se uma quadra esta inteira ou parcialmente dentro de uma região retangular.
+  /* A função verifica se uma quadra esta inteira ou parcialmente dentro de uma
+    região retangular.
     Caso o quadra esteja dentro da região retangular retorna 1, caso não retorna
     0.
   */
@@ -962,15 +1342,16 @@ int compareRQ2(Quadra quadra, Region region) {
   h = getAltQ(quadra);
   x = getXQ(quadra);
   y = getYQ(quadra);
-  if (verificarSobreposicaoRR(newReg->w, newReg->h, newReg->x,
-                                        newReg->y, w, h, x, y) == 't') {
+  if (verificarSobreposicaoRR(newReg->w, newReg->h, newReg->x, newReg->y, w, h,
+                              x, y) == 't') {
     return 1;
   }
   return 0;
 }
 
 int compareCR2(Retangulo retangulo, Region region) {
-  /* A função verifica se uma retângulo esta inteira ou parcialmente dentro de uma região circular.
+  /* A função verifica se uma retângulo esta inteira ou parcialmente dentro de
+    uma região circular.
     Caso o retângulo esteja dentro da região circular retorna 1, caso não
     retorna 0.
   */
@@ -980,15 +1361,16 @@ int compareCR2(Retangulo retangulo, Region region) {
   h = getRh(retangulo);
   x = getRx(retangulo);
   y = getRy(retangulo);
-  if (verificarSobreposicaoRC(w, h, x, y, newReg->w, newReg->x,
-                                        newReg->y) == 't') {
+  if (verificarSobreposicaoRC(w, h, x, y, newReg->w, newReg->x, newReg->y) ==
+      't') {
     return 1;
   }
   return 0;
 }
 
 int compareCC2(Circulo circulo, Region region) {
-  /* A função verifica se um círculo esta inteira ou parcialmente dentro de uma regiãoo circular.
+  /* A função verifica se um círculo esta inteira ou parcialmente dentro de uma
+    regiãoo circular.
     Caso o circulo esteja dentro da região circular retorna 1, caso não retorna
     0.
   */
@@ -997,15 +1379,16 @@ int compareCC2(Circulo circulo, Region region) {
   r = getCr(circulo);
   x = getCx(circulo);
   y = getCy(circulo);
-  if (verificarSobreposicaoCC(newReg->w, newReg->x,
-                                        newReg->y, r, x, y) == 't') {
+  if (verificarSobreposicaoCC(newReg->w, newReg->x, newReg->y, r, x, y) ==
+      't') {
     return 1;
   }
   return 0;
 }
 
 int compareCQ2(Quadra quadra, Region region) {
-  /* A função verifica se uma quadra esta inteira ou parcialmente dentro de uma região circular.
+  /* A função verifica se uma quadra esta inteira ou parcialmente dentro de uma
+    região circular.
     Caso a quadra esteja dentro da região circular retorna 1, caso não retorna
     0.
   */
@@ -1015,15 +1398,15 @@ int compareCQ2(Quadra quadra, Region region) {
   h = getAltQ(quadra);
   x = getXQ(quadra);
   y = getYQ(quadra);
-  if (verificarSobreposicaoRC(w, h, x, y, newReg->w, newReg->x,
-                                        newReg->y) == 't') {
+  if (verificarSobreposicaoRC(w, h, x, y, newReg->w, newReg->x, newReg->y) ==
+      't') {
     return 1;
   }
   return 0;
 }
 
 List getElementsListPartialInsideR(Canvas canvas, int type, double x, double y,
-                            double w, double h) {
+                                   double w, double h) {
   CanvasP *canvasP = (CanvasP *)canvas;
   Reg *newReg;
   List list = NULL;
@@ -1062,6 +1445,18 @@ List getElementsListPartialInsideR(Canvas canvas, int type, double x, double y,
   case 8: /* Estabelecimentos Comerciais */
     list = getEstabeCInsideR(canvasP->cidade, newReg);
     break;
+  case 9: /* Linha */
+    list = getLineInsideElement(canvasP->listLines, newReg, 'r', 'p');
+    break;
+  case 10: /* Texto */
+    list = getTextInsideElement(canvasP->listTexts, newReg, 'r');
+    break;
+  case 11: /* Polígono */
+    list = getPolyGonInsideElement(canvasP->listPolygons, newReg, 'r', 'p');
+    break;
+  case 12: /* Multiplas Linha */
+    list = getPolyLineInsideElement(canvasP->listPolyLines, newReg, 'r', 'p');
+    break;
   default:
     printf("COMANDO INVÁLIDO.\n");
   }
@@ -1070,7 +1465,7 @@ List getElementsListPartialInsideR(Canvas canvas, int type, double x, double y,
 }
 
 List getElementsListPartialInsideC(Canvas canvas, int type, double x, double y,
-                            double r) {
+                                   double r) {
   CanvasP *canvasP = (CanvasP *)canvas;
   Reg *newReg;
   List list = NULL;
@@ -1108,6 +1503,18 @@ List getElementsListPartialInsideC(Canvas canvas, int type, double x, double y,
     break;
   case 8: /* Estabelecimentos Comerciais */
     list = getEstabeCInsideC(canvasP->cidade, newReg);
+    break;
+  case 9: /* Linha */
+    list = getLineInsideElement(canvasP->listLines, newReg, 'c', 'p');
+    break;
+  case 10: /* Texto */
+    list = getTextInsideElement(canvasP->listTexts, newReg, 'c');
+    break;
+  case 11: /* Polígono */
+    list = getPolyGonInsideElement(canvasP->listPolygons, newReg, 'c', 'p');
+    break;
+  case 12: /* Multiplas Linha */
+    list = getPolyLineInsideElement(canvasP->listPolyLines, newReg, 'c', 'p');
     break;
   default:
     printf("COMANDO INVÁLIDO.\n");

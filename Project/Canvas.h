@@ -238,12 +238,16 @@ void showListEllipses(Canvas canvas, FILE *file);
    O argumento type pode receber os inteiros:
    1 : Quadra;
    2 : Hidrante;
-   3 : Semáfaro.
+   3 : Semáfaro;
    4 : Torre;
    5 : Retângulo;
    6 : Círculo;
-   7 :  Moradores
-   8 : Estabelecimentos Comerciais
+   7 :  Moradores;
+   8 : Estabelecimentos Comerciais;
+   9 : Linha;
+   10 : Texto;
+   11 : Polígono;
+   12 :  Multiplas Linhas
  */
 List getElementsListInsideR(Canvas canvas, int type, double x, double y, double w, double h);
 
@@ -255,12 +259,16 @@ List getElementsListInsideR(Canvas canvas, int type, double x, double y, double 
    O argumento type pode receber os inteiros:
    1 : Quadra;
    2 : Hidrante;
-   3 : Semáfaro.
+   3 : Semáfaro;
    4 : Torre;
    5 : Retângulo;
    6 : Círculo;
-   7 :  Moradores
-   8 : Estabelecimentos Comerciais
+   7 :  Moradores;
+   8 : Estabelecimentos Comerciais;
+   9 : Linha;
+   10 : Texto;
+   11 : Polígono;
+   12 :  Multiplas Linhas
  */
 List getElementsListInsideC(Canvas canvas, int type, double x, double y, double r);
 
@@ -273,12 +281,16 @@ List getElementsListInsideC(Canvas canvas, int type, double x, double y, double 
   O argumento type pode receber os inteiros:
   1 : Quadra;
   2 : Hidrante;
-  3 : Semáfaro.
+  3 : Semáfaro;
   4 : Torre;
   5 : Retângulo;
   6 : Círculo;
-  7 : Moradores;
+  7 :  Moradores;
   8 : Estabelecimentos Comerciais;
+  9 : Linha;
+  10 : Texto;
+  11 : Polígono;
+  12 :  Multiplas Linhas
 */
 List getElementsListPartialInsideR(Canvas canvas, int type, double x, double y,
                                    double w, double h);
@@ -291,12 +303,16 @@ List getElementsListPartialInsideR(Canvas canvas, int type, double x, double y,
   O argumento type pode receber os inteiros:
   1 : Quadra;
   2 : Hidrante;
-  3 : Semáfaro.
+  3 : Semáfaro;
   4 : Torre;
   5 : Retângulo;
   6 : Círculo;
-  7 : Moradores;
+  7 :  Moradores;
   8 : Estabelecimentos Comerciais;
+  9 : Linha;
+  10 : Texto;
+  11 : Polígono;
+  12 :  Multiplas Linhas
 */
 List getElementsListPartialInsideC(Canvas canvas, int type, double x, double y,
                                    double r);
