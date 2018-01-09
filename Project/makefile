@@ -2,7 +2,7 @@
 #		Autor: Matheus Augusto Marques
 
 objects = Arquivo.o Cidade.o Canvas.o Celular.o Circulo.o \
-					ConvexHull.o Cor.o Dicionario.o Endereco.o \
+					ConvexHull.o Cor.o Dicionario.o Endereco.o Ponto.o\
 					EstabelecimentoComercial.o ExecucaoEcPmTm.o ExecucaoGeo.o \
 					ExecucaoQry.o ExecucaoQry2.o HashTable.o Hidrante.o \
 					List.o main.o Morador.o OpEntrada.o OperacoesF.o \
@@ -32,7 +32,7 @@ dependenciasEq = Arquivo.h Arquivo.c StringO.h StringO.c \
 
 dependenciasCa = Canvas.h Canvas.c Circulo.h Circulo.c \
 			     Retangulo.h Retangulo.c List.h \
- 			     List.c Cidade.h Cidade.c \
+ 			     List.c Cidade.h Cidade.c Ponto.c Ponto.h\
  			     ConvexHull.h ConvexHull.c OperacoesF.h OperacoesF.c \
  			     QuadTree.h QuadTree.c Texto.h Texto.c Linha.h Linha.c \
 				 Poligono.h Poligono.c Elipse.h Elipse.c \
@@ -81,6 +81,8 @@ Linha.o: Linha.h Linha.c StringO.h StringO.c
 Poligono.o: Poligono.h Poligono.c StringO.h StringO.c
 	gcc -c $(CFLAGS) Poligono.c -o Poligono.o
 
+Ponto.o: Ponto.h Ponto.c
+	gcc -c $(CFLAGS) Ponto.c -o Ponto.o
 
 MultiplasLinhas.o: MultiplasLinhas.h MultiplasLinhas.c StringO.h StringO.c
 	gcc -c $(CFLAGS) MultiplasLinhas.c -o MultiplasLinhas.o

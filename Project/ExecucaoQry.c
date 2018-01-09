@@ -9,11 +9,15 @@
 #include "StringO.h"
 #include "ConvexHull.h"
 
+
 long int executardq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas canvas, int *qtdQuadrasRemovidas){
   double w=0, h=0, x=0, y=0;
   void *elemento = NULL;
   int i, n;
   long int qtdCompararacoesR = 0;
+  char secao5[] = "cepXquadra";
+  HashTable hash;
+  Dicionario dicionario;
   char *cep = NULL;
   List lista = NULL;
   Cidade cidade;
@@ -21,12 +25,15 @@ long int executardq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas ca
 
   lista = getElementsListInsideR(canvas, 1, x, y, w,  h);
   n = lengthL(lista);
+
   if(*arqSaidaT==NULL && n > 0){
     *arqSaidaT = createArqA(path);
   }
 
   if(lista != NULL && n > 0){
     cidade = getCidade(canvas);
+    dicionario = getDicionario(cidade);
+    hash = getSecaoDicionario(dicionario, secao5);
     cep = NULL;
     for(i=1; i<=n; i++){
       elemento = getItemL(lista, i);
@@ -36,6 +43,7 @@ long int executardq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas ca
         fillBreakLine(*arqSaidaT);
         *qtdQuadrasRemovidas = *qtdQuadrasRemovidas+1;
       }
+      removeHT(hash, cep, cep, compareQ);
       qtdCompararacoesR = qtdCompararacoesR + removeQuadra(cidade, cep);
       cep = NULL;
     }
@@ -133,8 +141,13 @@ long int executardt(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas ca
   int i, n;
   long int qtdCompararacoesR = 0;
   char *id;
+  char secao14[] = "numcelXtorre";
+  char secao16[] = "operadoraXtorre";
+  HashTable hash;
+  Dicionario dicionario;
   List lista = NULL;
   Cidade cidade;
+  HashTable hash2 = NULL;
   fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
   lista = getElementsListInsideR(canvas, 4, x, y, w,  h);
   n = lengthL(lista);
@@ -144,6 +157,9 @@ long int executardt(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas ca
 
   if(lista != NULL && n > 0){
     cidade = getCidade(canvas);
+    dicionario = getDicionario(cidade);
+    hash = getSecaoDicionario(dicionario, secao14);
+    hash2 = getSecaoDicionario(dicionario, secao16);
     id = NULL;
     for(i=1; i<=n; i++){
       elemento = getItemL(lista, i);
@@ -153,6 +169,8 @@ long int executardt(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas ca
         fillBreakLine(*arqSaidaT);
         *qtdElementosRemovidos = *qtdElementosRemovidos + 1;
       }
+      removeHT2(hash, id, compareT);
+      removeHT2(hash2, id, compareT);
       qtdCompararacoesR = qtdCompararacoesR + removeTorre(cidade, id);
       id = NULL;
     }
@@ -171,6 +189,9 @@ long int executarDq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas ca
   int i, n;
   long int qtdCompararacoesR = 0;
   char *cep;
+  char secao5[] = "cepXquadra";
+  HashTable hash;
+  Dicionario dicionario;
   List lista = NULL;
   Cidade cidade;
   fscanf(arqEntradaQry, "%lf %lf %lf\n", &x, &y, &r);
@@ -184,6 +205,8 @@ long int executarDq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas ca
 
   if(lista != NULL && n > 0){
     cidade = getCidade(canvas);
+    dicionario = getDicionario(cidade);
+    hash = getSecaoDicionario(dicionario, secao5);
     cep = NULL;
     for(i=1; i<=n; i++){
       elemento = getItemL(lista, i);
@@ -193,6 +216,7 @@ long int executarDq(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas ca
         fillBreakLine(*arqSaidaT);
         *qtdQuadrasRemovidas = *qtdQuadrasRemovidas+1;
       }
+      removeHT(hash, cep, cep, compareQ);
       qtdCompararacoesR = qtdCompararacoesR + removeQuadra(cidade, cep);
       cep = NULL;
     }
@@ -291,7 +315,12 @@ long int executarDt(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas ca
   int i, n;
   long int qtdCompararacoesR = 0;
   char *id;
+  char secao14[] = "numcelXtorre";
+  char secao16[] = "operadoraXtorre";
+  HashTable hash;
+  Dicionario dicionario;
   List lista = NULL;
+  HashTable hash2 = NULL;
   Cidade cidade;
 
   fscanf(arqEntradaQry, "%lf %lf %lf\n", &x, &y, &r);
@@ -304,6 +333,9 @@ long int executarDt(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas ca
 
   if(lista != NULL && n > 0){
     cidade = getCidade(canvas);
+    dicionario = getDicionario(cidade);
+    hash = getSecaoDicionario(dicionario, secao14);
+    hash2 = getSecaoDicionario(dicionario, secao16);
     id = NULL;
     for(i=1; i<=n; i++){
       elemento = getItemL(lista, i);
@@ -313,6 +345,8 @@ long int executarDt(FILE *arqEntradaQry, FILE **arqSaidaT, char *path, Canvas ca
         fillBreakLine(*arqSaidaT);
         *qtdElementosRemovidos = *qtdElementosRemovidos + 1;
       }
+      removeHT2(hash, id, compareT);
+      removeHT2(hash2, id, compareT);
       qtdCompararacoesR = qtdCompararacoesR + removeTorre(cidade, id);
       id = NULL;
     }

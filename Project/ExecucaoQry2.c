@@ -616,8 +616,8 @@ void executarQryDm(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
       }
       if (quadra != NULL) {
         calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x, &y);
-        /* Insere um círculo na lista de figuras geométricas */
-        insertCirculo(canvas, createCircle(-1, 3, x, y, cor));
+        /* Insere um ponto no canvas */
+        insertPointCanvas(canvas, createPoint(0, x, y));
         insertTextCanvas(canvas, createText(0, cpf, x, y));
       } else {
         printf("Região (Quadra) onde a pessoa mora nao existe na cidade.\n");
@@ -662,7 +662,7 @@ void executarQryDe(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
               getNomeEstabC(estabC), x, y);
 
       /* Insere um círculo na lista de figuras geométricas */
-      insertCirculo(canvas, createCircle(-1, 3, x, y, cor));
+      insertPointCanvas(canvas, createPoint(0, x, y));
     } else {
       printf("Quadra nao existe.\n");
     }
@@ -1738,4 +1738,72 @@ void executarQryDpr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
     eraseListL(list, NULL);
     eraseBase(list);
   }
+
+  /* Texto */
+  list = getElementsListPartialInsideR(canvas, 10, x, y, w, h);
+  if (list != NULL) {
+    l = lengthL(list);
+    for (i = 1; i <= l; i++) {
+      element = getItemL(list, i);
+      if (element != NULL) {
+        setIdText(element, i);
+        removeTextCanvas(canvas, i);
+      }
+      element = NULL;
+      id = NULL;
+    }
+    eraseListL(list, NULL);
+    eraseBase(list);
+  }
+
+  /* Ponto */
+  list = getElementsListPartialInsideR(canvas, 13, x, y, w, h);
+  if (list != NULL) {
+    l = lengthL(list);
+    for (i = 1; i <= l; i++) {
+      element = getItemL(list, i);
+      if (element != NULL) {
+        setIdPoint(element, i);
+        removePointCanvas(canvas, i);
+      }
+      element = NULL;
+      id = NULL;
+    }
+    eraseListL(list, NULL);
+    eraseBase(list);
+  }
+
+  /* Linha */
+  list = getElementsListPartialInsideR(canvas, 9, x, y, w, h);
+  if (list != NULL) {
+    l = lengthL(list);
+    for (i = 1; i <= l; i++) {
+      element = getItemL(list, i);
+      if (element != NULL) {
+        setIdLine(element, i);
+        removeLineCanvas(canvas, i);
+      }
+      element = NULL;
+      id = NULL;
+    }
+    eraseListL(list, NULL);
+    eraseBase(list);
+  }
+  /* Polígono */
+  list = getElementsListPartialInsideR(canvas, 11, x, y, w, h);
+  if (list != NULL) {
+    l = lengthL(list);
+    for (i = 1; i <= l; i++) {
+      element = getItemL(list, i);
+      if (element != NULL) {
+        setIdPolygon(element, i);
+        removePolygonCanvas(canvas, i);
+      }
+      element = NULL;
+      id = NULL;
+    }
+    eraseListL(list, NULL);
+    eraseBase(list);
+  }
+
 }

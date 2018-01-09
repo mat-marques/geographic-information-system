@@ -100,7 +100,7 @@ int getnPointsPolyLine(PolyLine polyLine) {
 }
 
 
-int getqtdPointsPolyLine(PolyLine polyLine){
+int getQtdPointsPolyLine(PolyLine polyLine){
   newPolyLine *myPolyLine = (newPolyLine *)polyLine;
   if (polyLine != NULL) {
     return myPolyLine->qtdPoints;

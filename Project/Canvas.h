@@ -10,6 +10,7 @@
 #include "MultiplasLinhas.h"
 #include "Texto.h"
 #include "Elipse.h"
+#include "Ponto.h"
 
 typedef void* Canvas;
 typedef void* figuraGeometrica;
@@ -140,6 +141,16 @@ void removeTextCanvas(Canvas canvas, int id);
 
 
 /*
+   Insere no canvas um ponto.
+ */
+void insertPointCanvas(Canvas canvas, Point point);
+
+/*
+   Remove do canvas um ponto com o número de identificação id.
+ */
+void removePointCanvas(Canvas canvas, int id);
+
+/*
    Insere no canvas um polígono.
  */
 void insertPolygonCanvas(Canvas canvas, Polygon polygon);
@@ -230,6 +241,12 @@ void showListEllipses(Canvas canvas, FILE *file);
 
 
 /*
+   Escreve no arquivo file todos os pontos dentro do canvas.
+ */
+void showListPoints(Canvas canvas, FILE *file);
+
+
+/*
    A função retorna uma lista de elementos do tipo especificado por type. Essa lista abriga um conjunto de elementos que estão dentro de uma região retangular. A região retangular é especificada por
    w : comprimento,
    h : altura,
@@ -247,7 +264,8 @@ void showListEllipses(Canvas canvas, FILE *file);
    9 : Linha;
    10 : Texto;
    11 : Polígono;
-   12 :  Multiplas Linhas
+   12 :  Multiplas Linhas;
+   13 : Pontos
  */
 List getElementsListInsideR(Canvas canvas, int type, double x, double y, double w, double h);
 
@@ -268,52 +286,55 @@ List getElementsListInsideR(Canvas canvas, int type, double x, double y, double 
    9 : Linha;
    10 : Texto;
    11 : Polígono;
-   12 :  Multiplas Linhas
+   12 :  Multiplas Linhas;
+   13 : Pontos
  */
 List getElementsListInsideC(Canvas canvas, int type, double x, double y, double r);
 
 /*
-  A função retorna uma lista de elementos do tipo especificado por type. Essa lista abriga um conjunto de elementos que estão inteira e parcialmente dentro de uma região retangular. A região retangular é especificada por
-  w : comprimento,
-  h : altura,
-  x : coordenada no espaço 2d,
-  y : coordenada no espaço 2d.
-  O argumento type pode receber os inteiros:
-  1 : Quadra;
-  2 : Hidrante;
-  3 : Semáfaro;
-  4 : Torre;
-  5 : Retângulo;
-  6 : Círculo;
-  7 :  Moradores;
-  8 : Estabelecimentos Comerciais;
-  9 : Linha;
-  10 : Texto;
-  11 : Polígono;
-  12 :  Multiplas Linhas
-*/
+   A função retorna uma lista de elementos do tipo especificado por type. Essa lista abriga um conjunto de elementos que estão inteira e parcialmente dentro de uma região retangular. A região retangular é especificada por
+   w : comprimento,
+   h : altura,
+   x : coordenada no espaço 2d,
+   y : coordenada no espaço 2d.
+   O argumento type pode receber os inteiros:
+   1 : Quadra;
+   2 : Hidrante;
+   3 : Semáfaro;
+   4 : Torre;
+   5 : Retângulo;
+   6 : Círculo;
+   7 :  Moradores;
+   8 : Estabelecimentos Comerciais;
+   9 : Linha;
+   10 : Texto;
+   11 : Polígono;
+   12 :  Multiplas Linhas;
+   13 : Pontos
+ */
 List getElementsListPartialInsideR(Canvas canvas, int type, double x, double y,
                                    double w, double h);
 
 /*
-  A função retorna uma lista de elementos do tipo especificado por type. Essa lista abriga um conjunto de elementos que estão inteira e parcialmente dentro de uma região circular. A região círcular é especificada por
-  r : raio,
-  x : coordenada no espaço 2d,
-  y : coordenada no espaço 2d.
-  O argumento type pode receber os inteiros:
-  1 : Quadra;
-  2 : Hidrante;
-  3 : Semáfaro;
-  4 : Torre;
-  5 : Retângulo;
-  6 : Círculo;
-  7 :  Moradores;
-  8 : Estabelecimentos Comerciais;
-  9 : Linha;
-  10 : Texto;
-  11 : Polígono;
-  12 :  Multiplas Linhas
-*/
+   A função retorna uma lista de elementos do tipo especificado por type. Essa lista abriga um conjunto de elementos que estão inteira e parcialmente dentro de uma região circular. A região círcular é especificada por
+   r : raio,
+   x : coordenada no espaço 2d,
+   y : coordenada no espaço 2d.
+   O argumento type pode receber os inteiros:
+   1 : Quadra;
+   2 : Hidrante;
+   3 : Semáfaro;
+   4 : Torre;
+   5 : Retângulo;
+   6 : Círculo;
+   7 :  Moradores;
+   8 : Estabelecimentos Comerciais;
+   9 : Linha;
+   10 : Texto;
+   11 : Polígono;
+   12 :  Multiplas Linhas;
+   13 : Pontos
+ */
 List getElementsListPartialInsideC(Canvas canvas, int type, double x, double y,
                                    double r);
 

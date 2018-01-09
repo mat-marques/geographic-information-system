@@ -176,14 +176,14 @@ long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath,
     printf("ERRO EM ABERTURA DE ARQUIVO GEO.\n");
     exit(0);
   }
-
+  printf("Comandos Geo\n");
   while (1) {
     fscanf(arqEntradaGeo, "%s ", entradaA);
 
     if (entradaA[0] == '#') {
       break;
     }
-
+    printf("%s\n", entradaA);
     if (boolean == 't' &&
         (entradaA[0] == 'o' || entradaA[0] == 'i' || entradaA[0] == 'd')) {
       /*  Abre o arquivo de saída .txt. */
@@ -342,7 +342,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
   if(arqEntradaQry != NULL){
     arqSaidaT = createArqW(path);
   }
-
+  printf("Comandos do Qry\n");
   if (arqEntradaQry != NULL) {
     while (1) {
 
@@ -352,7 +352,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
       if (fscanf(arqEntradaQry, "%s ", entradaA) < 0) {
         break;
       }
-
+      printf("%s\n", entradaA);
       if (strcmp(entradaA, "dq") == 0) {
         *qtdCompararacoesR =
             *qtdCompararacoesR + executardq(arqEntradaQry, &arqSaidaT, path,
@@ -546,7 +546,7 @@ void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas) {
 
   /* Círculos */
   showCanvasElements(canvas, arqSaidaSvg, 6);
-  
+
   tagFechamento(arqSaidaSvg);
 }
 

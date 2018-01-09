@@ -17,7 +17,8 @@ typedef struct reg { double w, h, x, y; } Reg;
 
 typedef struct CanvasP {
   QuadTree listaC, listaR;
-  List listaR2, listLines, listTexts, listPolygons, listPolyLines, listEllipses;
+  List listaR2, listLines, listTexts, listPolygons;
+  List listPoints, listPolyLines, listEllipses;
   Cidade cidade;
   double width, height;
   int id;
@@ -68,6 +69,7 @@ Canvas criaCanvas(int id) {
   canvas->listPolyLines = createL();
   canvas->listTexts = createL();
   canvas->listEllipses = createL();
+  canvas->listPoints = createL();
   canvas->width = 100;
   canvas->height = 100;
   canvas->id = id;
@@ -190,6 +192,18 @@ void removeTextCanvas(Canvas canvas, int id) {
   CanvasP *canvasP = (CanvasP *)canvas;
   Item item;
   item = removeItemL2(canvasP->listTexts, &id, compareText);
+  eraseText(item);
+}
+
+void insertPointCanvas(Canvas canvas, Point point) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  insertEndL(canvasP->listPoints, point);
+}
+
+void removePointCanvas(Canvas canvas, int id) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  Item item;
+  item = removeItemL2(canvasP->listPoints, &id, comparePoints);
   eraseText(item);
 }
 
@@ -421,6 +435,21 @@ void showListEllipses(Canvas canvas, FILE *file) {
   }
 }
 
+void showListPoints(Canvas canvas, FILE *file) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  int i, j;
+  Item item;
+  char cor[] = "black";
+  j = lengthL(canvasP->listPoints);
+  for (i = 1; i <= j; i++) {
+    item = getItemL(canvasP->listPoints, i);
+    if (item != NULL) {
+      pontos(file, getXPoint(item), getYPoint(item), cor);
+    }
+    item = NULL;
+  }
+}
+
 QuadTree getListaR(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   return canvasP->listaR;
@@ -454,6 +483,11 @@ List getListPolyLines(Canvas canvas) {
 List getListTexts(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   return canvasP->listTexts;
+}
+
+List getListPoints(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  return canvasP->listPoints;
 }
 
 QuadTree getListaC(Canvas canvas) {
@@ -704,6 +738,28 @@ int compareCText(Text text, Region region) {
   Reg *newReg = (Reg *)region;
   x = getXText(text);
   y = getYText(text);
+  if (pontoInternoC(newReg->w, newReg->x, newReg->y, x, y) == 't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareRPoint(Point point, Region region) {
+  double x, y;
+  Reg *newReg = (Reg *)region;
+  x = getXPoint(point);
+  y = getYPoint(point);
+  if (pontoInternoR(newReg->w, newReg->h, newReg->x, newReg->y, x, y) == 't') {
+    return 1;
+  }
+  return 0;
+}
+
+int compareCPoint(Point point, Region region) {
+  double x, y;
+  Reg *newReg = (Reg *)region;
+  x = getXPoint(point);
+  y = getYPoint(point);
   if (pontoInternoC(newReg->w, newReg->x, newReg->y, x, y) == 't') {
     return 1;
   }
@@ -1017,6 +1073,31 @@ List getPolyLineInsideElement(List list, Region region, char type,
   return newList;
 }
 
+List getPointsInsideElement(List list, Region region, char type) {
+  int i, j;
+  void *item;
+  List newList = NULL;
+  j = lengthL(list);
+  newList = createL();
+
+  for (i = 0; i < j; i++) {
+    item = getItemL(list, i);
+    if (item != NULL) {
+      if (type == 'r') {
+        if (compareRPoint(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      } else {
+        if (compareCPoint(item, region) == 1) {
+          insertEndL(newList, item);
+        }
+      }
+    }
+    item = NULL;
+  }
+  return newList;
+}
+
 List getMoradoresInsideR(Cidade cidade, Region region) {
   double x = 0, y = 0;
   int i, j;
@@ -1223,6 +1304,9 @@ List getElementsListInsideR(Canvas canvas, int type, double x, double y,
   case 12: /* Multiplas Linha */
     list = getPolyLineInsideElement(canvasP->listPolyLines, newReg, 'r', 'i');
     break;
+  case 13: /* Ponto */
+    list = getPointsInsideElement(canvasP->listPoints, newReg, 'r');
+    break;
   default:
     printf("COMANDO INVÁLIDO.\n");
   }
@@ -1281,6 +1365,9 @@ List getElementsListInsideC(Canvas canvas, int type, double x, double y,
     break;
   case 12: /* Multiplas Linha */
     list = getPolyLineInsideElement(canvasP->listPolyLines, newReg, 'c', 'i');
+    break;
+  case 13: /* Ponto */
+    list = getPointsInsideElement(canvasP->listPoints, newReg, 'c');
     break;
   default:
     printf("COMANDO INVÁLIDO.\n");
@@ -1457,6 +1544,9 @@ List getElementsListPartialInsideR(Canvas canvas, int type, double x, double y,
   case 12: /* Multiplas Linha */
     list = getPolyLineInsideElement(canvasP->listPolyLines, newReg, 'r', 'p');
     break;
+  case 13: /* Ponto */
+    list = getPointsInsideElement(canvasP->listPoints, newReg, 'r');
+    break;
   default:
     printf("COMANDO INVÁLIDO.\n");
   }
@@ -1515,6 +1605,9 @@ List getElementsListPartialInsideC(Canvas canvas, int type, double x, double y,
     break;
   case 12: /* Multiplas Linha */
     list = getPolyLineInsideElement(canvasP->listPolyLines, newReg, 'c', 'p');
+    break;
+  case 13: /* Ponto */
+    list = getPointsInsideElement(canvasP->listPoints, newReg, 'c');
     break;
   default:
     printf("COMANDO INVÁLIDO.\n");
@@ -1583,6 +1676,12 @@ void eraseListTexts(Canvas canvas) {
   eraseBase(canvasP->listTexts);
 }
 
+void eraseListPoints(Canvas canvas) {
+  CanvasP *canvasP = (CanvasP *)canvas;
+  eraseListL(canvasP->listPoints, removePoint);
+  eraseBase(canvasP->listPoints);
+}
+
 void eraseCanvas(Canvas canvas) {
   CanvasP *canvasP = (CanvasP *)canvas;
   eraseListaR(canvas);
@@ -1593,6 +1692,7 @@ void eraseCanvas(Canvas canvas) {
   eraseListEllipses(canvas);
   eraseListPolyLines(canvas);
   eraseListTexts(canvas);
+  eraseListPoints(canvas);
   eraseCidade(canvasP->cidade);
   free(canvas);
 }
