@@ -153,7 +153,7 @@ long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath,
        retangulos = NULL, circulos = NULL;
 
   Cor cq = NULL, cs = NULL, ct = NULL, ch = NULL;
-  int bool1 = 0, bool2 = 0, bool3 = 0, bool4 = 0;
+  int bool1 = 0, bool2 = 0, bool3 = 0, bool4 = 0, myCont = 0;
   long int cont = 0;
 
   /*  Listas auxiliares. */
@@ -183,7 +183,8 @@ long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath,
     if (entradaA[0] == '#') {
       break;
     }
-    printf("%s\n", entradaA);
+    printf("%s %d\n", entradaA, myCont);
+    myCont++;
     if (boolean == 't' &&
         (entradaA[0] == 'o' || entradaA[0] == 'i' || entradaA[0] == 'd')) {
       /*  Abre o arquivo de saída .txt. */
@@ -265,7 +266,7 @@ long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath,
     }
     entradaA[0] = '\0';
   }
-
+  printf("Inicio do calculo da envoltoria convexa.\n");
   if (bool1 == 0) {
     if (lengthL(retangulos))
       cont = cont + executarConvexHull(retangulos, canvas, 5);
@@ -298,7 +299,7 @@ long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath,
     *qtdCompararacoesI = executarConvexHull(quadras, canvas, 1);
     cont = cont + *qtdCompararacoesI;
   }
-
+  printf("Fim do Geo\n");
   eraseListL(retangulos, NULL);
   eraseBase(retangulos);
 
@@ -524,6 +525,8 @@ void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas) {
   /* Quadra */
   showCanvasElements(canvas, arqSaidaSvg, 1);
 
+  /* Círculos */
+  showCanvasElements(canvas, arqSaidaSvg, 6);
 
   /* Hidrante */
   showCanvasElements(canvas, arqSaidaSvg, 2);
@@ -544,8 +547,7 @@ void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas) {
 
   showListLines(canvas, arqSaidaSvg);
 
-  /* Círculos */
-  showCanvasElements(canvas, arqSaidaSvg, 6);
+  showListPoints(canvas, arqSaidaSvg);
 
   tagFechamento(arqSaidaSvg);
 }

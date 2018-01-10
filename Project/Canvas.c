@@ -204,7 +204,7 @@ void removePointCanvas(Canvas canvas, int id) {
   CanvasP *canvasP = (CanvasP *)canvas;
   Item item;
   item = removeItemL2(canvasP->listPoints, &id, comparePoints);
-  eraseText(item);
+  removePoint(item);
 }
 
 void insertPolygonCanvas(Canvas canvas, Polygon polygon) {

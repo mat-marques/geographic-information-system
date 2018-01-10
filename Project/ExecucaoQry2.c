@@ -950,8 +950,12 @@ void executarQryLk(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
   Cidade cidade = NULL;
   int i, j, n = 1;
   void *element;
+  double x = 0, y = 0;
   char *id, *var2;
-
+  Torre torre;
+  Pessoa pessoa;
+  Endereco endereco;
+  Quadra quadra;
   cidade = getCidade(canvas);
 
   dicionario = getDicionario(cidade);
@@ -975,6 +979,18 @@ void executarQryLk(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
         fprintf(*arqSaidaT,
                 "%d - Celular de numero: %s esta conectado a torre de id %s.\n",
                 n, getNumCelular(element), id);
+        torre = getTorre(cidade, id);
+        pessoa = getDonoCelular(element);
+        endereco = getEnderecoP(pessoa);
+        quadra = getQuadra(cidade, getCep(endereco));
+        if(quadra != NULL){
+          calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x, &y);
+          insertLineCanvas(canvas, createLine(0, getXT(torre), getYT(torre), x, y));
+          insertPointCanvas(canvas, createPoint(0, x, y));
+        }
+        quadra = NULL;
+        pessoa = NULL;
+        torre = NULL;
         n++;
       }
     }
@@ -1043,7 +1059,9 @@ void executarQryCo(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
 
   fscanf(arqEntradaQry, "%s", op);
   letra = fgetc(arqEntradaQry);
-  if (letra == ' ') {
+  letra = fgetc(arqEntradaQry);
+  if ((feof(arqEntradaQry) == 0) && (letra != ' ') && (letra != '\n')) {
+    fseek(arqEntradaQry, -1, SEEK_CUR);
     fscanf(arqEntradaQry, "%d\n", &n);
   }
 
@@ -1112,11 +1130,12 @@ void executarQryLnr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
 
   if (list != NULL) {
     letra = fgetc(arqEntradaQry);
+    letra = fgetc(arqEntradaQry);
     if ((feof(arqEntradaQry) == 0) && (letra != ' ') && (letra != '\n')) {
+      fseek(arqEntradaQry, -1, SEEK_CUR);
       i = qtdCaracteres(arqEntradaQry);
       op = alocarString(i);
       fscanf(arqEntradaQry, "%s\n", op);
-
       fprintf(*arqSaidaT, "Comando lnr?\n");
       j = lengthL(list);
       for (i = 1; i <= j; i++) {
@@ -1144,6 +1163,7 @@ void executarQryLnr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
 
       free(op);
     } else {
+      fseek(arqEntradaQry, -1, SEEK_CUR);
       fgetc(arqEntradaQry);
       fprintf(*arqSaidaT, "Comando lnr?\n");
       j = lengthL(list);
@@ -1229,9 +1249,11 @@ void executarQryEcr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
   i = qtdCaracteres(arqEntradaQry);
   tipo1 = alocarString(i);
 
-  fscanf(arqEntradaQry, "%s ", tipo1);
+  fscanf(arqEntradaQry, "%s", tipo1);
+  letra = fgetc(arqEntradaQry);
   letra = fgetc(arqEntradaQry);
   if ((feof(arqEntradaQry) == 0) && (letra != ' ') && (letra != '\n')) {
+    fseek(arqEntradaQry, -1, SEEK_CUR);
     fscanf(arqEntradaQry, "%lf %lf %lf %lf\n", &x, &y, &w, &h);
 
     cidade = getCidade(canvas);
@@ -1275,6 +1297,7 @@ void executarQryEcr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
     eraseListL(list, NULL);
     eraseBase(list);
   } else {
+    fseek(arqEntradaQry, -1, SEEK_CUR);
     cidade = getCidade(canvas);
     dicionario = getDicionario(cidade);
 
