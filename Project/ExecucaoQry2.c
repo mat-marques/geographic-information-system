@@ -573,7 +573,7 @@ void executarQryMr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
           }
         }
       } else {
-        fprintf(*arqSaidaT, "Nunhum morador reside na regiao fornecida.\n");
+        fprintf(*arqSaidaT, "Nenhum morador reside na quadra de cep %s que esta inteiramente dentro da gerião fornecida.\n", cep);
       }
     }
     eraseListL(list, NULL);
@@ -617,8 +617,8 @@ void executarQryDm(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
       if (quadra != NULL) {
         calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x, &y);
         /* Insere um ponto no canvas */
-        insertPointCanvas(canvas, createPoint(0, x, y));
-        insertTextCanvas(canvas, createText(0, cpf, x, y));
+        insertPointCanvas(canvas, createPoint(automaticId++, x, y));
+        insertTextCanvas(canvas, createText(automaticId++, cpf, x, y));
       } else {
         printf("Região (Quadra) onde a pessoa mora nao existe na cidade.\n");
       }
@@ -662,7 +662,7 @@ void executarQryDe(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
               getNomeEstabC(estabC), x, y);
 
       /* Insere um círculo na lista de figuras geométricas */
-      insertPointCanvas(canvas, createPoint(0, x, y));
+      insertPointCanvas(canvas, createPoint(automaticId++, x, y));
     } else {
       printf("Quadra nao existe.\n");
     }
@@ -717,7 +717,7 @@ void executarQryCon(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
 
         /* Insere uma linha no canvas */
         insertLineCanvas(canvas,
-                         createLine(0, x, y, getXT(torre), getYT(torre)));
+                         createLine(automaticId++, x, y, getXT(torre), getYT(torre)));
       }
     }
   }
@@ -814,44 +814,47 @@ void executarQryMse(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
 void calcularCoordLosango(Canvas canvas, char face, double x, double y) {
   Polygon polygon = NULL;
   Line line1 = NULL, line2 = NULL;
-  polygon = createPolygon(0, 4);
+  char colour[] = "white";
+  polygon = createPolygon(automaticId++, 4);
   switch (face) {
   case 'S':
     insertPointsPolygon(polygon, x, y);
     insertPointsPolygon(polygon, x - 5, y + 5);
     insertPointsPolygon(polygon, x, y + 10);
     insertPointsPolygon(polygon, x + 5, y + 5);
-    line1 = createLine(0, x, y + 2.5, x, y + 7.5);
-    line2 = createLine(0, x - 2.5, y + 5, x + 2.5, y + 5);
+    line1 = createLine(automaticId++, x, y + 2.5, x, y + 7.5);
+    line2 = createLine(automaticId++, x - 2.5, y + 5, x + 2.5, y + 5);
     break;
   case 'L':
     insertPointsPolygon(polygon, x + 5, y - 5);
     insertPointsPolygon(polygon, x, y);
     insertPointsPolygon(polygon, x + 5, y + 5);
     insertPointsPolygon(polygon, x + 10, y);
-    line1 = createLine(0, x + 2.5, y, x + 7.5, y);
-    line2 = createLine(0, x + 5, y - 2.5, x + 5, y + 2.5);
+    line1 = createLine(automaticId++, x + 2.5, y, x + 7.5, y);
+    line2 = createLine(automaticId++, x + 5, y - 2.5, x + 5, y + 2.5);
     break;
   case 'N':
     insertPointsPolygon(polygon, x, y - 10);
     insertPointsPolygon(polygon, x - 5, y - 5);
     insertPointsPolygon(polygon, x, y);
     insertPointsPolygon(polygon, x + 5, y - 5);
-    line1 = createLine(0, x, y - 2.5, x, y - 7.5);
-    line2 = createLine(0, x - 2.5, y - 5, x + 2.5, y - 5);
+    line1 = createLine(automaticId++, x, y - 2.5, x, y - 7.5);
+    line2 = createLine(automaticId++, x - 2.5, y - 5, x + 2.5, y - 5);
     break;
   case 'O':
     insertPointsPolygon(polygon, x - 5, y - 5);
     insertPointsPolygon(polygon, x - 10, y);
     insertPointsPolygon(polygon, x - 5, y + 5);
     insertPointsPolygon(polygon, x, y);
-    line1 = createLine(0, x - 5, y - 2.5, x - 5, y + 2.5);
-    line2 = createLine(0, x - 2.5, y, x - 7.5, y);
+    line1 = createLine(automaticId++, x - 5, y - 2.5, x - 5, y + 2.5);
+    line2 = createLine(automaticId++, x - 2.5, y, x - 7.5, y);
     break;
   }
   insertPolygonCanvas(canvas, polygon);
   insertLineCanvas(canvas, line1);
   insertLineCanvas(canvas, line2);
+  setColourLine(line1, colour);
+  setColourLine(line2, colour);
 }
 
 void executarQryRip(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
@@ -985,8 +988,8 @@ void executarQryLk(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
         quadra = getQuadra(cidade, getCep(endereco));
         if(quadra != NULL){
           calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x, &y);
-          insertLineCanvas(canvas, createLine(0, getXT(torre), getYT(torre), x, y));
-          insertPointCanvas(canvas, createPoint(0, x, y));
+          insertLineCanvas(canvas, createLine(automaticId++, getXT(torre), getYT(torre), x, y));
+          insertPointCanvas(canvas, createPoint(automaticId++, x, y));
         }
         quadra = NULL;
         pessoa = NULL;
@@ -1505,7 +1508,7 @@ void executarQryLec(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
           quadra = getCep_x_Quadra(canvas, getCep(endereco));
           calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x,
                              &y);
-          insertCirculo(canvas, createCircle(-1, 3, x, y, cor));
+          insertPointCanvas(canvas, createPoint(automaticId++, x, y));
         } else {
           fprintf(*arqSaidaT,
                   "O proprietario do celular nao possui endereço.\n");
@@ -1769,8 +1772,7 @@ void executarQryDpr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
     for (i = 1; i <= l; i++) {
       element = getItemL(list, i);
       if (element != NULL) {
-        setIdText(element, i);
-        removeTextCanvas(canvas, i);
+        removeTextCanvas(canvas, getIdText(element));
       }
       element = NULL;
       id = NULL;
@@ -1786,8 +1788,7 @@ void executarQryDpr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
     for (i = 1; i <= l; i++) {
       element = getItemL(list, i);
       if (element != NULL) {
-        setIdPoint(element, i);
-        removePointCanvas(canvas, i);
+        removePointCanvas(canvas, getIdPoint(element));
       }
       element = NULL;
       id = NULL;
@@ -1803,8 +1804,7 @@ void executarQryDpr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
     for (i = 1; i <= l; i++) {
       element = getItemL(list, i);
       if (element != NULL) {
-        setIdLine(element, i);
-        removeLineCanvas(canvas, i);
+        removeLineCanvas(canvas, getIdLine(element));
       }
       element = NULL;
       id = NULL;
@@ -1812,6 +1812,7 @@ void executarQryDpr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
     eraseListL(list, NULL);
     eraseBase(list);
   }
+
   /* Polígono */
   list = getElementsListPartialInsideR(canvas, 11, x, y, w, h);
   if (list != NULL) {
@@ -1819,8 +1820,7 @@ void executarQryDpr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
     for (i = 1; i <= l; i++) {
       element = getItemL(list, i);
       if (element != NULL) {
-        setIdPolygon(element, i);
-        removePolygonCanvas(canvas, i);
+        removePolygonCanvas(canvas, getIdPolygon(element));
       }
       element = NULL;
       id = NULL;

@@ -12,6 +12,7 @@
 #include "EstabelecimentoComercial.h"
 #include "Dicionario.h"
 #include "Morador.h"
+#include "Grafo.h"
 
 typedef void* ElementoUrbano;
 typedef void* Cidade;
@@ -224,6 +225,13 @@ List getListaPessoas(Cidade cidade);
    Retorna uma lista vazia caso não exista Estabelecimentos Comerciais na cidade.
  */
 List getListaEstabelecimentos(Cidade cidade);
+
+
+/*
+   Retorna um grafo que representa as vias da cidade.
+ */
+Graph getGrafo(Cidade cidade);
+
 
 /*
    Retorna uma quadra presente em uma cidade com o título de identificação definido pela string cep.

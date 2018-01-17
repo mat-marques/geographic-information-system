@@ -22,6 +22,7 @@ typedef struct City {
   QuadTree listaQ, listaS, listaT, listaH;
   Dicionario dicionario;
   List listaMoradores, listaEstabComerciais, listaPessoas;
+  Graph grafo;
   char *nome;
 } City;
 
@@ -72,6 +73,7 @@ Dicionario configuraDicionario() {
 
 Cidade criaCidade(char *name) {
   City *city = NULL;
+  char id[] = "Via da Cidade";
   city = (City *)malloc(sizeof(City));
   city->nome = name;
   city->listaQ = createQuadTree();
@@ -82,6 +84,7 @@ Cidade criaCidade(char *name) {
   city->listaMoradores = createL();
   city->listaEstabComerciais = createL();
   city->dicionario = configuraDicionario();
+  city->grafo = createGraph(id);
   return city;
 }
 
@@ -245,6 +248,11 @@ List getListaPessoas(Cidade cidade){
 List getListaEstabelecimentos(Cidade cidade){
   City *city = (City *)cidade;
   return city->listaEstabComerciais;
+}
+
+Graph getGrafo(Cidade cidade){
+  City *city = (City *)cidade;
+  return city->grafo;
 }
 
 void showQ(Quadra quadra) {

@@ -6,7 +6,7 @@
 /*
    Autor: Matheus Augusto Marques.
    Módulo ExecucaoEcPmTm:
-   O módulo contém as funções necessárias para serem utilizadas no processamento dos comandos contidos nos arquivos de entrada ec, pm e tm.
+   O módulo contém as funções necessárias para serem utilizadas no processamento dos comandos contidos nos arquivos de entrada ec, pm, tm e via.
  */
 
 /*
@@ -38,5 +38,17 @@ void executarTmSu(Canvas canvas, FILE *arqEntradaTm);
    O procedimento executa o comando 'um' do arquivo '.tm'. O comando 'um' define que uma Pessoa identificada por cpf é cliente da linha móvel numcel da UELMobile.
  */
 void executarTmUm(Canvas canvas, FILE *arqEntradaTm);
+
+
+/*
+   O procedimento executa o comando 'v' do arquivo '.via'. O comando 'v' cria o vértice id posicionado nas coordenadas [x,y].
+*/
+void executarViaV(Canvas canvas, FILE *arqEntradaVia);
+
+/*
+   O procedimento executa o comando 'e' do arquivo '.via'. O comando 'e' cria a aresta (i,j) e associa as outras informações à aresta. Caso a aresta não
+   possua quadras em algum de seus lados, esta ausência é indicada por um hífen (-).
+*/
+void executarViaE(Canvas canvas, FILE *arqEntradaVia);
 
 #endif

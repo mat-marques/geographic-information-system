@@ -27,6 +27,14 @@ char *parametroO(char **argv, int argc);
  */
 char *parametroE(char **argv, int argc);
 
+
+/**
+   Retorna uma String referente ao parâmetro -v passado para o programa pelo usúario.
+   O parâmetro -v deve ser valido.
+ */
+char *parametroV(char **argv, int argc);
+
+
 /**
    Retorna um caracter. Retorna t se o comando -acc0 foi passado ao programa e retorna f caso não.
  */

@@ -23,7 +23,7 @@ Text createText(int id, char *text, double x, double y){
     myText->y = y;
     myText->colour = criarString(colour1);
     myText->fontFamily = criarString(family);
-    myText->fontSize = 12;
+    myText->fontSize = 5;
   }
   return myText;
 }

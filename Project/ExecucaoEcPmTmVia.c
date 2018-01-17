@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ExecucaoEcPmTm.h"
+#include "ExecucaoEcPmTmVia.h"
 #include "StringO.h"
 #include "Endereco.h"
 #include "Celular.h"
@@ -329,4 +329,61 @@ void executarTmUm(Canvas canvas, FILE *arqEntradaTm){
 
   desalocar(cpf);
   desalocar(numCel);
+}
+
+
+void executarViaV(Canvas canvas, FILE *arqEntradaVia){
+  char *id;
+  double x, y;
+  int s;
+  Vertex vertex = NULL;
+  s = qtdCaracteres(arqEntradaVia);
+  id = alocarString(s);
+  fscanf(arqEntradaVia, "%s ", id);
+  fscanf(arqEntradaVia, "%lf %lf\n", &x, &y);
+
+  vertex = createVertex(id, x, y);
+  if(vertex != NULL){
+    insertVertex(getGrafo(getCidade(canvas)), vertex);
+  }
+  free(id);
+}
+
+
+void executarViaE(Canvas canvas, FILE *arqEntradaVia){
+  char *idOrigin, *idDestiny, *name, *cepRight, *cepLeft;
+  double cmp, vm;
+  int s;
+  Edge edge = NULL;
+  s = qtdCaracteres(arqEntradaVia);
+  idOrigin = alocarString(s);
+  fscanf(arqEntradaVia, "%s ", idOrigin);
+
+  s = qtdCaracteres(arqEntradaVia);
+  idDestiny = alocarString(s);
+  fscanf(arqEntradaVia, "%s ", idDestiny);
+
+  s = qtdCaracteres(arqEntradaVia);
+  name = alocarString(s);
+  fscanf(arqEntradaVia, "%s ", name);
+
+  s = qtdCaracteres(arqEntradaVia);
+  cepRight = alocarString(s);
+  fscanf(arqEntradaVia, "%s ", cepRight);
+
+  s = qtdCaracteres(arqEntradaVia);
+  cepLeft = alocarString(s);
+  fscanf(arqEntradaVia, "%s ", cepLeft);
+
+  fscanf(arqEntradaVia, "%lf %lf\n", &cmp, &vm);
+
+  edge = createEdge2(idOrigin, idDestiny, name, cepRight, cepLeft, cmp, vm);
+  if(edge != NULL){
+    insertEdge(getGrafo(getCidade(canvas)), edge);
+  }
+  free(idOrigin);
+  free(idDestiny);
+  free(name);
+  free(cepRight);
+  free(cepLeft);
 }

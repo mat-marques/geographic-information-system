@@ -10,18 +10,18 @@
 #include "StringO.h"
 #include "Svg.h"
 
-#include "ExecucaoEcPmTm.h"
+#include "ExecucaoEcPmTmVia.h"
 #include "ExecucaoGeo.h"
 #include "ExecucaoQry.h"
 #include "ExecucaoQry2.h"
 
 void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry,
                    FILE **arqEntradaEc, FILE **arqEntradaPm,
-                   FILE **arqEntradaTm, char **arqNome, char **dirPath,
+                   FILE **arqEntradaTm, FILE **arqEntradaVia, char **arqNome, char **dirPath,
                    char **exitFileSvg, char *acc0, char *acc, char **argv,
                    int argc) {
-  char *string0 = NULL, *string1 = NULL, *string2 = NULL, *string3 = NULL;
-  char extensao2[] = ".svg", *string4 = NULL;
+  char *string0 = NULL, *string1 = NULL, *string2 = NULL, *string3 = NULL, *string4 = NULL;
+  char extensao2[] = ".svg", *string5 = NULL;
   char travessao[] = "-";
 
   parametroId(argv, argc);
@@ -90,24 +90,33 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry,
 
   string2 = parametroTm(argv, argc);
 
-  string3 = parametroE(argv, argc);
+  string3 = parametroV(argv, argc);
 
-  if (string3 != NULL) {
+  string4 = parametroE(argv, argc);
+
+
+  if (string4 != NULL) {
     if (string0 != NULL) {
-      string4 = concatenarElementos2(string3, string0);
-      *arqEntradaEc = createArqR(string4);
+      string5 = concatenarElementos2(string4, string0);
+      *arqEntradaEc = createArqR(string5);
     }
     desalocar(string4);
     string4 = NULL;
     if (string1 != NULL) {
-      string4 = concatenarElementos2(string3, string1);
-      *arqEntradaPm = createArqR(string4);
+      string5 = concatenarElementos2(string4, string1);
+      *arqEntradaPm = createArqR(string5);
     }
     desalocar(string4);
     string4 = NULL;
     if (string2 != NULL) {
-      string4 = concatenarElementos2(string3, string2);
-      *arqEntradaTm = createArqR(string4);
+      string5 = concatenarElementos2(string4, string2);
+      *arqEntradaTm = createArqR(string5);
+    }
+    desalocar(string4);
+    string4 = NULL;
+    if (string3 != NULL) {
+      string5 = concatenarElementos2(string4, string3);
+      *arqEntradaTm = createArqR(string5);
     }
   } else {
     if (string0 != NULL) {
@@ -121,6 +130,10 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry,
     if (string2 != NULL) {
       *arqEntradaTm = createArqR(string2);
     }
+
+    if (string3 != NULL) {
+      *arqEntradaVia = createArqR(string3);
+    }
   }
 
   desalocar(string0);
@@ -128,6 +141,7 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry,
   desalocar(string2);
   desalocar(string3);
   desalocar(string4);
+  desalocar(string5);
   string0 = NULL;
   string1 = NULL;
   string2 = NULL;
@@ -136,6 +150,7 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry,
 
   *acc = parametroAcc(argv, argc);
 }
+
 
 long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath,
                              Canvas canvas, int *qtdQuadrasInseridas,
@@ -329,6 +344,7 @@ long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath,
   return cont;
 }
 
+
 long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
                              Canvas canvas, int *qtdQuadrasRemovidas,
                              long int *qtdCompararacoesR,
@@ -443,6 +459,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
   return cont;
 }
 
+
 void executarComandoEc(FILE *arqEntradaEc, Canvas canvas) {
   char entrada[3];
   if (arqEntradaEc != NULL) {
@@ -465,6 +482,7 @@ void executarComandoEc(FILE *arqEntradaEc, Canvas canvas) {
     }
   }
 }
+
 
 void executarComandoPm(FILE *arqEntradaPm, Canvas canvas) {
   char entrada[3];
@@ -489,6 +507,7 @@ void executarComandoPm(FILE *arqEntradaPm, Canvas canvas) {
   }
 }
 
+
 void executarComandoTm(FILE *arqEntradaTm, Canvas canvas) {
   char entrada[3];
   if (arqEntradaTm != NULL) {
@@ -511,6 +530,31 @@ void executarComandoTm(FILE *arqEntradaTm, Canvas canvas) {
     }
   }
 }
+
+
+void executarComandoVia(FILE *arqEntradaVia, Canvas canvas) {
+  char entrada[3];
+  if (arqEntradaVia != NULL) {
+    while (1) {
+      if (feof(arqEntradaVia) != 0) {
+        break;
+      }
+
+      if (fscanf(arqEntradaVia, "%s ", entrada) < 0) {
+        break;
+      }
+
+      if (strcmp(entrada, "v") == 0) {
+        executarViaV(canvas, arqEntradaVia);
+      } else if (strcmp(entrada, "e") == 0) {
+        executarViaE(canvas, arqEntradaVia);
+      } else {
+        printf("Comando invalido em arquivo via.\n");
+      }
+    }
+  }
+}
+
 
 void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas) {
 
@@ -552,6 +596,7 @@ void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas) {
   tagFechamento(arqSaidaSvg);
 }
 
+
 void processarDados(char **argv, int argc) {
   char *arqNome = NULL, *dirPath = NULL, *exitFileSvg = NULL;
   char acc0 = 'f', acc = 'f';
@@ -560,11 +605,11 @@ void processarDados(char **argv, int argc) {
       qtdElementosRemovidos = 0;
   long int qtdCompararacoesI = 0, qtdCompararacoesR = 0;
   FILE *arqEntradaGeo = NULL, *arqEntradaQry = NULL, *arqSaidaSvg = NULL,
-       *arqEntradaEc = NULL, *arqEntradaPm = NULL, *arqEntradaTm = NULL;
+       *arqEntradaEc = NULL, *arqEntradaPm = NULL, *arqEntradaTm = NULL, *arqEntradaVia = NULL;
   Canvas canvas;
-
+  automaticId = 0;
   abrirArquivos(&arqEntradaGeo, &arqEntradaQry, &arqEntradaEc, &arqEntradaPm,
-                &arqEntradaTm, &arqNome, &dirPath, &exitFileSvg, &acc0, &acc,
+                &arqEntradaTm, &arqEntradaVia, &arqNome, &dirPath, &exitFileSvg, &acc0, &acc,
                 argv, argc);
 
   canvas = criaCanvas(1);
@@ -577,6 +622,8 @@ void processarDados(char **argv, int argc) {
   executarComandoPm(arqEntradaPm, canvas);
 
   executarComandoTm(arqEntradaTm, canvas);
+
+  executarComandoVia(arqEntradaVia, canvas);
 
   executarComandosQry(arqEntradaQry, arqNome, dirPath, canvas,
                           &qtdQuadrasRemovidas, &qtdCompararacoesR,

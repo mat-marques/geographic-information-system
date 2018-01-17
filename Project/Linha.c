@@ -13,7 +13,7 @@ typedef struct myLine {
 
 Line createLine(int id, double x1, double y1, double x2, double y2) {
   newLine *myLine = NULL;
-  char colour1[] = "white";
+  char colour1[] = "black";
   myLine = (newLine *)malloc(sizeof(newLine));
   if (myLine != NULL) {
     myLine->id = id;

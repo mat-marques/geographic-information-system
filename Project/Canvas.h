@@ -15,6 +15,8 @@
 typedef void* Canvas;
 typedef void* figuraGeometrica;
 
+long int automaticId;
+
 /***
    Autor: Matheus Augusto Marques.
    Tad: Canvas

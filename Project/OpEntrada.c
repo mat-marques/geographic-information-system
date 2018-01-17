@@ -54,6 +54,20 @@ char *parametroE(char **argv, int argc){
   return new0;
 }
 
+
+char *parametroV(char **argv, int argc){
+  int i;
+  char *new0=NULL;
+  for(i=1; i<argc; i++){
+    if(strcmp(argv[i],"-v")==0)
+    {
+      new0 = concatenarStrings(new0, *(argv+i+1));
+    }
+  }
+
+  return new0;
+}
+
 char parametroAcc0(char **argv, int argc){
   int i;
   for(i=1; i<argc; i++){

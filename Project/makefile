@@ -3,20 +3,21 @@
 
 objects = Arquivo.o Cidade.o Canvas.o Celular.o Circulo.o \
 					ConvexHull.o Cor.o Dicionario.o Endereco.o Ponto.o\
-					EstabelecimentoComercial.o ExecucaoEcPmTm.o ExecucaoGeo.o \
+					EstabelecimentoComercial.o ExecucaoEcPmTmVia.o ExecucaoGeo.o \
 					ExecucaoQry.o ExecucaoQry2.o HashTable.o Hidrante.o \
 					List.o main.o Morador.o OpEntrada.o OperacoesF.o \
 					Ordination.o Pessoa.o Processamento.o Quadra.o QuadTree.o \
 					Retangulo.o Semafaro.o Stack.o StringO.o Svg.o Torre.o \
-					Texto.o Poligono.o Linha.o MultiplasLinhas.o Elipse.o
+					Texto.o Poligono.o Linha.o MultiplasLinhas.o Elipse.o \
+					Rua.o Cruzamento.o Grafo.o
 
 
 dependenciasP = Processamento.h Processamento.c Arquivo.h Arquivo.c \
                 StringO.h StringO.c Svg.h Svg.c \
                 OpEntrada.h OpEntrada.c OperacoesF.h OperacoesF.c \
 				Cidade.h Cidade.c Canvas.h Canvas.c ExecucaoGeo.h ExecucaoGeo.c \
-				ExecucaoQry.h ExecucaoQry.c Cor.h Cor.c ExecucaoEcPmTm.h \
-				ExecucaoEcPmTm.c ExecucaoQry2.h ExecucaoQry2.c
+				ExecucaoQry.h ExecucaoQry.c Cor.h Cor.c ExecucaoEcPmTmVia.h \
+				ExecucaoEcPmTmVia.c ExecucaoQry2.h ExecucaoQry2.c
 
 dependenciasEg = Arquivo.h Arquivo.c StringO.h StringO.c Svg.h Svg.c \
                  OpEntrada.h OpEntrada.c Cor.h Cor.c Stack.h Stack.c \
@@ -46,7 +47,7 @@ dependenciasCi = Cidade.h Cidade.c Quadra.h Quadra.c\
 				 EstabelecimentoComercial.h EstabelecimentoComercial.c \
 				 Dicionario.h Dicionario.c Endereco.h Endereco.c \
 				 HashTable.h HashTable.c Celular.h Celular.c \
-				 Morador.h Morador.c StringO.h StringO.c
+				 Morador.h Morador.c StringO.h StringO.c Grafo.h Grafo.c
 
 dependenciasCh = ConvexHull.h ConvexHull.c Quadra.h Quadra.c \
  				 Hidrante.h Hidrante.c Semafaro.h Semafaro.c \
@@ -55,7 +56,7 @@ dependenciasCh = ConvexHull.h ConvexHull.c Quadra.h Quadra.c \
  				 QuadTree.h QuadTree.c Stack.h Stack.c \
  				 Svg.h Svg.c OperacoesF.h OperacoesF.c
 
-dependenciasEcPmTm = ExecucaoEcPmTm.h ExecucaoEcPmTm.c StringO.h StringO.c \
+dependenciasEcPmTmVia = ExecucaoEcPmTmVia.h ExecucaoEcPmTmVia.c StringO.h StringO.c \
 					 Endereco.h Endereco.c Celular.h Celular.c \
 					 Canvas.h Canvas.c
 
@@ -68,6 +69,18 @@ CFLAGS  = -g -ansi -pedantic
 
 siguel:	$(objects)
 	gcc -o siguel $(CFLAGS) $(objects) -lm
+
+
+Cruzamento.o: Cruzamento.h Cruzamento.c StringO.h StringO.c
+	gcc -c $(CFLAGS) Cruzamento.c -o Cruzamento.o
+
+
+Rua.o: Rua.h Rua.c StringO.h StringO.c
+	gcc -c $(CFLAGS) Rua.c -o Rua.o
+
+
+Grafo.o: Grafo.h Grafo.c Cruzamento.h Cruzamento.c Rua.h Rua.c List.h List.c StringO.h StringO.c
+	gcc -c $(CFLAGS) Grafo.c -o Grafo.o
 
 
 Elipse.o: Elipse.h Elipse.c StringO.h StringO.c
@@ -121,8 +134,8 @@ Dicionario.o: Dicionario.h Dicionario.c HashTable.h HashTable.c List.h List.c
 
 
 
-ExecucaoEcPmTm.o: $(dependenciasEcPmTm)
-	gcc -c $(CFLAGS) ExecucaoEcPmTm.c -o ExecucaoEcPmTm.o
+ExecucaoEcPmTmVia.o: $(dependenciasEcPmTmVia)
+	gcc -c $(CFLAGS) ExecucaoEcPmTmVia.c -o ExecucaoEcPmTmVia.o
 
 
 
