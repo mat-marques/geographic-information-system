@@ -336,15 +336,16 @@ void executarViaV(Canvas canvas, FILE *arqEntradaVia){
   char *id;
   double x, y;
   int s;
-  Vertex vertex = NULL;
+  CrossRoad cruzamento = NULL;
   s = qtdCaracteres(arqEntradaVia);
   id = alocarString(s);
   fscanf(arqEntradaVia, "%s ", id);
   fscanf(arqEntradaVia, "%lf %lf\n", &x, &y);
 
-  vertex = createVertex(id, x, y);
-  if(vertex != NULL){
-    insertVertex(getGrafo(getCidade(canvas)), vertex);
+  cruzamento = createCrossRoad(id, x, y);
+
+  if(cruzamento != NULL){
+    insertVertex(getGrafo(getCidade(canvas)), id, cruzamento);
   }
   free(id);
 }
@@ -354,7 +355,7 @@ void executarViaE(Canvas canvas, FILE *arqEntradaVia){
   char *idOrigin, *idDestiny, *name, *cepRight, *cepLeft;
   double cmp, vm;
   int s;
-  Edge edge = NULL;
+  Street rua = NULL;
   s = qtdCaracteres(arqEntradaVia);
   idOrigin = alocarString(s);
   fscanf(arqEntradaVia, "%s ", idOrigin);
@@ -377,9 +378,9 @@ void executarViaE(Canvas canvas, FILE *arqEntradaVia){
 
   fscanf(arqEntradaVia, "%lf %lf\n", &cmp, &vm);
 
-  edge = createEdge2(idOrigin, idDestiny, name, cepRight, cepLeft, cmp, vm);
-  if(edge != NULL){
-    insertEdge(getGrafo(getCidade(canvas)), edge);
+  rua = createStreet(name, cepRight, cepLeft, cmp, vm);
+  if(rua != NULL){
+    insertEdge(getGrafo(getCidade(canvas)), idOrigin, idDestiny, rua);
   }
   free(idOrigin);
   free(idDestiny);

@@ -12,6 +12,7 @@
 #include "Stack.h"
 #include "Svg.h"
 #include "Torre.h"
+#include "Ponto.h"
 
 #include "Celular.h"
 #include "StringO.h"
@@ -23,6 +24,7 @@ typedef struct City {
   Dicionario dicionario;
   List listaMoradores, listaEstabComerciais, listaPessoas;
   Graph grafo;
+  SetOfRegisters registradores;
   char *nome;
 } City;
 
@@ -85,6 +87,7 @@ Cidade criaCidade(char *name) {
   city->listaEstabComerciais = createL();
   city->dicionario = configuraDicionario();
   city->grafo = createGraph(id);
+  city->registradores = createSetOfRegisters(name, 11);
   return city;
 }
 
@@ -203,6 +206,10 @@ Dicionario getDicionario(Cidade cidade){
   return city->dicionario;
 }
 
+SetOfRegisters getRegistradores(Cidade cidade){
+  City *city = (City *)cidade;
+  return city->registradores;
+}
 
 char *getNome(Cidade cidade) {
   City *city = (City *)cidade;
@@ -585,6 +592,11 @@ void eraseListaEstabC(Cidade cidade) {
   eraseBase(city->listaEstabComerciais);
 }
 
+void eraseRegistradores(Cidade cidade) {
+  City *city = (City *)cidade;
+  removeSetOfRegisters(city->registradores, removePoint);
+}
+
 void eraseCidade(Cidade cidade) {
   City *city = (City *)cidade;
   eraseListaQ(cidade);
@@ -596,6 +608,7 @@ void eraseCidade(Cidade cidade) {
   eraseListaMoradores(cidade);
   eraseListaEstabC(cidade);
   removeDicionario(city->dicionario);
+  eraseRegistradores(city->registradores);
   if (city->nome != NULL) {
     free(city->nome);
   }

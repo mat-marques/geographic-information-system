@@ -9,7 +9,8 @@ objects = Arquivo.o Cidade.o Canvas.o Celular.o Circulo.o \
 					Ordination.o Pessoa.o Processamento.o Quadra.o QuadTree.o \
 					Retangulo.o Semafaro.o Stack.o StringO.o Svg.o Torre.o \
 					Texto.o Poligono.o Linha.o MultiplasLinhas.o Elipse.o \
-					Rua.o Cruzamento.o Grafo.o
+					Rua.o Cruzamento.o Grafo.o ExecucaoQry3.o \
+					Registrador.o ConjuntoDeRegistradores.o
 
 
 dependenciasP = Processamento.h Processamento.c Arquivo.h Arquivo.c \
@@ -47,7 +48,8 @@ dependenciasCi = Cidade.h Cidade.c Quadra.h Quadra.c\
 				 EstabelecimentoComercial.h EstabelecimentoComercial.c \
 				 Dicionario.h Dicionario.c Endereco.h Endereco.c \
 				 HashTable.h HashTable.c Celular.h Celular.c \
-				 Morador.h Morador.c StringO.h StringO.c Grafo.h Grafo.c
+				 Morador.h Morador.c StringO.h StringO.c Grafo.h Grafo.c \
+				 ConjuntoDeRegistradores.h ConjuntoDeRegistradores.c
 
 dependenciasCh = ConvexHull.h ConvexHull.c Quadra.h Quadra.c \
  				 Hidrante.h Hidrante.c Semafaro.h Semafaro.c \
@@ -64,11 +66,21 @@ dependenciasEq2 = ExecucaoQry2.h ExecucaoQry2.c Canvas.h Canvas.c \
 				  OperacoesF.h OperacoesF.c Endereco.h Endereco.c \
 				  List.h List.c StringO.h StringO.c
 
+dependenciasEq3 = ExecucaoQry3.h ExecucaoQry3.c Canvas.h Canvas.c \
+									StringO.h StringO.c
 
 CFLAGS  = -g -ansi -pedantic
 
 siguel:	$(objects)
 	gcc -o siguel $(CFLAGS) $(objects) -lm
+
+
+Registrador.o: Registrador.h Registrador.c StringO.h StringO.c
+	gcc -c $(CFLAGS) Registrador.c -o Registrador.o
+
+
+ConjuntoDeRegistradores.o: ConjuntoDeRegistradores.h ConjuntoDeRegistradores.c Registrador.h Registrador.c StringO.h StringO.c
+	gcc -c $(CFLAGS) ConjuntoDeRegistradores.c -o ConjuntoDeRegistradores.o
 
 
 Cruzamento.o: Cruzamento.h Cruzamento.c StringO.h StringO.c
@@ -150,6 +162,9 @@ ExecucaoQry.o: $(dependenciasEq)
 ExecucaoQry2.o: $(dependenciasEq2)
 	gcc -c $(CFLAGS) ExecucaoQry2.c -o ExecucaoQry2.o -lm
 
+
+ExecucaoQry3.o: $(dependenciasEq3)
+	gcc -c $(CFLAGS) ExecucaoQry3.c -o ExecucaoQry3.o -lm
 
 Svg.o: Svg.h Svg.c
 	gcc -c $(CFLAGS) Svg.c -o Svg.o

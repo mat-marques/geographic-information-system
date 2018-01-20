@@ -176,6 +176,7 @@ Edge removeEdgeGraph(Graph graph, char *idOrigin, char *idDestiny);
 
 
 void eraseVertex(Graph graph, void (eraseV)(void*)){
+  
 }
 
 

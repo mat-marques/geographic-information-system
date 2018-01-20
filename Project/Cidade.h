@@ -13,6 +13,7 @@
 #include "Dicionario.h"
 #include "Morador.h"
 #include "Grafo.h"
+#include "ConjuntoDeRegistradores.h"
 
 typedef void* ElementoUrbano;
 typedef void* Cidade;
@@ -138,6 +139,12 @@ void removeEstabCidade(Cidade cidade, char *cnpj);
   A função retorna um dicionário com informações sobre as pessoas, moradores e estabelecimentos comerciais inseridos na cidade.
  */
 Dicionario getDicionario(Cidade cidade);
+
+
+/*
+  A função retorna um conjunto de registradores que contém informações sobre elementos da cidade.
+ */
+SetOfRegisters getRegistradores(Cidade cidade);
 
 
 /*
