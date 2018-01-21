@@ -1,8 +1,6 @@
 #ifndef GRAFO_H
 #define GRAFO_H
 
-#include "Cruzamento.h"
-#include "Rua.h"
 #include "List.h"
 
 typedef void* Graph;
@@ -67,16 +65,20 @@ List getListAdjacent(Graph graph, char *id);
 int adjacent(Graph graph, char* idOrigin, char *idDestiny);
 
 
+Info removeEdgeGraph(Graph graph, char *idOrigin, char *idDestiny);
+
+void showGraph(Graph graph, FILE *fileSvg, void(showV)(void *, FILE *), void(showE)(void *, void*, FILE *));
+
 /*
   Apaga todos os vertíces dentro do grafo.
 */
-void eraseVertex(Graph graph, void (eraseV)(void*));
+void eraseAllVertex(Graph graph, void (eraseInfo)(void*));
 
 
 /*
   Apaga todos as arestas dentro do grafo.
 */
-void eraseEdge(Graph graph, void (eraseE)(void*));
+void eraseAllEdge(Graph graph, void (eraseInfo)(void*));
 
 
 /*
