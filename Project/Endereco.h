@@ -44,6 +44,19 @@ void setFace(Endereco endereco, char face);
 */
 int getNum(Endereco endereco);
 
+
+double getXEndereco(Endereco endereco);
+
+
+void setXEndereco(Endereco endereco, double x);
+
+
+double getYEndereco(Endereco endereco);
+
+
+void setYEndereco(Endereco endereco, double y);
+
+
 /*
  O procedimento define no endereçço um novo número.
 */

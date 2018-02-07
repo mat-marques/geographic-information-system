@@ -8,6 +8,7 @@ typedef struct NovoEndereco {
   char *cep, face;
   int num;
   char *comp;
+  double x, y;
 } NovoEndereco;
 
 Endereco criaEndereco(char *cep, char face, int num, char *comp) {
@@ -19,7 +20,8 @@ Endereco criaEndereco(char *cep, char face, int num, char *comp) {
   novoE->comp = criarString(comp);
   novoE->face = face;
   novoE->num = num;
-
+  novoE->x = -1;
+  novoE->y = -1;
   return novoE;
 }
 
@@ -55,6 +57,27 @@ int getNum(Endereco endereco) {
 void setNum(Endereco endereco, double num) {
   NovoEndereco *novoE = (NovoEndereco *)endereco;
   novoE->num = num;
+}
+
+
+double getXEndereco(Endereco endereco){
+  NovoEndereco *novoE = (NovoEndereco *)endereco;
+  return novoE->x;
+}
+
+void setXEndereco(Endereco endereco, double x){
+  NovoEndereco *novoE = (NovoEndereco *)endereco;
+  novoE->x = x;
+}
+
+double getYEndereco(Endereco endereco){
+  NovoEndereco *novoE = (NovoEndereco *)endereco;
+  return novoE->y;
+}
+
+void setYEndereco(Endereco endereco, double y){
+  NovoEndereco *novoE = (NovoEndereco *)endereco;
+  novoE->y = y;
 }
 
 char *getComp(Endereco endereco) {

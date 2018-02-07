@@ -1,5 +1,5 @@
-#ifndef VERTICE_H
-#define VERTICE_H
+#ifndef CRUZAMENTO_H
+#define CRUZAMENTO_H
 
 typedef void* CrossRoad;
 

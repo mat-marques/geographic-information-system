@@ -5,35 +5,19 @@
 #include "ExecucaoQry3.h"
 #include "StringO.h"
 
-char secao1[] = "cpfXcep";
-char secao2[] = "numcelXpessoa";
-char secao3[] = "codtXestabC";
-char secao4[] = "cpfXpessoa";
-char secao5[] = "cepXquadra";
-char secao6[] = "cepXmoradores";
-char secao7[] = "cepXpessoas";
-char secao8[] = "cnpjXestabC";
-char secao9[] = "descricaoXestabC";
-char secao10[] = "cepXestabC";
-char secao11[] = "cpfXmorador";
-char secao12[] = "operadoraXcelular";
-char secao13[] = "torreXcelular";
-char secao14[] = "numcelXtorre";
-char secao15[] = "numcelXcelular";
-char secao16[] = "operadoraXtorre";
-
 HashTable hash;
 Dicionario dicionario;
 
 
 void executarQryF(FILE *arqEntradaQry, Canvas canvas){
   char *r, *fone;
+  char secao15[] = "numcelXcelular";
   int i;
   Cidade cidade = NULL;
   Celular celular = NULL;
   SetOfRegisters sor = NULL;
   Register registrador = NULL;
-  //Point ponto = NULL;
+  Point ponto = NULL;
   i = qtdCaracteres(arqEntradaQry);
   r = alocarString(i);
 
@@ -55,9 +39,13 @@ void executarQryF(FILE *arqEntradaQry, Canvas canvas){
     sor = getRegistradores(cidade);
     registrador = getRegister(sor, r);
     if(registrador != NULL){
-
+      ponto = getInfoRegister(registrador);
+      setXPoint(ponto, getXCelular(celular));
+      setYPoint(ponto, getYCelular(celular));
     } else {
-
+      ponto = createPoint(automaticId++, getXCelular(celular), getYCelular(celular));
+      registrador = createRegister(r, ponto);
+      insertRegister(sor, registrador);
     }
 
   }
@@ -67,13 +55,15 @@ void executarQryF(FILE *arqEntradaQry, Canvas canvas){
 
 
 void executarQryM(FILE *arqEntradaQry, Canvas canvas){
-  char *r, *cpf, *cep = NULL;
+  char *r, *cpf;
+  char secao11[] = "cpfXmorador";
   int i;
   Cidade cidade = NULL;
-  Quadra quadra = NULL;
   SetOfRegisters sor = NULL;
   Register registrador = NULL;
   Point ponto = NULL;
+  Morador morador = NULL;
+  Endereco endereco = NULL;
   i = qtdCaracteres(arqEntradaQry);
   r = alocarString(i);
 
@@ -86,27 +76,24 @@ void executarQryM(FILE *arqEntradaQry, Canvas canvas){
 
   cidade = getCidade(canvas);
   dicionario = getDicionario(cidade);
+  hash = getSecaoDicionario(dicionario, secao11);
 
-  hash = getSecaoDicionario(dicionario, secao1);
+  morador = itemIsInsideHT(hash, cpf, cpf, compareMorador);
 
-  cep = (char*) itemIsInsideHT(hash, cpf, cpf, compareStrings);
-
-  if(cep != NULL){
-    quadra = getQuadra(cidade, cep);
-    if(quadra != NULL){
+  if(morador != NULL){
+      endereco = getEndereco(morador);
       sor = getRegistradores(cidade);
       registrador = getRegister(sor, r);
       if(registrador != NULL){
         ponto = getInfoRegister(registrador);
-        setXPoint(ponto, getXQ(quadra));
-        setYPoint(ponto, getXQ(quadra));
+        setXPoint(ponto, getXEndereco(endereco));
+        setYPoint(ponto, getYEndereco(endereco));
       } else {
-        ponto = createPoint(automaticId++, getXQ(quadra), getYQ(quadra));
+        ponto = createPoint(automaticId++, getXEndereco(endereco), getYEndereco(endereco));
         registrador = createRegister(r, ponto);
         insertRegister(sor, registrador);
       }
     }
-  }
 
   free(r);
   free(cpf);
@@ -115,6 +102,7 @@ void executarQryM(FILE *arqEntradaQry, Canvas canvas){
 
 void executarQryE(FILE *arqEntradaQry, Canvas canvas){
   char *r, *cep, face;
+  char secao5[] = "cepXquadra";
   int num;
   int i;
   double x = 0, y = 0;
@@ -249,7 +237,11 @@ void executarQryXY(FILE *arqEntradaQry, Canvas canvas){
 void executarQryTP(FILE *arqEntradaQry, Canvas canvas){
   char *r1, *r2;
   int i;
-
+  Cidade cidade;
+  SetOfRegisters sor;
+  Register registrador;
+  Point point;
+  double x = 0, y = 0;
   i = qtdCaracteres(arqEntradaQry);
   r1 = alocarString(i);
 
@@ -259,6 +251,27 @@ void executarQryTP(FILE *arqEntradaQry, Canvas canvas){
   r2 = alocarString(i);
 
   fscanf(arqEntradaQry, "%s\n", r2);
+
+  cidade = getCidade(canvas);
+  sor = getRegistradores(cidade);
+  registrador = getRegister(sor, r2);
+
+  if(registrador != NULL){
+    point = getInfoRegister(registrador);
+    getEstabCCloser(cidade, getXPoint(point), getYPoint(point), &x, &y);
+    registrador = getRegister(sor, r1);
+
+    if(registrador != NULL){
+      point = getInfoRegister(registrador);
+      setXPoint(point, x);
+      setYPoint(point, y);
+    } else {
+      point = createPoint(automaticId++, x, y);
+      registrador = createRegister(r1, point);
+      insertRegister(sor, registrador);
+    }
+
+  }
 
   free(r1);
   free(r2);

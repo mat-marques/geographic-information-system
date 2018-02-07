@@ -12,6 +12,8 @@
 #include "EstabelecimentoComercial.h"
 #include "Dicionario.h"
 #include "Morador.h"
+#include "Rua.h"
+#include "Cruzamento.h"
 #include "Grafo.h"
 #include "ConjuntoDeRegistradores.h"
 
@@ -186,6 +188,10 @@ void showMoradores(Cidade cidade, FILE *file);
    O procedimento desenha em um arquivo de extensão '.svg' um quadrado representando o Estabelecimento Comercial.
  */
 void showEstabelecimentos(Cidade cidade, FILE *file);
+
+
+void getEstabCCloser(Cidade cidade, double x, double y, double *xr, double *yr);
+
 
 /*
    Retorna um lista contendo todas as quadras de uma cidade.

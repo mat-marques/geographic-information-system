@@ -9,6 +9,7 @@
 typedef struct novoCelular {
   char *num, *idT, *operadora;
   Pessoa pessoa;
+  double x, y;
 } NovoCelular;
 
 Celular criaCelular(char *num) {
@@ -18,7 +19,8 @@ Celular criaCelular(char *num) {
   novoC->operadora = NULL;
   novoC->pessoa = NULL;
   novoC->num = criarString(num);
-
+  novoC->x = 0;
+  novoC->y = 0;
   return novoC;
 }
 
@@ -34,6 +36,26 @@ void setNumCelular(Celular celular, char *num) {
     novoC->num = NULL;
   }
   novoC->num = criarString(num);
+}
+
+double getXCelular(Celular celular){
+  NovoCelular *novoC = (NovoCelular *)celular;
+  return novoC->x;
+}
+
+void setXCelular(Celular celular, double x){
+  NovoCelular *novoC = (NovoCelular *)celular;
+  novoC->x = x;
+}
+
+double getYCelular(Celular celular){
+  NovoCelular *novoC = (NovoCelular *)celular;
+  return novoC->y;
+}
+
+void setYCelular(Celular celular, double y){
+  NovoCelular *novoC = (NovoCelular *)celular;
+  novoC->y = y;
 }
 
 char *getNomeOperadora(Celular celular) {

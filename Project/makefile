@@ -49,7 +49,8 @@ dependenciasCi = Cidade.h Cidade.c Quadra.h Quadra.c\
 				 Dicionario.h Dicionario.c Endereco.h Endereco.c \
 				 HashTable.h HashTable.c Celular.h Celular.c \
 				 Morador.h Morador.c StringO.h StringO.c Grafo.h Grafo.c \
-				 ConjuntoDeRegistradores.h ConjuntoDeRegistradores.c
+				 ConjuntoDeRegistradores.h ConjuntoDeRegistradores.c \
+				 OperacoesF.h OperacoesF.c
 
 dependenciasCh = ConvexHull.h ConvexHull.c Quadra.h Quadra.c \
  				 Hidrante.h Hidrante.c Semafaro.h Semafaro.c \

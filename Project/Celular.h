@@ -29,6 +29,15 @@ char *getNumCelular(Celular celular);
 */
 void setNumCelular(Celular celular, char *num);
 
+
+double getXCelular(Celular celular);
+
+void setXCelular(Celular celular, double x);
+
+double getYCelular(Celular celular);
+
+void setYCelular(Celular celular, double y);
+
 /*
   A função retorna o nome da operadora do celular.
 */

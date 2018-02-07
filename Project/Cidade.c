@@ -13,7 +13,7 @@
 #include "Svg.h"
 #include "Torre.h"
 #include "Ponto.h"
-
+#include "OperacoesF.h"
 #include "Celular.h"
 #include "StringO.h"
 
@@ -435,6 +435,31 @@ void showEstabelecimentos(Cidade cidade, FILE *file){
     }
   }
 
+}
+
+void getEstabCCloser(Cidade cidade, double x, double y, double *xr, double *yr){
+  City *city = (City *)cidade;
+  int i, j;
+  double dist = 0, lessDist = 0;
+  Endereco endereco;
+  EstabC estabC = NULL;
+  j = lengthL(city->listaEstabComerciais);
+  for(i=1; i<=j; i++){
+    estabC = getItemL(city->listaEstabComerciais, i);
+    if(estabC != NULL){
+      endereco = getEnderecoEstabC(estabC);
+      dist = distanciaEntrePontos(x, y, getXEndereco(endereco), getYEndereco(endereco));
+      if(i == 1){
+        lessDist = dist;
+      } else {
+        if(lessDist < dist){
+          lessDist = dist;
+          *xr = getXEndereco(endereco);
+          *yr = getYEndereco(endereco);
+        }
+      }
+    }
+  }
 }
 
 Quadra getQuadra(Cidade cidade, char *cep) {

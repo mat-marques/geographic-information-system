@@ -718,6 +718,9 @@ void executarQryCon(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
         /* Insere uma linha no canvas */
         insertLineCanvas(canvas,
                          createLine(automaticId++, x, y, getXT(torre), getYT(torre)));
+
+        setXCelular(celular, x);
+        setYCelular(celular, y);
       }
     }
   }

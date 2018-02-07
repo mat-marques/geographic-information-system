@@ -1,5 +1,5 @@
-#ifndef Rua_H
-#define Rua_H
+#ifndef RUA_H
+#define RUA_H
 
 typedef void* Street;
 

@@ -59,10 +59,13 @@ void executarEcE(Canvas canvas, FILE *arqEntradaEc){
   char secao3[] = "codtXestabC";
   char secao8[] = "cnpjXestabC";
   char secao10[] = "cepXestabC";
+  char secao5[] = "cepXquadra";
 
   int l, num;
   Cidade cidade;
   EstabC estabC;
+  double x, y;
+  Quadra quadra = NULL;
   l = qtdCaracteres(arqEntradaEc);
   codt = alocarString(l);
   fscanf(arqEntradaEc, "%s ", codt);
@@ -90,6 +93,16 @@ void executarEcE(Canvas canvas, FILE *arqEntradaEc){
   insertEstabC(cidade, estabC);
 
   dicionario = getDicionario(cidade);
+  hash = getSecaoDicionario(dicionario, secao5);
+
+  /* Coordenada geografica de onde fica o estabelecimento */
+  quadra = itemIsInsideHT(hash, cep, cep, compareQ);
+  if(quadra != NULL){
+    calculaCoordenadaM(quadra, num, face, &x, &y);
+    setXEndereco(getEnderecoEstabC(estabC), x);
+    setYEndereco(getEnderecoEstabC(estabC), y);
+  }
+
   /* Insere na secao3 - codtXestabC */
   hash = getSecaoDicionario(dicionario, secao3);
   insertHT(hash, codt, estabC);
@@ -164,6 +177,7 @@ void executarPmM(Canvas canvas, FILE *arqEntradaPm){
   char secao6[] = "cepXmoradores";
   char secao7[] = "cepXpessoas";
   char secao11[] = "cpfXmorador";
+  char secao5[] = "cepXquadra";
 
   int l;
   int num;
@@ -171,6 +185,8 @@ void executarPmM(Canvas canvas, FILE *arqEntradaPm){
   Pessoa pessoa;
   Endereco endereco;
   Morador morador;
+  Quadra quadra = NULL;
+  double x, y;
   l = qtdCaracteres(arqEntradaPm);
   cpf = alocarString(l);
   fscanf(arqEntradaPm, "%s ", cpf);
@@ -197,6 +213,15 @@ void executarPmM(Canvas canvas, FILE *arqEntradaPm){
     endereco = criaEndereco(cep, face, num, comp);
     setEnderecoP(pessoa, endereco);
     morador = criaMorador(cpf, endereco);
+
+    /* Coordenada geografica de onde o morador mora */
+    hash = getSecaoDicionario(dicionario, secao5);
+    quadra = itemIsInsideHT(hash, cep, cep, compareQ);
+    if(quadra != NULL){
+      calculaCoordenadaM(quadra, num, face, &x, &y);
+      setXEndereco(endereco, x);
+      setYEndereco(endereco, y);
+    }
 
     /* Insere na secao1 - cpfXcep */
     hash = getSecaoDicionario(dicionario, secao1);
