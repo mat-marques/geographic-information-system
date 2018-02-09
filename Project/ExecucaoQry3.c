@@ -54,7 +54,7 @@ void executarQryF(FILE *arqEntradaQry, Canvas canvas){
 }
 
 
-void executarQryM(FILE *arqEntradaQry, Canvas canvas){
+void executarQryM2(FILE *arqEntradaQry, Canvas canvas){
   char *r, *cpf;
   char secao11[] = "cpfXmorador";
   int i;
@@ -235,7 +235,7 @@ void executarQryXY(FILE *arqEntradaQry, Canvas canvas){
 
 
 void executarQryTP(FILE *arqEntradaQry, Canvas canvas){
-  char *r1, *r2;
+  char *r1, *r2, *tp;
   int i;
   Cidade cidade;
   SetOfRegisters sor;
@@ -248,6 +248,11 @@ void executarQryTP(FILE *arqEntradaQry, Canvas canvas){
   fscanf(arqEntradaQry, "%s ", r1);
 
   i = qtdCaracteres(arqEntradaQry);
+  tp = alocarString(i);
+
+  fscanf(arqEntradaQry, "%s ", tp);
+
+  i = qtdCaracteres(arqEntradaQry);
   r2 = alocarString(i);
 
   fscanf(arqEntradaQry, "%s\n", r2);
@@ -258,7 +263,7 @@ void executarQryTP(FILE *arqEntradaQry, Canvas canvas){
 
   if(registrador != NULL){
     point = getInfoRegister(registrador);
-    getEstabCCloser(cidade, getXPoint(point), getYPoint(point), &x, &y);
+    getEstabCCloser(cidade, getXPoint(point), getYPoint(point), &x, &y, tp);
     registrador = getRegister(sor, r1);
 
     if(registrador != NULL){
@@ -275,40 +280,33 @@ void executarQryTP(FILE *arqEntradaQry, Canvas canvas){
 
   free(r1);
   free(r2);
+  free(tp);
 }
 
 
 void executarQryP(FILE *arqEntradaQry, Canvas canvas){
-  char *r1, *r2, *cor, letra;
-  int i, boolean = 0;
+  char t_p, D_T, *sufixo, *r1, *r2;
+  int i;
+
+  fscanf(arqEntradaQry, "%c ", &t_p);
+
+  if(t_p == 'p'){
+    i = qtdCaracteres(arqEntradaQry);
+    sufixo = alocarString(i);
+    fscanf(arqEntradaQry, "%s ", sufixo);
+  }
+
+  fscanf(arqEntradaQry, "%c ", &D_T);
 
   i = qtdCaracteres(arqEntradaQry);
   r1 = alocarString(i);
-
   fscanf(arqEntradaQry, "%s ", r1);
 
   i = qtdCaracteres(arqEntradaQry);
   r2 = alocarString(i);
-
   fscanf(arqEntradaQry, "%s", r2);
-  letra = fgetc(arqEntradaQry);
-  if(letra == ' '){
-    letra = fgetc(arqEntradaQry);
-    if((letra != ' ') && (letra != '\n')){
-      boolean = 1;
-    }
-  }
-  if(boolean == 1){
-    fseek(arqEntradaQry, -1, SEEK_CUR);
-    i = qtdCaracteres(arqEntradaQry);
-    cor = alocarString(i);
 
-    fscanf(arqEntradaQry, "%s\n", cor);
 
-    free(cor);
-  } else {
-
-  }
 
   free(r1);
   free(r2);

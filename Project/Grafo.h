@@ -1,7 +1,7 @@
 #ifndef GRAFO_H
 #define GRAFO_H
 
-#include "List.h"
+#include "HashTable.h"
 
 typedef void* Graph;
 typedef void* Info;
@@ -25,7 +25,7 @@ typedef void* Edge;
 /*
   A função e retorna um grafo definido com um id.
 */
-Graph createGraph(char *id);
+Graph createGraph(char *id, int n);
 
 
 /*
@@ -38,7 +38,7 @@ void insertVertex(Graph graph, char *id, Info info);
   Insere uma aresta no grafo.
   Info é a informação que será armazenada na aresta.
 */
-void insertEdge(Graph graph, char *idOrigin, char *idDestiny, Info info);
+void insertEdge(Graph graph, char *idOrigin, char *idDestiny, double p, double v, Info info);
 
 
 /*
@@ -47,38 +47,48 @@ void insertEdge(Graph graph, char *idOrigin, char *idDestiny, Info info);
 Vertex getVertex(Graph graph, char *id);
 
 
+char *getIdVertex(Vertex vertex);
+
+
+Edge getInfoVertex(Vertex vertex);
+
 /*
   Busca uma aresta no grafo e retorna o info da aresta encontrada.
 */
-Edge getEdge(Graph graph, char *idOrigin, char *idDestiny);
+Info getEdge(Graph graph, char *idOrigin, char *idDestiny);
 
 
-/*
+char *getIdEdge(Edge edge);
 
-*/
+
+Info getInfoEdge(Edge edge);
+
+
 List getListAdjacent(Graph graph, char *id);
 
 
-/*
-
-*/
 int adjacent(Graph graph, char* idOrigin, char *idDestiny);
+
+
+List deepSearch(Graph graph);
+
+
+List widthSearch(Graph graph, Vertex vertex);
+
+
+List shortestPath(Graph graph, Vertex vertexO);
 
 
 Info removeEdgeGraph(Graph graph, char *idOrigin, char *idDestiny);
 
+
 void showGraph(Graph graph, FILE *fileSvg, void(showV)(void *, FILE *), void(showE)(void *, void*, FILE *));
 
-/*
-  Apaga todos os vertíces dentro do grafo.
-*/
-void eraseAllVertex(Graph graph, void (eraseInfo)(void*));
+
+void eraseAllVertex(Graph graph, void(eraseInfo)(void *));
 
 
-/*
-  Apaga todos as arestas dentro do grafo.
-*/
-void eraseAllEdge(Graph graph, void (eraseInfo)(void*));
+void eraseAllEdge(Graph graph, void(eraseInfo)(void *)) ;
 
 
 /*

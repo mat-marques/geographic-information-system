@@ -6,20 +6,38 @@
 #include "StringO.h"
 #include "Svg.h"
 
+#define Branco 0
+#define Cinza 1
+#define Preto 2
+#define Max 1000000000
+
+int myTime = 0;
+
+struct widthS {
+  int cor;
+  long int dist;
+  struct myVertex *p;
+};
+
 typedef struct myVertex {
   char *id;
   void *info;
   List listEdge;
+  struct widthS *u;
 } newVertex;
 
 typedef struct myEdge {
   void *info;
   char *idOrigin, *idDestiny, *id;
+  double p, v;
+  newVertex *vertex;
 } newEdge;
 
 typedef struct myGraph {
   char *id;
-  List listVertex;
+  HashTable hashVertex;
+  newVertex **vectorVertex;
+  long int qtdVD, qtdV;
 } newGraph;
 
 int compareVertex(void *vertexA, void *id) {
@@ -40,12 +58,15 @@ int compareEdge(void *edgeA, void *id) {
   return 0;
 }
 
-Graph createGraph(char *id) {
+Graph createGraph(char *id, int n) {
   newGraph *graph = NULL;
   graph = (newGraph *)malloc(sizeof(newGraph));
   if (graph != NULL) {
     graph->id = criarString(id);
-    graph->listVertex = createL();
+    graph->hashVertex = createHT(50);
+    graph->qtdVD = n;
+    graph->qtdV = 0;
+    graph->vectorVertex = (newVertex**) malloc(n * sizeof(newVertex));
   }
   return graph;
 }
@@ -54,24 +75,30 @@ void insertVertex(Graph graph, char *id, Info info) {
   newGraph *graphN = (newGraph *)graph;
   newVertex *vertexN = NULL;
   if (graphN != NULL) {
-    vertexN = (newVertex *)malloc(sizeof(newVertex));
-    if (vertexN != NULL) {
-      vertexN->id = criarString(id);
-      vertexN->info = info;
-      vertexN->listEdge = createL();
-      insertEndL(graphN->listVertex, vertexN);
+    if(graphN->qtdV < graphN->qtdVD){
+      vertexN = (newVertex *)malloc(sizeof(newVertex));
+      if (vertexN != NULL) {
+        vertexN->id = criarString(id);
+        vertexN->info = info;
+        vertexN->listEdge = createL();
+        vertexN->u = NULL;
+        insertHT(graphN->hashVertex, id, vertexN);
+        *(graphN->vectorVertex + graphN->qtdV) = vertexN;
+        graphN->qtdV++;
+      }
     }
   }
 }
 
-void insertEdge(Graph graph, char *idOrigin, char *idDestiny, Info info) {
+void insertEdge(Graph graph, char *idOrigin, char *idDestiny, double p, double v,
+                Info info) {
   newGraph *graphN = (newGraph *)graph;
   int l;
   newEdge *edgeN = NULL;
   newVertex *vertexN = NULL;
   if (graphN != NULL) {
-    vertexN =
-        (newVertex *)searchItemL(graphN->listVertex, idOrigin, compareVertex);
+    vertexN = (newVertex *)itemIsInsideHT(graphN->hashVertex, idOrigin,
+                                          idOrigin, compareVertex);
     if (vertexN != NULL) {
       edgeN = (newEdge *)malloc(sizeof(newEdge));
       if (edgeN != NULL) {
@@ -84,6 +111,10 @@ void insertEdge(Graph graph, char *idOrigin, char *idDestiny, Info info) {
         edgeN->info = info;
         edgeN->idOrigin = criarString(idOrigin);
         edgeN->idDestiny = criarString(idDestiny);
+        edgeN->p = p;
+        edgeN->v = v;
+        edgeN->vertex = (newVertex *)itemIsInsideHT(
+            graphN->hashVertex, idDestiny, idDestiny, compareVertex);
         insertEndL(vertexN->listEdge, edgeN);
       }
     }
@@ -94,12 +125,23 @@ Vertex getVertex(Graph graph, char *id) {
   newGraph *graphN = (newGraph *)graph;
   newVertex *vertexN = NULL;
   if (graphN != NULL) {
-    vertexN = (newVertex *)searchItemL(graphN->listVertex, id, compareVertex);
+    vertexN =
+        (newVertex *)itemIsInsideHT(graphN->hashVertex, id, id, compareVertex);
     if (vertexN != NULL) {
-      return vertexN->info;
+      return vertexN;
     }
   }
   return NULL;
+}
+
+char *getIdVertex(Vertex vertex) {
+  newVertex *v = (newVertex *)vertex;
+  return v->id;
+}
+
+Info getInfoVertex(Vertex vertex) {
+  newVertex *v = (newVertex *)vertex;
+  return v->info;
 }
 
 Edge getEdge(Graph graph, char *idOrigin, char *idDestiny) {
@@ -109,8 +151,8 @@ Edge getEdge(Graph graph, char *idOrigin, char *idDestiny) {
   int l;
   char *id;
   if (graphN != NULL) {
-    vertexN =
-        (newVertex *)searchItemL(graphN->listVertex, idOrigin, compareVertex);
+    vertexN = (newVertex *)itemIsInsideHT(graphN->hashVertex, idOrigin,
+                                          idOrigin, compareVertex);
     if (vertexN != NULL) {
       l = strlen(idOrigin) + strlen(idDestiny) + 2;
       id = (char *)malloc(l * sizeof(char));
@@ -119,11 +161,21 @@ Edge getEdge(Graph graph, char *idOrigin, char *idDestiny) {
       edgeN = (newEdge *)searchItemL(vertexN->listEdge, id, compareEdge);
       free(id);
       if (edgeN != NULL) {
-        return edgeN->info;
+        return edgeN;
       }
     }
   }
   return NULL;
+}
+
+char *getIdEdge(Edge edge) {
+  newEdge *e = (newEdge *)edge;
+  return e->id;
+}
+
+Info getInfoEdge(Edge edge) {
+  newEdge *e = (newEdge *)edge;
+  return e->info;
 }
 
 List getListAdjacent(Graph graph, char *id) {
@@ -132,14 +184,15 @@ List getListAdjacent(Graph graph, char *id) {
   List list = NULL;
   newVertex *vertex = NULL;
   newEdge *edge = NULL;
-  vertex = (newVertex *)searchItemL(graphN->listVertex, id, compareVertex);
+  vertex =
+      (newVertex *)itemIsInsideHT(graphN->hashVertex, id, id, compareVertex);
   if (vertex != NULL) {
     list = createL();
     j = lengthL(vertex->listEdge);
     for (i = 1; i <= j; i++) {
       edge = (newEdge *)getItemL(vertex->listEdge, i);
       if (edge != NULL) {
-        insertEndL(list, edge->idDestiny);
+        insertEndL(list, edge->vertex);
       }
       edge = NULL;
     }
@@ -153,8 +206,8 @@ int adjacent(Graph graph, char *idOrigin, char *idDestiny) {
   char *id;
   newVertex *vertex = NULL;
   newEdge *edge = NULL;
-  vertex =
-      (newVertex *)searchItemL(graphN->listVertex, idOrigin, compareVertex);
+  vertex = (newVertex *)itemIsInsideHT(graphN->hashVertex, idOrigin, idOrigin,
+                                       compareVertex);
   if (vertex != NULL) {
     l = strlen(idOrigin) + strlen(idDestiny) + 2;
     id = (char *)malloc(l * sizeof(char));
@@ -169,9 +222,219 @@ int adjacent(Graph graph, char *idOrigin, char *idDestiny) {
   return 0;
 }
 
-void deepSearch(Graph graph);
+void DSG(newVertex *v, List listR) {
+  int i, j;
+  newEdge *e = NULL;
+  myTime = myTime + 1;
+  v->u->dist = myTime;
+  v->u->cor = Cinza;
+  j = lengthL(v->listEdge);
+  for (i = 1; i <= j; i++) {
+    e = (newEdge *)getItemL(v->listEdge, i);
+    if (e->vertex->u->cor == Branco) {
+      e->vertex->u->p = v;
+      insertEndL(listR, e->vertex);
+      DSG(e->vertex, listR);
+    }
+  }
+  v->u->cor = Preto;
+  myTime = myTime + 1;
+  v->u->dist = myTime;
+}
 
-void widthSearch(Graph graph);
+List deepSearch(Graph graph) {
+  newGraph *graphN = (newGraph *)graph;
+  List listR = NULL;
+  int i;
+  newVertex *v = NULL;
+
+  if (graphN != NULL) {
+    /* Define as condições iniciais de todos os vertíces menos o vertice s */
+    for (i = 0; i < graphN->qtdVD; i++) {
+      v = *(graphN->vectorVertex + i);
+      if ((v != NULL)) {
+        if (v->u == NULL) {
+          v->u = (struct widthS *)malloc(sizeof(struct widthS));
+        }
+        if (v->u != NULL) {
+          v->u->cor = Branco;
+          v->u->p = NULL;
+          v->u->dist = 0;
+        }
+      }
+    }
+    myTime = 0;
+    listR = createL();
+
+    /* Busca em profundidade */
+    for (i = 0; i < graphN->qtdVD; i++) {
+      v = *(graphN->vectorVertex + i);
+      if (v->u->cor == Branco) {
+        DSG(v, listR);
+      }
+    }
+  }
+
+  return listR;
+}
+
+List widthSearch(Graph graph, Vertex vertex) {
+  newGraph *graphN = (newGraph *)graph;
+  List list = NULL, listR = NULL;
+  int i, n, m;
+  newVertex *v = NULL;
+  newEdge *edge = NULL;
+  newVertex *s = (newVertex *)vertex;
+  if (graphN != NULL) {
+    /* Define as condições iniciais de todos os vertíces menos o vertice s */
+    for (i = 0; i <= graphN->qtdVD; i++) {
+      v = *(graphN->vectorVertex + i);
+      if ((v != NULL) && (strcmp(v->id, s->id) != 0)) {
+        if (v->u == NULL) {
+          v->u = (struct widthS *)malloc(sizeof(struct widthS));
+        }
+        if (v->u != NULL) {
+          v->u->cor = Branco;
+          v->u->dist = 0;
+          v->u->p = NULL;
+        }
+      }
+    }
+    /* Define as condições iniciais do vertice de partida */
+    s->u->cor = Cinza;
+    s->u->dist = 0;
+    s->u->p = NULL;
+
+    /* Fila de prioridades */
+    list = createL();
+
+    listR = createL();
+    insertEndL(list, s);
+    insertEndL(listR, s);
+
+    v = NULL;
+    /* Busca em largura */
+    while (lengthL(list) != 0) {
+      v = (newVertex *)getBeginItemL(list);
+      removeBeginL(list, NULL);
+      if (v != NULL) {
+        m = lengthL(v->listEdge);
+        if (m > 0) {
+          for (n = 1; n <= m; n++) {
+            edge = (newEdge *)getItemL(v->listEdge, n);
+            if (edge != NULL) {
+              if (edge->vertex->u->cor == Branco) {
+                edge->vertex->u->cor = Cinza;
+                edge->vertex->u->dist = v->u->dist + 1;
+                edge->vertex->u->p = v;
+                insertEndL(list, edge->vertex);
+                insertEndL(listR, edge->vertex);
+              }
+            }
+          }
+          v->u->cor = Preto;
+        }
+      }
+    }
+
+    eraseListL(list, NULL);
+    eraseBase(list);
+  }
+  return listR;
+}
+
+void initializeSingleSource(newGraph *graph) {
+  int i;
+  newVertex *v;
+  for (i = 0; i <= graph->qtdVD; i++) {
+    v = *(graph->vectorVertex + i);
+    if ((v != NULL)) {
+      if(v->u == NULL){
+        v->u = (struct widthS *)malloc(sizeof(struct widthS));
+      }
+      if (v->u != NULL) {
+        v->u->dist = Max;
+        v->u->p = NULL;
+      }
+    }
+  }
+}
+
+void relax(newVertex *u, newVertex *v, newEdge *w) {
+  if ((u->u->dist + ((long int)w->p)) < v->u->dist) {
+    v->u->dist = u->u->dist + w->p;
+    v->u->p = u;
+  }
+}
+
+int extractMin(List listQ) {
+  newVertex *v = NULL;
+  int i, j, n, p;
+  j = lengthL(listQ);
+  v = (newVertex *)getBeginItemL(listQ);
+  p = v->u->dist;
+  n = 1;
+  for (i = 2; i <= j; i++) {
+    v = (newVertex *)getItemL(listQ, i);
+    if (v->u->dist < p) {
+      n = i;
+    }
+  }
+  return n;
+}
+
+List shortestPath(Graph graph, Vertex vertex) {
+  newGraph *graphN = (newGraph *)graph;
+  List listS = NULL, listQ = NULL;
+  int i, j, n;
+  newVertex *u = NULL;
+  newEdge *edge = NULL;
+  newVertex *w = (newVertex *)vertex;
+
+  if (graphN != NULL) {
+
+    initializeSingleSource(graphN);
+    w->u->dist = 0;
+
+    listS = createL();
+    listQ = createL();
+    for (i = 0; i <= graphN->qtdVD; i++) {
+      u = *(graphN->vectorVertex + i);
+      if ((u != NULL)) {
+        insertEndL(listQ, u);
+      }
+    }
+
+    u = NULL;
+
+    while (lengthL(listQ) != 0) {
+      n = extractMin(listQ);
+      u = (newVertex *)getItemL(listQ, n);
+      removeMiddleL(listQ, n, NULL);
+      insertEndL(listS, u);
+      j = lengthL(u->listEdge);
+      for (i = 1; i <= j; i++) {
+        edge = (newEdge *)getItemL(u->listEdge, i);
+        if (edge != NULL) {
+          relax(u, edge->vertex, edge);
+        }
+      }
+    }
+  }
+
+  j = lengthL(listS);
+  printf("Vertex  |  Distance from Source\n");
+  for (i = 1; i <= j; i++) {
+    u = (newVertex *)getItemL(listS, i);
+    if (u != NULL) {
+      printf("%s  |  %ld\n", u->id, u->u->dist);
+    }
+  }
+  eraseListL(listQ, NULL);
+  eraseBase(listQ);
+
+  return listS;
+}
 
 Info removeEdgeGraph(Graph graph, char *idOrigin, char *idDestiny) {
   newGraph *graphN = (newGraph *)graph;
@@ -179,51 +442,52 @@ Info removeEdgeGraph(Graph graph, char *idOrigin, char *idDestiny) {
   int l;
   char *id;
   newVertex *vertex = NULL;
-  vertex =
-      (newVertex *)searchItemL(graphN->listVertex, idOrigin, compareVertex);
+  vertex = (newVertex *)itemIsInsideHT(graphN->hashVertex, idOrigin, idOrigin,
+                                       compareVertex);
   if (vertex != NULL) {
     l = strlen(idOrigin) + strlen(idDestiny) + 2;
     id = (char *)malloc(l * sizeof(char));
     id = strcat(idOrigin, "-");
     id = strcat(id, idDestiny);
-    removeItemL2(vertex->listEdge, id, compareEdge);
+    info = removeItemL2(vertex->listEdge, id, compareEdge);
     free(id);
   }
   return info;
 }
 
-void removeVertex(void *vertexA) {
-  newVertex *vertex = (newVertex *)vertexA;
-  free(vertex->id);
-  free(vertex);
-}
-
-void showGraph(Graph graph, FILE *fileSvg, void(showV)(void *, FILE *), void(showE)(void *, void*, FILE *)) {
+void showGraph(Graph graph, FILE *fileSvg, void(showV)(void *, FILE *),
+               void(showE)(void *, void *, FILE *)) {
   newGraph *graphN = (newGraph *)graph;
-  int i, j, n, m;
+  int i, n, m;
   newVertex *vertex, *vertex2;
   newEdge *edge;
   if (graphN != NULL && showV != NULL) {
-    j = lengthL(graphN->listVertex);
-    for (i = 1; i <= j; i++) {
-      vertex = (newVertex *)getItemL(graphN->listVertex, i);
+    for (i = 1; i <= graphN->qtdVD; i++) {
+      vertex = *(graphN->vectorVertex + i);
       showV(vertex->info, fileSvg);
       if (vertex != NULL) {
         m = lengthL(vertex->listEdge);
-        printf("m = %d\n", m);
         for (n = 1; n <= m; n++) {
           edge = (newEdge *)getItemL(vertex->listEdge, n);
-          vertex2 = (newVertex*) searchItemL(graphN->listVertex, edge->idDestiny, compareVertex);
-          if(vertex2 != NULL && showE != NULL){
+          vertex2 =
+              (newVertex *)itemIsInsideHT(graphN->hashVertex, edge->idDestiny,
+                                          edge->idDestiny, compareVertex);
+          if (vertex2 != NULL && showE != NULL) {
             showE(vertex->info, vertex2->info, fileSvg);
           }
         }
-
       }
-
     }
-
   }
+}
+
+void removeVertex(void *vertexA) {
+  newVertex *vertex = (newVertex *)vertexA;
+  free(vertex->id);
+  if (vertex->u != NULL) {
+    free(vertex->u);
+  }
+  free(vertex);
 }
 
 void removeEdge(void *edgeA) {
@@ -236,32 +500,29 @@ void removeEdge(void *edgeA) {
 
 void eraseAllVertex(Graph graph, void(eraseInfo)(void *)) {
   newGraph *graphN = (newGraph *)graph;
-  int i, j;
+  int i;
   newVertex *vertex;
   if (graphN != NULL) {
+    eraseHT(graphN->hashVertex, NULL);
     if (eraseInfo != NULL) {
-      j = lengthL(graphN->listVertex);
-      for (i = 1; i <= j; i++) {
-        vertex = (newVertex *)getItemL(graphN->listVertex, i);
+      for (i = 1; i <= graphN->qtdVD; i++) {
+        vertex = *(graphN->vectorVertex + i);
         if (vertex != NULL) {
           eraseInfo(vertex->info);
         }
       }
     }
-    eraseListL(graphN->listVertex, removeVertex);
-    eraseBase(graphN->listVertex);
   }
 }
 
 void eraseAllEdge(Graph graph, void(eraseInfo)(void *)) {
   newGraph *graphN = (newGraph *)graph;
-  int i, j, n, m;
+  int i, n, m;
   newVertex *vertex;
   newEdge *edge;
   if (graphN != NULL) {
-    j = lengthL(graphN->listVertex);
-    for (i = 1; i <= j; i++) {
-      vertex = (newVertex *)getItemL(graphN->listVertex, i);
+    for (i = 0; i <= graphN->qtdVD; i++) {
+      vertex = *(graphN->vectorVertex + i);
       if (vertex != NULL) {
         if (eraseInfo != NULL) {
           m = lengthL(vertex->listEdge);
@@ -283,6 +544,7 @@ void eraseGraph(Graph graph) {
   newGraph *graphN = (newGraph *)graph;
   if (graphN != NULL) {
     free(graphN->id);
+    free(graphN->vectorVertex);
     free(graphN);
   }
 }

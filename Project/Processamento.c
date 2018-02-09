@@ -280,7 +280,7 @@ long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath,
     }
     entradaA[0] = '\0';
   }
-  printf("Inicio do calculo da envoltoria convexa.\n");
+
   if (bool1 == 0) {
     if (lengthL(retangulos))
       cont = cont + executarConvexHull(retangulos, canvas, 5);
@@ -446,7 +446,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
       } else if (strcmp(entradaA, "@f?") == 0) {
         executarQryF(arqEntradaQry, canvas);
       } else if (strcmp(entradaA, "@m?") == 0) {
-        executarQryM(arqEntradaQry, canvas);
+        executarQryM2(arqEntradaQry, canvas);
       } else if (strcmp(entradaA, "@e?") == 0) {
         executarQryE(arqEntradaQry, canvas);
       } else if (strcmp(entradaA, "@g?") == 0) {
@@ -541,7 +541,12 @@ void executarComandoTm(FILE *arqEntradaTm, Canvas canvas) {
 }
 
 void executarComandoVia(FILE *arqEntradaVia, Canvas canvas) {
-  char entrada[3];
+  char entrada[3], idG[] = "Vias da cidade";
+  List list = createL();
+  int b = 0;
+  CrossRoad cross = NULL;
+  Graph g;
+  QuadTree q;
   if (arqEntradaVia != NULL) {
     while (1) {
       if (feof(arqEntradaVia) != 0) {
@@ -553,9 +558,26 @@ void executarComandoVia(FILE *arqEntradaVia, Canvas canvas) {
       }
 
       if (strcmp(entrada, "v") == 0) {
-        executarViaV(canvas, arqEntradaVia);
+        executarViaV(list, arqEntradaVia);
       } else if (strcmp(entrada, "e") == 0) {
+        /* Insere os vertíces (Cruazamentos) no grafo e em uma QuadTree */
+        if(b == 0){
+          b = 1;
+          setGrafo(getCidade(canvas), idG, lengthL(list));
+          g = getGrafo(getCidade(canvas));
+          q = getListaCrossRoad(getCidade(canvas));
+          do {
+            cross = getBeginItemL(list);
+            removeBeginL(list, NULL);
+            insertVertex(g, getIdCrossRoad(cross), cross);
+            insertQuadTree(q, cross, getXCrossRoad(cross), getYCrossRoad(cross));
+          } while(lengthL(list) > 0);
+          eraseListL(list, NULL);
+          eraseBase(list);
+        }
+
         executarViaE(canvas, arqEntradaVia);
+
       } else {
         printf("Comando invalido em arquivo via.\n");
       }

@@ -24,6 +24,7 @@ typedef struct City {
   Dicionario dicionario;
   List listaMoradores, listaEstabComerciais, listaPessoas;
   Graph grafo;
+  QuadTree listCrossRoad;
   SetOfRegisters registradores;
   char *nome;
 } City;
@@ -75,18 +76,17 @@ Dicionario configuraDicionario() {
 
 Cidade criaCidade(char *name) {
   City *city = NULL;
-  char id[] = "Via da Cidade";
   city = (City *)malloc(sizeof(City));
   city->nome = name;
   city->listaQ = createQuadTree();
   city->listaS = createQuadTree();
   city->listaT = createQuadTree();
   city->listaH = createQuadTree();
+  city->listCrossRoad = createQuadTree();
   city->listaPessoas = createL();
   city->listaMoradores = createL();
   city->listaEstabComerciais = createL();
   city->dicionario = configuraDicionario();
-  city->grafo = createGraph(id);
   city->registradores = createSetOfRegisters(name, 11);
   return city;
 }
@@ -242,6 +242,11 @@ QuadTree getListaH(Cidade cidade) {
   return city->listaH;
 }
 
+QuadTree getListaCrossRoad(Cidade cidade) {
+  City *city = (City *)cidade;
+  return city->listCrossRoad;
+}
+
 List getListaMoradores(Cidade cidade){
   City *city = (City *)cidade;
   return city->listaMoradores;
@@ -260,6 +265,11 @@ List getListaEstabelecimentos(Cidade cidade){
 Graph getGrafo(Cidade cidade){
   City *city = (City *)cidade;
   return city->grafo;
+}
+
+void setGrafo(Cidade cidade, char *id, int n){
+  City *city = (City *)cidade;
+  city->grafo  = createGraph(id, n);
 }
 
 void showQ(Quadra quadra) {
@@ -437,27 +447,35 @@ void showEstabelecimentos(Cidade cidade, FILE *file){
 
 }
 
-void getEstabCCloser(Cidade cidade, double x, double y, double *xr, double *yr){
+void getEstabCCloser(Cidade cidade, double x, double y, double *xr, double *yr, char *tp){
   City *city = (City *)cidade;
   int i, j;
+  char *tipo, secao3[] = "codtXestabC";
   double dist = 0, lessDist = 0;
   Endereco endereco;
   EstabC estabC = NULL;
-  j = lengthL(city->listaEstabComerciais);
+  List list;
+  HashTable hash;
+  hash = getSecaoDicionario(city->dicionario, secao3);
+  list = getHtList(hash, tp);
+  j = lengthL(list);
   for(i=1; i<=j; i++){
-    estabC = getItemL(city->listaEstabComerciais, i);
+    estabC = getItemL(list, i);
     if(estabC != NULL){
-      endereco = getEnderecoEstabC(estabC);
-      dist = distanciaEntrePontos(x, y, getXEndereco(endereco), getYEndereco(endereco));
-      if(i == 1){
-        lessDist = dist;
-      } else {
-        if(lessDist < dist){
+      tipo = getCodt(estabC);
+      if(strcmp(tipo, tp) == 0){
+        endereco = getEnderecoEstabC(estabC);
+        dist = distanciaEntrePontos(x, y, getXEndereco(endereco), getYEndereco(endereco));
+        if(i == 1){
           lessDist = dist;
-          *xr = getXEndereco(endereco);
-          *yr = getYEndereco(endereco);
+        } else {
+          if(lessDist < dist){
+            lessDist = dist;
+            *xr = getXEndereco(endereco);
+            *yr = getYEndereco(endereco);
+          }
         }
-      }
+    }
     }
   }
 }

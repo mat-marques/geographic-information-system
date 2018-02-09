@@ -190,7 +190,7 @@ void showMoradores(Cidade cidade, FILE *file);
 void showEstabelecimentos(Cidade cidade, FILE *file);
 
 
-void getEstabCCloser(Cidade cidade, double x, double y, double *xr, double *yr);
+void getEstabCCloser(Cidade cidade, double x, double y, double *xr, double *yr, char *tp);
 
 
 /*
@@ -221,6 +221,9 @@ QuadTree getListaT(Cidade cidade);
 QuadTree getListaH(Cidade cidade);
 
 
+QuadTree getListaCrossRoad(Cidade cidade);
+
+
 /*
    Retorna um lista contendo todos os Moradores de uma cidade.
    Retorna uma lista vazia caso não exista moradores na cidade.
@@ -245,6 +248,8 @@ List getListaEstabelecimentos(Cidade cidade);
  */
 Graph getGrafo(Cidade cidade);
 
+
+void setGrafo(Cidade cidade, char *id, int n);
 
 /*
    Retorna uma quadra presente em uma cidade com o título de identificação definido pela string cep.

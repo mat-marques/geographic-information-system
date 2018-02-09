@@ -43,7 +43,7 @@ void executarTmUm(Canvas canvas, FILE *arqEntradaTm);
 /*
    O procedimento executa o comando 'v' do arquivo '.via'. O comando 'v' cria o vértice id posicionado nas coordenadas [x,y].
 */
-void executarViaV(Canvas canvas, FILE *arqEntradaVia);
+void executarViaV(List list, FILE *arqEntradaVia);
 
 /*
    O procedimento executa o comando 'e' do arquivo '.via'. O comando 'e' cria a aresta (i,j) e associa as outras informações à aresta. Caso a aresta não

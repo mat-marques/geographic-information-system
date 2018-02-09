@@ -71,6 +71,11 @@ ItemQt removeQuadTreeItem(QuadTree tree, ItemQt item, compareToQt function, List
 List getElementsByRegion(QuadTree tree, Region region, compareToQt function);
 
 
+
+ItemQt getNearestPoint(QuadTree tree, double x, double y);
+
+
+
 /*
    A função procura e retorna um determinado item especificado pela variável item.
    As comparações entre o os elementos da árvore e o item são feitos através da função implementada pelo usuário. A função "function" deve retornar 1 caso o elemento esteja em region e zero caso contrário.

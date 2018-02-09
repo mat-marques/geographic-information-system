@@ -357,11 +357,12 @@ void executarTmUm(Canvas canvas, FILE *arqEntradaTm){
 }
 
 
-void executarViaV(Canvas canvas, FILE *arqEntradaVia){
+void executarViaV(List list, FILE *arqEntradaVia){
   char *id;
   double x, y;
   int s;
   CrossRoad cruzamento = NULL;
+
   s = qtdCaracteres(arqEntradaVia);
   id = alocarString(s);
   fscanf(arqEntradaVia, "%s ", id);
@@ -370,7 +371,7 @@ void executarViaV(Canvas canvas, FILE *arqEntradaVia){
   cruzamento = createCrossRoad(id, x, y);
 
   if(cruzamento != NULL){
-    insertVertex(getGrafo(getCidade(canvas)), id, cruzamento);
+    insertEndL(list, cruzamento);
   }
   free(id);
 }
@@ -405,7 +406,7 @@ void executarViaE(Canvas canvas, FILE *arqEntradaVia){
 
   rua = createStreet(name, cepRight, cepLeft, cmp, vm);
   if(rua != NULL){
-    insertEdge(getGrafo(getCidade(canvas)), idOrigin, idDestiny, rua);
+    insertEdge(getGrafo(getCidade(canvas)), idOrigin, idDestiny, cmp, vm, rua);
   }
   free(idOrigin);
   free(idDestiny);

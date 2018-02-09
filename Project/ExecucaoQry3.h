@@ -18,7 +18,7 @@ void executarQryF(FILE *arqEntradaQry, Canvas canvas);
 /*
    Armazena no registrador r a posição geográfica da residência do morador de cpf.
  */
-void executarQryM(FILE *arqEntradaQry, Canvas canvas);
+void executarQryM2(FILE *arqEntradaQry, Canvas canvas);
 
 
 /*

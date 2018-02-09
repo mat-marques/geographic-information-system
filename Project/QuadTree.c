@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "QuadTree.h"
+#include "OperacoesF.h"
 
 typedef struct node {
   ItemQt info;
@@ -306,6 +307,80 @@ List getElementsByRegion(QuadTree tree, Region region, compareToQt function) {
     }
   }
   return list;
+}
+
+
+void nearest2(node *tree, double rx, double ry, double w, double h, List list){
+  char b;
+  if(tree != NULL){
+    b = pontoInternoR(w, h, rx, ry, tree->x, tree->y);
+    if(b == 'v'){
+      insertEndL(list, tree);
+    }
+    /* SE */
+    if (rx <= tree->x && ry <= tree->y)
+      nearest2(tree->direction[0], rx, ry, w, h, list);
+
+    /* SW */
+    if (rx > tree->x && ry < tree->y)
+      nearest2(tree->direction[1], rx, ry, w, h, list);
+
+    /* NE */
+    if (rx < tree->x && ry > tree->y)
+      nearest2(tree->direction[2], rx, ry, w, h, list);
+
+    /* NW */
+    if (rx >= tree->x && ry >= tree->y)
+      nearest2(tree->direction[3], rx, ry, w, h, list);
+
+  }
+}
+
+node *extractMin(List list, double x, double y){
+  node *best = NULL, *aux;
+  double d1, d2;
+  best = (node*) getBeginItemL(list);
+  removeBeginL(list, NULL);
+  if(lengthL(list) == 0){
+    return best;
+  }
+  d1 = distanciaEntrePontos(x, y, best->x, best->y);
+  while(lengthL(list) > 0){
+    aux = (node*) getBeginItemL(list);
+    removeBeginL(list, NULL);
+    d2 = distanciaEntrePontos(x, y, aux->x, aux->y);
+    if(d2 < d1){
+      d1 = d2;
+      best = aux;
+    }
+  }
+  return best;
+}
+
+ItemQt nearest1(node *tree, double x, double y){
+  ItemQt best = NULL;
+  List list = createL();
+  double rx = x - 2, ry = y - 2, w = 4, h = 4;
+  do {
+    nearest2(tree, rx, ry, w, h, list);
+    w = w * 2;
+    h = h * 2;
+    rx = rx - (w/2);
+    ry = ry - (h/2);
+  } while(lengthL(list) == 0);
+  best = extractMin(list, x, y);
+  return best;
+}
+
+ItemQt getNearestPoint(QuadTree tree, double x, double y){
+  ItemQt item = NULL;
+  Base *base = (Base *)tree;
+  if (tree != NULL) {
+    if (base->root != NULL) {
+      item = nearest1(base->root, x, y);
+    }
+  }
+  return item;
 }
 
 /* Função interna. */
