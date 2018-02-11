@@ -26,7 +26,7 @@ typedef void* Cidade;
    TAD: Cidade.
    Definição:
    Uma cidade é definida por um nome , um conjunto de elementos urbanos,
-   quadras, pessoas, moradores, estabelecimentos comerciais, ruas e cruzamentos. . 
+   quadras, pessoas, moradores, estabelecimentos comerciais, ruas e cruzamentos. .
    Um elemento urbano pode ser um hidrante, uma torre-base ou um semafáro.
  */
 
@@ -190,6 +190,12 @@ void showMoradores(Cidade cidade, FILE *file);
    O procedimento desenha em um arquivo de extensão '.svg' um quadrado representando o Estabelecimento Comercial.
  */
 void showEstabelecimentos(Cidade cidade, FILE *file);
+
+
+/*
+  O procedimento desenha em um arquivo de estenção svg as vias que compõem a cidade.
+*/
+void showVia(Cidade cidade, FILE *file);
 
 
 /*

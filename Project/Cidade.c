@@ -447,6 +447,25 @@ void showEstabelecimentos(Cidade cidade, FILE *file){
 
 }
 
+
+void showCrossRoad(CrossRoad crossRoad, FILE *file){
+  char cor[] = "black";
+  tagCirculo(file, 5, getXCrossRoad(crossRoad), getYCrossRoad(crossRoad), cor);
+}
+
+
+void showStreet(CrossRoad crossRoad1, CrossRoad crossRoad2, FILE *file){
+  char cor[] = "blue";
+  linha(file, getXCrossRoad(crossRoad1), getYCrossRoad(crossRoad1), getXCrossRoad(crossRoad2), getYCrossRoad(crossRoad2), cor);
+}
+
+
+void showVia(Cidade cidade, FILE *file){
+  City *city = (City *)cidade;
+  showGraph(city->grafo, file, showCrossRoad, showStreet);
+}
+
+
 void getEstabCCloser(Cidade cidade, double x, double y, double *xr, double *yr, char *tp){
   City *city = (City *)cidade;
   int i, j;

@@ -50,7 +50,7 @@ void executarQryTP(FILE *arqEntradaQry, Canvas canvas);
 /*
    Qual o melhor trajeto entre a origem está que no registrador r1 e o destino que está no registrador r2. Caso o percurso peça a representação pictórica, o trajeto deve ser pintado com a cor especificada.
  */
-void executarQryP(FILE *arqEntradaQry, Canvas canvas);
+void executarQryP(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas);
 
 
 

@@ -110,12 +110,14 @@ List widthSearch(Graph graph, Vertex vertex);
 
 /*
   A função implementa o algoritmo de Dijkstra. Retorna uma lista com os vertíces
-  analisados. A análise parte do vertíce vertexO e pode faze a analise pelos pesos
-  p ou v.
+  que compõem o menor caminho. A análise parte do vertíce vertexO. vertexD é o vertíce
+  de destino. r será o valor a ser retornado, ele constitui o valor da analise de menor caminho.
+  A análise do menor caminho pode ser feita por um dos pesos p ou v.
   0 para p.
   1 para v.
+
 */
-List shortestPath(Graph graph, Vertex vertexO, int p_v);
+List shortestPath(Graph graph, Vertex vertexO, Vertex vertexD, int p_v, double *r);
 
 
 /*

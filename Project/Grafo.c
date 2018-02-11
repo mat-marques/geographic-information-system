@@ -363,7 +363,7 @@ List widthSearch(Graph graph, Vertex vertex) {
 void initializeSingleSource(newGraph *graph) {
   int i;
   newVertex *v;
-  for (i = 0; i <= graph->qtdVD; i++) {
+  for (i = 0; i < graph->qtdVD; i++) {
     v = *(graph->vectorVertex + i);
     if ((v != NULL)) {
       if(v->u == NULL){
@@ -411,18 +411,18 @@ int extractMin(List listQ) {
 }
 
 
-List shortestPath(Graph graph, Vertex vertex, int p_v) {
+List shortestPath(Graph graph, Vertex vertexO, Vertex vertexD, int p_v, double *r) {
   newGraph *graphN = (newGraph *)graph;
   List listS = NULL, listQ = NULL;
   int i, j, n;
   newVertex *u = NULL;
   newEdge *edge = NULL;
-  newVertex *w = (newVertex *)vertex;
-
+  newVertex *origin = (newVertex *)vertexO;
+  newVertex *destiny = (newVertex *)vertexD;
   if (graphN != NULL) {
 
     initializeSingleSource(graphN);
-    w->u->dist = 0;
+    origin->u->dist = 0;
 
     listS = createL();
     listQ = createL();
@@ -450,18 +450,25 @@ List shortestPath(Graph graph, Vertex vertex, int p_v) {
     }
   }
 
-  j = lengthL(listS);
-  printf("Vertex  |  Distance from Source\n");
-  for (i = 1; i <= j; i++) {
-    u = (newVertex *)getItemL(listS, i);
-    if (u != NULL) {
-      printf("%s  |  %f\n", u->id, u->u->dist);
-    }
-  }
   eraseListL(listQ, NULL);
-  eraseBase(listQ);
+  /* Lista que conterá os vertíces que compõem o menor caminho */
+  if(destiny->u->p != NULL){
+    *r = destiny->u->dist; /* Valor da menor distância ou menor velocidade. */
+    insertBeginL(listQ, destiny);
+    u = destiny->u->p;
+    while(u != NULL){
+      insertBeginL(listQ, u);
+      u = u->u->p;
+    }
+  } else {
+    eraseBase(listQ);
+    listQ = NULL;
+  }
 
-  return listS;
+  eraseListL(listS, NULL);
+  eraseBase(listS);
+
+  return listQ;
 }
 
 
@@ -538,11 +545,12 @@ void eraseAllVertex(Graph graph, void(eraseInfo)(void *)) {
   if (graphN != NULL) {
     eraseHT(graphN->hashVertex, NULL);
     if (eraseInfo != NULL) {
-      for (i = 1; i <= graphN->qtdVD; i++) {
+      for (i = 0; i < graphN->qtdVD; i++) {
         vertex = *(graphN->vectorVertex + i);
         if (vertex != NULL) {
           eraseInfo(vertex->info);
         }
+        removeVertex(vertex);
       }
     }
   }
@@ -555,7 +563,7 @@ void eraseAllEdge(Graph graph, void(eraseInfo)(void *)) {
   newVertex *vertex;
   newEdge *edge;
   if (graphN != NULL) {
-    for (i = 0; i <= graphN->qtdVD; i++) {
+    for (i = 0; i < graphN->qtdVD; i++) {
       vertex = *(graphN->vectorVertex + i);
       if (vertex != NULL) {
         if (eraseInfo != NULL) {

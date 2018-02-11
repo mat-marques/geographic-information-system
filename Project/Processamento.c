@@ -456,7 +456,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
       } else if (strcmp(entradaA, "@tp?") == 0) {
         executarQryTP(arqEntradaQry, canvas);
       } else if (strcmp(entradaA, "p?") == 0) {
-        executarQryP(arqEntradaQry, canvas);
+        executarQryP(arqEntradaQry, &arqSaidaT, canvas);
       } else {
         printf("Comando invalido no qry\n");
       }
@@ -621,6 +621,8 @@ void finalizarExecucao(FILE *arqSaidaSvg, Canvas canvas) {
   showListLines(canvas, arqSaidaSvg);
 
   showListPoints(canvas, arqSaidaSvg);
+
+  showVia(getCidade(canvas), arqSaidaSvg);
 
   tagFechamento(arqSaidaSvg);
 }

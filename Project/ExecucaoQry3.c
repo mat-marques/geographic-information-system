@@ -284,15 +284,25 @@ void executarQryTP(FILE *arqEntradaQry, Canvas canvas){
 }
 
 
-void executarQryP(FILE *arqEntradaQry, Canvas canvas){
-  char t_p, D_T, *sufixo, *r1, *r2;
+void pitorico(Canvas canvas, List list, char *cor);
+
+
+void textual(Canvas canvas, FILE *arqSaidaT, List list);
+
+
+void executarQryP(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas){
+  char t_p, D_T, *sufixo, *r1, *r2, *cor = NULL, letra;
   int i;
   Register reg1, reg2;
   Cidade cidade;
   SetOfRegisters sor;
   Point point;
   QuadTree q;
-  void *v1, *v2;
+  Graph g;
+  List list;
+  double r = 0;
+  CrossRoad v1, v2;
+  Vertex v3, v4;
 
   fscanf(arqEntradaQry, "%c ", &t_p);
 
@@ -312,25 +322,72 @@ void executarQryP(FILE *arqEntradaQry, Canvas canvas){
   r2 = alocarString(i);
   fscanf(arqEntradaQry, "%s", r2);
 
+  letra = fgetc(arqEntradaQry);
+  if(t_p == 'p' && letra != '\n'){
+    i = qtdCaracteres(arqEntradaQry);
+    cor = alocarString(i);
+    fscanf(arqEntradaQry, "%s\n", cor);
+  }
+
   cidade = getCidade(canvas);
   sor = getRegistradores(cidade);
   reg1 = getRegister(sor, r1);
   reg2 = getRegister(sor, r2);
   q = getListaCrossRoad(cidade);
+  g = getGrafo(cidade);
 
   if(reg1 != NULL && reg2 != NULL){
     point = getInfoRegister(reg1);
+    /* Verifica se o ponto está na QuadTree */
     v1 = searchQuadTreeByCoordinate(q, getXPoint(point), getYPoint(point));
-    if(v1 == NULL){
+    if(v1 == NULL){ /* Encontra o ponto mais próximo que esta na QuadTree */
       v1 = getNearestPoint(q, getXPoint(point), getYPoint(point));
     }
-    
+
+    /* Verifica se o ponto está na QuadTree */
     point = getInfoRegister(reg2);
     v2 = searchQuadTreeByCoordinate(q, getXPoint(point), getYPoint(point));
-    if(v2 == NULL){
+    if(v2 == NULL){ /* Encontra o ponto mais próximo que esta na QuadTree */
       v2 = getNearestPoint(q, getXPoint(point), getYPoint(point));
     }
 
+    /* Busca os vertíces correspondentes no grafo */
+    v3 = getVertex(g, getIdCrossRoad(v1));
+    v4 = getVertex(g, getIdCrossRoad(v2));
+
+    /* Vertíces que compõem o menor caminho e o valor do caminho */
+    if(D_T == 'D'){
+      list = shortestPath(g, v3, v4, 0, &r);
+    } else {
+      list = shortestPath(g, v3, v4, 1, &r);
+    }
+
+    if(t_p == 'p'){
+      fprintf(*arqSaidaT, "p? p %s %c %s %s", sufixo, D_T, r1, r2);
+      if(cor != NULL){
+        fprintf(*arqSaidaT, "%s\n", cor);
+      } else {
+        fputc('\n', *arqSaidaT);
+      }
+      if(D_T == 'D'){
+        fprintf(*arqSaidaT, "Distância minima: %f metros\n", r);
+      } else {
+        fprintf(*arqSaidaT, "Tempo minimo: %f m/s\n", r);
+      }
+
+      pitorico(canvas, list, cor);
+
+    } else {
+      fprintf(*arqSaidaT, "p? t %c %s %s\n", D_T, r1, r2);
+      if(D_T == 'D'){
+        fprintf(*arqSaidaT, "Distância minima: %f metros\n", r);
+      } else {
+        fprintf(*arqSaidaT, "Tempo minimo: %f m/s\n", r);
+      }
+
+      textual(canvas, *arqSaidaT, list);
+
+    }
 
   }
 
