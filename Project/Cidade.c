@@ -548,6 +548,25 @@ void eraseListaH(Cidade cidade) {
   city->listaH = NULL;
 }
 
+void eraseListaCrossRoad(Cidade cidade) {
+
+  City *city = (City *)cidade;
+
+  eraseQuadTreeNode(city->listCrossRoad, NULL);
+  eraseQuadTreeBase(city->listCrossRoad);
+
+  city->listaH = NULL;
+}
+
+void eraseGraf(Cidade cidade){
+
+  City *city = (City *)cidade;
+  eraseAllEdge(city->grafo, removeStreet);
+  eraseAllVertex(city->grafo, removeCrossRoad);
+  eraseGraph(city->grafo);
+
+}
+
 void eraseHashTables(Cidade cidade){
   City *city = (City *)cidade;
   char secao1[] = "cpfXcep";
@@ -652,6 +671,8 @@ void eraseCidade(Cidade cidade) {
   eraseListaEstabC(cidade);
   removeDicionario(city->dicionario);
   eraseRegistradores(city->registradores);
+  eraseListaCrossRoad(cidade);
+  eraseGraf(cidade);
   if (city->nome != NULL) {
     free(city->nome);
   }

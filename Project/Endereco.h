@@ -45,15 +45,27 @@ void setFace(Endereco endereco, char face);
 int getNum(Endereco endereco);
 
 
+/*
+  Retorna a coordenada x do endereço.
+*/
 double getXEndereco(Endereco endereco);
 
 
+/*
+  Define uma nova coordenada x para o endereço.
+*/
 void setXEndereco(Endereco endereco, double x);
 
 
+/*
+  Retorna a coordenada y do endereço.
+*/
 double getYEndereco(Endereco endereco);
 
 
+/*
+  Define uma nova coordenada y para o endereço.
+*/
 void setYEndereco(Endereco endereco, double y);
 
 

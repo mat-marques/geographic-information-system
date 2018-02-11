@@ -25,7 +25,9 @@ typedef void* Cidade;
    Autor: Matheus Augusto Marques
    TAD: Cidade.
    Definição:
-   Uma cidade é definida por um nome , um conjunto de elementos urbanos, quadras, pessoas, moradores e estabelecimentos comerciais. Um elemento urbano pode ser um hidrante, uma torre-base ou um semafáro.
+   Uma cidade é definida por um nome , um conjunto de elementos urbanos,
+   quadras, pessoas, moradores, estabelecimentos comerciais, ruas e cruzamentos. . 
+   Um elemento urbano pode ser um hidrante, uma torre-base ou um semafáro.
  */
 
 
@@ -190,6 +192,11 @@ void showMoradores(Cidade cidade, FILE *file);
 void showEstabelecimentos(Cidade cidade, FILE *file);
 
 
+/*
+  O procedimento encontra qual é o estabelecimento comercial do tipo tp mais
+  próximo das coordenadas x e y. O valores xr e yr conterão ao final do processo
+  as cordenadas do estabelecimento mais próximo.
+*/
 void getEstabCCloser(Cidade cidade, double x, double y, double *xr, double *yr, char *tp);
 
 
@@ -220,7 +227,9 @@ QuadTree getListaT(Cidade cidade);
  */
 QuadTree getListaH(Cidade cidade);
 
-
+/*
+  Retorna uma QuadTree que contém todos os cruzamentos da cidade.
+*/
 QuadTree getListaCrossRoad(Cidade cidade);
 
 
@@ -249,6 +258,11 @@ List getListaEstabelecimentos(Cidade cidade);
 Graph getGrafo(Cidade cidade);
 
 
+/*
+   Define um novo grafo que representa as vias da cidade.
+   id define o nome do grafo.
+   n define a quantidade de vertíces do grafo.
+ */
 void setGrafo(Cidade cidade, char *id, int n);
 
 /*

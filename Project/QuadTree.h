@@ -71,7 +71,10 @@ ItemQt removeQuadTreeItem(QuadTree tree, ItemQt item, compareToQt function, List
 List getElementsByRegion(QuadTree tree, Region region, compareToQt function);
 
 
-
+/*
+  A função retorna o ItemQt que possui as coordenadas x1 e y1 mais próximas
+  das coordenadas x e y.
+*/
 ItemQt getNearestPoint(QuadTree tree, double x, double y);
 
 

@@ -30,12 +30,29 @@ char *getNumCelular(Celular celular);
 void setNumCelular(Celular celular, char *num);
 
 
+/*
+  Retorna a coordenada x da última posição onde o celular foi conectado a uma torre.
+*/
 double getXCelular(Celular celular);
 
+
+/*
+  Defina uma nova coordenada x para o celular. Coordenada onde o celular foi conectado
+  por último em um torre.
+*/
 void setXCelular(Celular celular, double x);
 
+
+/*
+  Retorna a coordenada y da última posição onde o celular foi conectado a uma torre.
+*/
 double getYCelular(Celular celular);
 
+
+/*
+  Defina uma nova coordenada y para o celular. Coordenada onde o celular foi conectado
+  por último em um torre.
+*/
 void setYCelular(Celular celular, double y);
 
 /*

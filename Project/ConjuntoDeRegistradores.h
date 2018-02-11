@@ -8,7 +8,8 @@ typedef void* SetOfRegisters;
 /*
 Autor: Matheus Augusto Marques
 Tad: Conjunto de registradores
-Definição: Um Conjunto de registradores de registradores é definido por um nome e um conjunto de registradores. A quantidade de registradores é definido por qtdRegisters.
+Definição: Um Conjunto de registradores de registradores é definido por um
+nome e um conjunto de registradores. A quantidade de registradores é definido por qtdRegisters.
 */
 
 /*

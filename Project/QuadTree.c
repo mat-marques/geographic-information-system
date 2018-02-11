@@ -383,6 +383,7 @@ ItemQt getNearestPoint(QuadTree tree, double x, double y){
   return item;
 }
 
+
 /* Função interna. */
 ItemQt searchItem(node *tree, ItemQt item, ItemQt info, compareToQt function) {
   node *aux = tree;

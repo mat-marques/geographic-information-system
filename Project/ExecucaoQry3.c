@@ -287,6 +287,12 @@ void executarQryTP(FILE *arqEntradaQry, Canvas canvas){
 void executarQryP(FILE *arqEntradaQry, Canvas canvas){
   char t_p, D_T, *sufixo, *r1, *r2;
   int i;
+  Register reg1, reg2;
+  Cidade cidade;
+  SetOfRegisters sor;
+  Point point;
+  QuadTree q;
+  void *v1, *v2;
 
   fscanf(arqEntradaQry, "%c ", &t_p);
 
@@ -306,7 +312,27 @@ void executarQryP(FILE *arqEntradaQry, Canvas canvas){
   r2 = alocarString(i);
   fscanf(arqEntradaQry, "%s", r2);
 
+  cidade = getCidade(canvas);
+  sor = getRegistradores(cidade);
+  reg1 = getRegister(sor, r1);
+  reg2 = getRegister(sor, r2);
+  q = getListaCrossRoad(cidade);
 
+  if(reg1 != NULL && reg2 != NULL){
+    point = getInfoRegister(reg1);
+    v1 = searchQuadTreeByCoordinate(q, getXPoint(point), getYPoint(point));
+    if(v1 == NULL){
+      v1 = getNearestPoint(q, getXPoint(point), getYPoint(point));
+    }
+    
+    point = getInfoRegister(reg2);
+    v2 = searchQuadTreeByCoordinate(q, getXPoint(point), getYPoint(point));
+    if(v2 == NULL){
+      v2 = getNearestPoint(q, getXPoint(point), getYPoint(point));
+    }
+
+
+  }
 
   free(r1);
   free(r2);
