@@ -3,7 +3,6 @@
 #include <string.h>
 #include "Morador.h"
 #include "StringO.h"
-#include "Endereco.h"
 
 typedef struct novoMorador{
   char *cpf;

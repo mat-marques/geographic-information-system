@@ -100,24 +100,26 @@ void abrirArquivos(FILE **arqEntradaGeo, FILE **arqEntradaQry,
       string5 = concatenarElementos2(string4, string0);
       *arqEntradaEc = createArqR(string5);
     }
-    desalocar(string4);
-    string4 = NULL;
+    desalocar(string5);
+    string5 = NULL;
     if (string1 != NULL) {
       string5 = concatenarElementos2(string4, string1);
       *arqEntradaPm = createArqR(string5);
     }
-    desalocar(string4);
-    string4 = NULL;
+    desalocar(string5);
+    string5 = NULL;
     if (string2 != NULL) {
       string5 = concatenarElementos2(string4, string2);
       *arqEntradaTm = createArqR(string5);
     }
-    desalocar(string4);
-    string4 = NULL;
+    desalocar(string5);
+    string5 = NULL;
     if (string3 != NULL) {
       string5 = concatenarElementos2(string4, string3);
-      *arqEntradaTm = createArqR(string5);
+      *arqEntradaVia = createArqR(string5);
     }
+    desalocar(string5);
+    string5 = NULL;
   } else {
     if (string0 != NULL) {
       *arqEntradaEc = createArqR(string0);
@@ -190,14 +192,14 @@ long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath,
     printf("ERRO EM ABERTURA DE ARQUIVO GEO.\n");
     exit(0);
   }
-  printf("Comandos Geo\n");
+
   while (1) {
     fscanf(arqEntradaGeo, "%s ", entradaA);
 
     if (entradaA[0] == '#') {
       break;
     }
-    printf("%s %d\n", entradaA, myCont);
+    /* printf("%s %d\n", entradaA, myCont); */
     myCont++;
     if (boolean == 't' &&
         (entradaA[0] == 'o' || entradaA[0] == 'i' || entradaA[0] == 'd')) {
@@ -313,7 +315,7 @@ long int executarComandosGeo(FILE *arqEntradaGeo, char *arqNome, char *dirPath,
     *qtdCompararacoesI = executarConvexHull(quadras, canvas, 1);
     cont = cont + *qtdCompararacoesI;
   }
-  printf("Fim do Geo\n");
+
   eraseListL(retangulos, NULL);
   eraseBase(retangulos);
 
@@ -347,17 +349,18 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
                              Canvas canvas, int *qtdQuadrasRemovidas,
                              long int *qtdCompararacoesR,
                              int *qtdElementosRemovidos) {
-  char *path = NULL, entradaA[6];
+  char *path = NULL, *path2,entradaA[6];
   char extensao1[] = ".txt";
   char extensao2[] = ".svg";
   FILE *arqSaidaT = NULL;
   long int cont = 0;
   path = concatenarElementos(dirPath, arqNome, extensao1);
+  path2 = concatenarStrings(dirPath, arqNome);
 
   if (arqEntradaQry != NULL) {
     arqSaidaT = createArqW(path);
   }
-  printf("Comandos do Qry\n");
+
   if (arqEntradaQry != NULL) {
     while (1) {
 
@@ -456,7 +459,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
       } else if (strcmp(entradaA, "@tp?") == 0) {
         executarQryTP(arqEntradaQry, canvas);
       } else if (strcmp(entradaA, "p?") == 0) {
-        executarQryP(arqEntradaQry, &arqSaidaT, canvas);
+        executarQryP(arqEntradaQry, &arqSaidaT, path2, canvas);
       } else {
         printf("Comando invalido no qry\n");
       }
@@ -464,6 +467,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
     entradaA[0] = '\0';
   }
   desalocar(path);
+  desalocar(path2);
   if (arqSaidaT != NULL) {
     fclose(arqSaidaT);
   }
@@ -560,7 +564,7 @@ void executarComandoVia(FILE *arqEntradaVia, Canvas canvas) {
       if (strcmp(entrada, "v") == 0) {
         executarViaV(list, arqEntradaVia);
       } else if (strcmp(entrada, "e") == 0) {
-        /* Insere os vertíces (Cruazamentos) no grafo e em uma QuadTree */
+        /* Insere os vertíces (Cruzamentos) no grafo e em uma QuadTree */
         if(b == 0){
           b = 1;
           setGrafo(getCidade(canvas), idG, lengthL(list));
@@ -574,13 +578,14 @@ void executarComandoVia(FILE *arqEntradaVia, Canvas canvas) {
           } while(lengthL(list) > 0);
           eraseListL(list, NULL);
           eraseBase(list);
+          printf("Passe aqui\n");
         }
 
         executarViaE(canvas, arqEntradaVia);
 
-      } else {
+      } /*else {
         printf("Comando invalido em arquivo via.\n");
-      }
+      }*/
     }
   }
 }
@@ -701,5 +706,9 @@ void processarDados(char **argv, int argc) {
 
   if (arqEntradaTm != NULL) {
     fclose(arqEntradaTm);
+  }
+
+  if (arqEntradaVia != NULL) {
+    fclose(arqEntradaVia);
   }
 }

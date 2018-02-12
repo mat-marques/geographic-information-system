@@ -5,13 +5,9 @@
 #include "Cidade.h"
 #include "ConvexHull.h"
 #include "Endereco.h"
-#include "Hidrante.h"
+
 #include "List.h"
-#include "QuadTree.h"
-#include "Semafaro.h"
-#include "Stack.h"
 #include "Svg.h"
-#include "Torre.h"
 #include "Ponto.h"
 #include "OperacoesF.h"
 #include "Celular.h"
@@ -75,6 +71,7 @@ Dicionario configuraDicionario() {
 }
 
 Cidade criaCidade(char *name) {
+  char r[] = "Registradores";
   City *city = NULL;
   city = (City *)malloc(sizeof(City));
   city->nome = name;
@@ -87,7 +84,8 @@ Cidade criaCidade(char *name) {
   city->listaMoradores = createL();
   city->listaEstabComerciais = createL();
   city->dicionario = configuraDicionario();
-  city->registradores = createSetOfRegisters(name, 11);
+  city->registradores = createSetOfRegisters(r, 11);
+  city->grafo = NULL;
   return city;
 }
 
@@ -449,20 +447,24 @@ void showEstabelecimentos(Cidade cidade, FILE *file){
 
 
 void showCrossRoad(CrossRoad crossRoad, FILE *file){
-  char cor[] = "black";
-  tagCirculo(file, 5, getXCrossRoad(crossRoad), getYCrossRoad(crossRoad), cor);
+  char cor[] = "red";
+  tagCirculo(file, 3, getXCrossRoad(crossRoad), getYCrossRoad(crossRoad), cor);
 }
 
 
 void showStreet(CrossRoad crossRoad1, CrossRoad crossRoad2, FILE *file){
-  char cor[] = "blue";
-  linha(file, getXCrossRoad(crossRoad1), getYCrossRoad(crossRoad1), getXCrossRoad(crossRoad2), getYCrossRoad(crossRoad2), cor);
+  char cor[] = "black";
+  arrow(file, getXCrossRoad(crossRoad1), getYCrossRoad(crossRoad1), getXCrossRoad(crossRoad2), getYCrossRoad(crossRoad2), cor);
 }
 
 
 void showVia(Cidade cidade, FILE *file){
   City *city = (City *)cidade;
-  showGraph(city->grafo, file, showCrossRoad, showStreet);
+  char cor[] = "black";
+  if(city->grafo != NULL){
+    defArrow(file, cor);
+    showGraph(city->grafo, file, showCrossRoad, showStreet);
+  }
 }
 
 
@@ -570,9 +572,10 @@ void eraseListaH(Cidade cidade) {
 void eraseListaCrossRoad(Cidade cidade) {
 
   City *city = (City *)cidade;
-
-  eraseQuadTreeNode(city->listCrossRoad, NULL);
-  eraseQuadTreeBase(city->listCrossRoad);
+  if(city->listCrossRoad != NULL){
+    eraseQuadTreeNode(city->listCrossRoad, NULL);
+    eraseQuadTreeBase(city->listCrossRoad);
+  }
 
   city->listaH = NULL;
 }
@@ -580,10 +583,11 @@ void eraseListaCrossRoad(Cidade cidade) {
 void eraseGraf(Cidade cidade){
 
   City *city = (City *)cidade;
-  eraseAllEdge(city->grafo, removeStreet);
-  eraseAllVertex(city->grafo, removeCrossRoad);
-  eraseGraph(city->grafo);
-
+  if(city->grafo != NULL){
+    eraseAllEdge(city->grafo, removeStreet);
+    eraseAllVertex(city->grafo, removeCrossRoad);
+    eraseGraph(city->grafo);
+  }
 }
 
 void eraseHashTables(Cidade cidade){
@@ -675,7 +679,9 @@ void eraseListaEstabC(Cidade cidade) {
 
 void eraseRegistradores(Cidade cidade) {
   City *city = (City *)cidade;
-  removeSetOfRegisters(city->registradores, removePoint);
+  if(city->registradores != NULL){
+    removeSetOfRegisters(city->registradores, removePoint);
+  }
 }
 
 void eraseCidade(Cidade cidade) {
@@ -688,8 +694,8 @@ void eraseCidade(Cidade cidade) {
   eraseListaPessoas(cidade);
   eraseListaMoradores(cidade);
   eraseListaEstabC(cidade);
-  removeDicionario(city->dicionario);
-  eraseRegistradores(city->registradores);
+  removeDicionario(cidade);
+  eraseRegistradores(cidade);
   eraseListaCrossRoad(cidade);
   eraseGraf(cidade);
   if (city->nome != NULL) {

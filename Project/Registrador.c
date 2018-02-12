@@ -60,12 +60,12 @@ int compareRegister(Register registerN, void *name){
 }
 
 
-void removeRegister(Register registerN, void (removeReg)(void *)){
+void removeRegister(Register registerN, void (removeRegInfo)(void *)){
   newRegister *nRegister = (newRegister*) registerN;
   if(nRegister != NULL){
     free(nRegister->name);
-    if(removeReg != NULL){
-      removeReg(nRegister->info);
+    if(removeRegInfo != NULL){
+      removeRegInfo(nRegister->info);
     }
     free(nRegister);
   }

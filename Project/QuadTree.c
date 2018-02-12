@@ -336,7 +336,7 @@ void nearest2(node *tree, double rx, double ry, double w, double h, List list){
   }
 }
 
-node *extractMin(List list, double x, double y){
+node *extractN(List list, double x, double y){
   node *best = NULL, *aux;
   double d1, d2;
   best = (node*) getBeginItemL(list);
@@ -368,7 +368,7 @@ ItemQt nearest1(node *tree, double x, double y){
     rx = rx - (w/2);
     ry = ry - (h/2);
   } while(lengthL(list) == 0);
-  best = extractMin(list, x, y);
+  best = extractN(list, x, y);
   return best;
 }
 

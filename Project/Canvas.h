@@ -3,14 +3,14 @@
 
 #include "Circulo.h"
 #include "Retangulo.h"
-#include "List.h"
-#include "Cidade.h"
 #include "Linha.h"
 #include "Poligono.h"
 #include "MultiplasLinhas.h"
 #include "Texto.h"
 #include "Elipse.h"
 #include "Ponto.h"
+#include "List.h"
+#include "Cidade.h"
 
 typedef void* Canvas;
 typedef void* figuraGeometrica;

@@ -16,7 +16,7 @@ CrossRoad createCrossRoad(char* id, double x, double y){
 
   CrossRoad = (newCrossRoad*) malloc(sizeof(newCrossRoad));
   if(CrossRoad != NULL){
-      CrossRoad->id = id;
+      CrossRoad->id = criarString(id);
       CrossRoad->x = x;
       CrossRoad->y = y;
   }

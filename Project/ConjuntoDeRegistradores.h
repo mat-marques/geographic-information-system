@@ -57,7 +57,9 @@ Register getRegister(SetOfRegisters setOfRegisters, char *name);
 
 /*
   Apaga todos os registradores armazenados no conjunto de registradores.
+  removeRegInfo é uma função que remove o dado armazenado no registrador. Deve
+  ser implementada pelo usuário.
 */
-void removeSetOfRegisters(SetOfRegisters setOfRegisters,  void (removeReg)(void *));
+void removeSetOfRegisters(SetOfRegisters setOfRegisters,  void (removeRegInfo)(void *));
 
 #endif

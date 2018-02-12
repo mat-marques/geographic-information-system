@@ -13,12 +13,13 @@ objects = Arquivo.o Cidade.o Canvas.o Celular.o Circulo.o \
 					Registrador.o ConjuntoDeRegistradores.o
 
 
-dependenciasP = Processamento.h Processamento.c Arquivo.h Arquivo.c \
-                StringO.h StringO.c Svg.h Svg.c \
-                OpEntrada.h OpEntrada.c OperacoesF.h OperacoesF.c \
-				Cidade.h Cidade.c Canvas.h Canvas.c ExecucaoGeo.h ExecucaoGeo.c \
-				ExecucaoQry.h ExecucaoQry.c Cor.h Cor.c ExecucaoEcPmTmVia.h \
-				ExecucaoEcPmTmVia.c ExecucaoQry2.h ExecucaoQry2.c
+dependenciasP = Processamento.h Processamento.c Canvas.h Canvas.c \
+								OpEntrada.h OpEntrada.c OperacoesF.h OperacoesF.c \
+								Arquivo.h Arquivo.c Cidade.h Cidade.c Cor.h Cor.c \
+								StringO.h StringO.c Svg.h Svg.c ExecucaoEcPmTmVia.h \
+								ExecucaoEcPmTmVia.c ExecucaoGeo.h ExecucaoGeo.c \
+								ExecucaoQry.h ExecucaoQry.c ExecucaoQry2.h ExecucaoQry2.c \
+								ExecucaoQry3.h ExecucaoQry3.h
 
 dependenciasEg = Arquivo.h Arquivo.c StringO.h StringO.c Svg.h Svg.c \
                  OpEntrada.h OpEntrada.c Cor.h Cor.c Stack.h Stack.c \
@@ -32,25 +33,23 @@ dependenciasEq = Arquivo.h Arquivo.c StringO.h StringO.c \
 				 ExecucaoQry.h ExecucaoQry.c ConvexHull.h ConvexHull.c
 
 
-dependenciasCa = Canvas.h Canvas.c Circulo.h Circulo.c \
-			     Retangulo.h Retangulo.c List.h \
- 			     List.c Cidade.h Cidade.c Ponto.c Ponto.h\
- 			     ConvexHull.h ConvexHull.c OperacoesF.h OperacoesF.c \
- 			     QuadTree.h QuadTree.c Texto.h Texto.c Linha.h Linha.c \
-				 Poligono.h Poligono.c Elipse.h Elipse.c \
-				 MultiplasLinhas.h MultiplasLinhas.c
+dependenciasCa = Circulo.h Circulo.c Retangulo.h Retangulo.c \
+								 Linha.h Linha.c Poligono.h Poligono.c \
+								 MultiplasLinhas.h MultiplasLinhas.c Texto.h Texto.c \
+								 Elipse.h Elipse.c Ponto.h Ponto.c List.h List.h List.c \
+								 Cidade.h Cidade.c Canvas.h Canvas.c ConvexHull.h ConvexHull.c \
+								 OperacoesF.h OperacoesF.c Svg.h Svg.c
 
-dependenciasCi = Cidade.h Cidade.c Quadra.h Quadra.c\
-				 List.h List.c Pessoa.h Pessoa.c\
-   				 Hidrante.h Hidrante.c Semafaro.h Semafaro.c \
-				 Torre.h Torre.c QuadTree.h QuadTree.c Svg.h Svg.c \
- 			 	 ConvexHull.h ConvexHull.c Stack.h Stack.c \
-				 EstabelecimentoComercial.h EstabelecimentoComercial.c \
-				 Dicionario.h Dicionario.c Endereco.h Endereco.c \
-				 HashTable.h HashTable.c Celular.h Celular.c \
-				 Morador.h Morador.c StringO.h StringO.c Grafo.h Grafo.c \
-				 ConjuntoDeRegistradores.h ConjuntoDeRegistradores.c \
-				 OperacoesF.h OperacoesF.c
+dependenciasCi = Quadra.h Quadra.c Hidrante.h Hidrante.c \
+								 Semafaro.h Semafaro.c Torre.h Torre.c \
+								 QuadTree.h QuadTree.c HashTable.h HashTable.c \
+								 Pessoa.h Pessoa.c EstabelecimentoComercial.h \
+								 EstabelecimentoComercial.c Dicionario.h Dicionario.c \
+								 Morador.h Morador.c Rua.h Rua.c Cruzamento.h Cruzamento.c \
+								 Grafo.h Grafo.c ConjuntoDeRegistradores.h ConjuntoDeRegistradores.c \
+								 Cidade.h Cidade.c ConvexHull.h ConvexHull.c Endereco.h Endereco.c \
+								 List.h List.c Svg.h Svg.c Ponto.h Ponto.c OperacoesF.h OperacoesF.c \
+								 Celular.h Celular.c StringO.h StringO.c
 
 dependenciasCh = ConvexHull.h ConvexHull.c Quadra.h Quadra.c \
  				 Hidrante.h Hidrante.c Semafaro.h Semafaro.c \
@@ -68,7 +67,7 @@ dependenciasEq2 = ExecucaoQry2.h ExecucaoQry2.c Canvas.h Canvas.c \
 				  List.h List.c StringO.h StringO.c
 
 dependenciasEq3 = ExecucaoQry3.h ExecucaoQry3.c Canvas.h Canvas.c \
-									StringO.h StringO.c
+									StringO.h StringO.c Svg.h Svg.c
 
 CFLAGS  = -g -ansi -pedantic
 
@@ -92,7 +91,7 @@ Rua.o: Rua.h Rua.c StringO.h StringO.c
 	gcc -c $(CFLAGS) Rua.c -o Rua.o
 
 
-Grafo.o: Grafo.h Grafo.c Cruzamento.h Cruzamento.c Rua.h Rua.c List.h List.c StringO.h StringO.c
+Grafo.o: Grafo.h Grafo.c HashTable.h HashTable.c StringO.h StringO.c
 	gcc -c $(CFLAGS) Grafo.c -o Grafo.o
 
 
@@ -134,7 +133,7 @@ EstabelecimentoComercial.o: EstabelecimentoComercial.c EstabelecimentoComercial.
 	gcc -c $(CFLAGS) EstabelecimentoComercial.c -o EstabelecimentoComercial.o
 
 
-Pessoa.o: Pessoa.h Pessoa.c Celular.h Celular.c StringO.h StringO.c
+Pessoa.o: Pessoa.h Pessoa.c Endereco.h Endereco.c Celular.h Celular.c StringO.h StringO.c
 	gcc -c $(CFLAGS) Pessoa.c -o Pessoa.o
 
 
@@ -142,7 +141,7 @@ Celular.o: Celular.h Celular.c Pessoa.h Pessoa.c StringO.h StringO.c
 	gcc -c $(CFLAGS) Celular.c -o Celular.o
 
 
-Dicionario.o: Dicionario.h Dicionario.c HashTable.h HashTable.c List.h List.c
+Dicionario.o: Dicionario.h Dicionario.c HashTable.h HashTable.c List.h List.c StringO.h StringO.c
 	gcc -c $(CFLAGS) Dicionario.c -o Dicionario.o
 
 
@@ -175,7 +174,7 @@ Stack.o: Stack.h Stack.c
 	gcc -c $(CFLAGS) Stack.c -o Stack.o
 
 
-QuadTree.o: QuadTree.h QuadTree.c List.h List.c
+QuadTree.o: QuadTree.h QuadTree.c List.h List.c OperacoesF.h OperacoesF.c
 	gcc -c $(CFLAGS) QuadTree.c -o QuadTree.o
 
 

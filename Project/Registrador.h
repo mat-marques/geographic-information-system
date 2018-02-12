@@ -51,6 +51,6 @@ int compareRegister(Register registerN, void *name);
 /*
   Apaga os dados de um registrador.
 */
-void removeRegister(Register registerN, void (removeReg)(void *));
+void removeRegister(Register registerN, void (removeRegInfo)(void *));
 
 #endif

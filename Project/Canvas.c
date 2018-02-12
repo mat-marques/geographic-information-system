@@ -5,12 +5,7 @@
 
 #include "Canvas.h"
 #include "ConvexHull.h"
-#include "List.h"
 #include "OperacoesF.h"
-#include "QuadTree.h"
-#include "Retangulo.h"
-#include "Stack.h"
-#include "StringO.h"
 #include "Svg.h"
 
 typedef struct reg { double w, h, x, y; } Reg;

@@ -1,7 +1,8 @@
-#include "HashTable.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "HashTable.h"
 
 typedef struct element {
   char *key;

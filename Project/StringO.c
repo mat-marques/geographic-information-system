@@ -106,6 +106,7 @@ void desalocarString(void *s){
 char *concatenarStrings(char *concatenar, char *palavra){
   int tamanho1=0, tamanho2=0, resultado=0;
   char letra='0', *new0=NULL;
+
   if(palavra!=NULL)
   {
     tamanho1 = strlen(palavra);

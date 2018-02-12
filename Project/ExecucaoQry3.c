@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "ExecucaoQry3.h"
 #include "StringO.h"
+#include "Svg.h"
 
 HashTable hash;
 Dicionario dicionario;
@@ -284,15 +286,152 @@ void executarQryTP(FILE *arqEntradaQry, Canvas canvas){
 }
 
 
-void pitorico(Canvas canvas, List list, char *cor);
+void pitorico(Canvas canvas, List list, FILE *arqSaidaSvg, char *cor){
+  List quadras = NULL;
+  Quadra quadra;
+  int i, j;
+  Vertex v1, v2, v3;
+  Edge e1;
+  CrossRoad c1, c2;
+  Cidade cidade;
+  Street s1;
+  char cor2[] = "black", *cep, semCep[] = "-";
+  char secao5[] = "cepXquadra";
+  double x0, y0, x1, y1, x2, y2, w0, h0, w1, h1;
+
+  cidade = getCidade(canvas);
+  dicionario = getDicionario(cidade);
+  hash = getSecaoDicionario(dicionario, secao5);
+
+  v1 = getBeginItemL(list);
+  v2 = getEndItemL(list);
+  v3 = getItemL(list, 2);
+
+  /* Busca das quadras que compõem a vizinhança do caminho */
+  e1 = getEdge(getGrafo(cidade), getIdVertex(v1), getIdVertex(v3));
+  s1 = getInfoEdge(e1);
+  cep = getCepRight(s1);
+
+  if(strcmp(cep, semCep) == 0){
+    cep = getCepLeft(s1);
+  }
+
+  quadra = itemIsInsideHT(hash, cep, cep, compareQ);
+
+  if(quadra != NULL){
+    w1 = getLargQ(quadra);
+    h1 = getAltQ(quadra);
+  } else {
+    w1 = 50;
+    h1 = 50;
+  }
+
+  c1 = getInfoVertex(v1);
+  c2 = getInfoVertex(v2);
+
+  x1 = getXCrossRoad(c1);
+  y1 = getYCrossRoad(c1);
+  x2 = getXCrossRoad(c2);
+  y2 = getYCrossRoad(c2);
+
+  w0 = fabs(x1 - x2);
+  h0 = fabs(y1 - y2);
+
+  if(x1 <= x2){
+    x0 = x1;
+  } else {
+    x0 = x2;
+  }
+
+  if(y1 <= y2){
+    y0 = y1;
+  } else {
+    y0 = y2;
+  }
+
+  quadras = getElementsListPartialInsideR(canvas, 1, (x0 - w1), (y0 - h1), (w0 + w1), (h0 + h1));
+  /* ----------------------------- */
+  /* Desenha as quadras */
+  if(quadras != NULL){
+    j = lengthL(list);
+    for(i=1; i<=j; i++){
+      quadra = getItemL(quadras, i);
+      if(quadra != NULL){
+        tagRetangulo2(arqSaidaSvg, getLargQ(quadra), getAltQ(quadra), getXQ(quadra),
+         getYQ(quadra), getCorpQ(quadra), getCorbQ(quadra));
+      }
+    }
+  }
+
+  eraseListL(quadras, NULL);
+  eraseBase(quadras);
+
+  /* Desenha as coordenadas de origem e destino. */
+  tagCirculo(arqSaidaSvg, 5, x1, y1, cor2);
+  tagTexto2(arqSaidaSvg, getIdCrossRoad(c1), cor2, 10, x1, y1);
+  tagCirculo(arqSaidaSvg, 5, x1, y2, cor2);
+  tagTexto2(arqSaidaSvg, getIdCrossRoad(c2), cor2, 10, x2, y2);
+
+  j = lengthL(list);
+  defArrow(arqSaidaSvg, cor);
+  /* Desenha as arestas */
+  for(i=2; i<=j; i++){
+    v1 = getItemL(list, i-1);
+    v2 = getItemL(list, i);
+    if(v1 != NULL && v2 != NULL){
+      c1 = getInfoVertex(v1);
+      c2 = getInfoVertex(v2);
+      arrow(arqSaidaSvg, getXCrossRoad(c1), getYCrossRoad(c1), getXCrossRoad(c2), getYCrossRoad(c2), cor);
+    }
+  }
+
+}
 
 
-void textual(Canvas canvas, FILE *arqSaidaT, List list);
+void textual(Canvas canvas, FILE *arqSaidaT, List list){
+  int i, j, p=0;
+  /*char n[] = "Norte", s[] = "Sul", l[] = "Leste", o[] = "Oeste";*/
+  char *id1, *id2;
+  Vertex v1, v2;
+  Edge e1;
+  Cidade cidade;
+  Street s1;
+  Graph g;
+
+  v1 = getBeginItemL(list);
+  v2 = getEndItemL(list);
+
+  cidade = getCidade(canvas);
+  g = getGrafo(cidade);
+
+  j = lengthL(list);
+  for(i=2; i<=j; i++){
+    v1 = getItemL(list, i-1);
+    v2 = getItemL(list, i);
+    if(v1 != NULL && v2 != NULL){
+      e1 = getEdge(g, getIdVertex(v1), getIdVertex(v2));
+      s1 = getInfoEdge(e1);
+      id1 = getNameStreet(s1);
+      if(p == 0){
+        fprintf(arqSaidaT, "Siga na rua %s.\n", id1);
+        id2 = id1;
+        p = 1;
+      } else if(strcmp(id1, id2) == 0) {
+        fprintf(arqSaidaT, "Continui na rua %s.\n", id1);
+      } else {
+        fprintf(arqSaidaT, "Vire na rua %s.\n", id1);
+        id2 = id1;
+      }
+    }
+  }
+
+}
 
 
-void executarQryP(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas){
-  char t_p, D_T, *sufixo, *r1, *r2, *cor = NULL, letra;
+void executarQryP(FILE *arqEntradaQry, FILE **arqSaidaT,  char *nameArq, Canvas canvas){
+  char t_p, D_T, *sufixo, *r1, *r2, *cor = NULL, letra, *nameArqS;
   int i;
+  FILE *arqSaidaSvg;
   Register reg1, reg2;
   Cidade cidade;
   SetOfRegisters sor;
@@ -307,9 +446,14 @@ void executarQryP(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas){
   fscanf(arqEntradaQry, "%c ", &t_p);
 
   if(t_p == 'p'){
-    i = qtdCaracteres(arqEntradaQry);
+    i = qtdCaracteres(arqEntradaQry) + 4;
     sufixo = alocarString(i);
     fscanf(arqEntradaQry, "%s ", sufixo);
+    sufixo[i-5] = '.';
+    sufixo[i-4] = 's';
+    sufixo[i-3] = 'v';
+    sufixo[i-2] = 'g';
+    sufixo[i-1] = '\0';
   }
 
   fscanf(arqEntradaQry, "%c ", &D_T);
@@ -374,9 +518,12 @@ void executarQryP(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas){
       } else {
         fprintf(*arqSaidaT, "Tempo minimo: %f m/s\n", r);
       }
-
-      pitorico(canvas, list, cor);
-
+      nameArqS = concatenarStrings(nameArq, sufixo);
+      arqSaidaSvg = fopen(nameArqS, "w");
+      if(arqSaidaSvg != NULL){
+        pitorico(canvas, list, arqSaidaSvg, cor);
+      }
+      fclose(arqSaidaSvg);
     } else {
       fprintf(*arqSaidaT, "p? t %c %s %s\n", D_T, r1, r2);
       if(D_T == 'D'){

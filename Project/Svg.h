@@ -120,6 +120,13 @@ void tagPoligono(FILE *arqSvg, int id, double *pontos, int n, char *corL, char *
 void tagEllipse(FILE *arqSvg, int id, double cx, double cy, double rx, double ry, char *corL, char *corF, int lineSize);
 
 
+/* Define um seta para o canvas. Deve ser usado antes do procedimento arrow. */
+void defArrow(FILE *arqSvg, char *cor);
+
+
+/* Define um seta entre dois pontos. */
+void arrow(FILE *arqSvg, double x1, double y1, double x2, double y2, char *cor);
+
 /**
    Escreve no arquivo arqSvg uma string referente a uma tag utilizada para fechamento de um arquivos svg.
  */

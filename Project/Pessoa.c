@@ -1,8 +1,10 @@
-#include "Pessoa.h"
-#include "StringO.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "Pessoa.h"
+#include "StringO.h"
 
 typedef struct novaPessoa {
   char *cpf, *nome, *sobrenome, *sexo, *nasc;

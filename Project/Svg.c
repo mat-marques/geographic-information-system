@@ -1,7 +1,8 @@
-#include "Svg.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "Svg.h"
 
 FILE *createSvg(char *arqName) {
   FILE *file;
@@ -330,7 +331,7 @@ void tagMultiplasLinhas(FILE *arqSvg, int id, double *pontos, int n, char *corL,
   fprintf(arqSvg, "stroke:%s;", corL);
   fprintf(arqSvg, "stroke-width:%d;", lineSize);
   fprintf(arqSvg, "\"\n");
-  
+
   fprintf(arqSvg, "%s\n", "/>");
 
 }
@@ -385,5 +386,39 @@ void tagEllipse(FILE *arqSvg, int id, double cx, double cy, double rx, double ry
   fprintf(arqSvg, "%s\n", "/>");
 
 }
+
+void defArrow(FILE *arqSvg ,char *cor){
+  fprintf(arqSvg, "%s\n", "<defs>");
+  fprintf(arqSvg, "%s\n", "<marker id=\"arrowhead\" markerWidth=\"10\" markerHeight=\"7\" refX=\"8\" refY=\"3.5\" orient=\"auto\">");
+  fprintf(arqSvg, "<polygon points=\"0 0, 10 3.5, 0 7\" fill=\"%s\"/>\n", cor);
+  fprintf(arqSvg, "%s\n", "</marker>");
+  fprintf(arqSvg, "%s\n", "</defs>");
+}
+
+void arrow(FILE *arqSvg, double x1, double y1, double x2, double y2,
+           char *cor){
+  fprintf(arqSvg, "%s\n", "<line");
+
+  fprintf(arqSvg, " %s", "x1=");
+  fprintf(arqSvg, "\"%.5f\"\n", x1);
+
+  fprintf(arqSvg, " %s", "y1=");
+  fprintf(arqSvg, "\"%f\"\n", y1);
+
+  fprintf(arqSvg, " %s", "x2=");
+  fprintf(arqSvg, "\"%.5f\"\n", x2);
+
+  fprintf(arqSvg, " %s", "y2=");
+  fprintf(arqSvg, "\"%f\"\n", y2);
+
+  fprintf(arqSvg, " %s", "style=");
+  fprintf(arqSvg, "\"%s", "stroke: ");
+  fprintf(arqSvg, " %s;", cor);
+  fprintf(arqSvg, " %s\"\n", "stroke-width: 1");
+  fprintf(arqSvg, " marker-end=\"%s\"\n", "url(#arrowhead)");
+
+  fprintf(arqSvg, "%s\n", "/>");
+}
+
 
 void tagFechamento(FILE *arqSvg) { fprintf(arqSvg, "%s\n", "</svg>"); }

@@ -4,7 +4,6 @@
 
 #include "Grafo.h"
 #include "StringO.h"
-#include "Svg.h"
 
 #define Branco 0
 #define Cinza 1
@@ -499,7 +498,7 @@ void showGraph(Graph graph, FILE *fileSvg, void(showV)(void *, FILE *),
   newVertex *vertex, *vertex2;
   newEdge *edge;
   if (graphN != NULL && showV != NULL) {
-    for (i = 1; i <= graphN->qtdVD; i++) {
+    for (i = 0; i < graphN->qtdVD; i++) {
       vertex = *(graphN->vectorVertex + i);
       showV(vertex->info, fileSvg);
       if (vertex != NULL) {

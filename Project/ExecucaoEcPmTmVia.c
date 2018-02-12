@@ -379,7 +379,7 @@ void executarViaV(List list, FILE *arqEntradaVia){
 
 void executarViaE(Canvas canvas, FILE *arqEntradaVia){
   char *idOrigin, *idDestiny, *name, *cepRight, *cepLeft;
-  double cmp, vm;
+  double cmp = 0, vm = 0;
   int s;
   Street rua = NULL;
   s = qtdCaracteres(arqEntradaVia);
@@ -391,10 +391,6 @@ void executarViaE(Canvas canvas, FILE *arqEntradaVia){
   fscanf(arqEntradaVia, "%s ", idDestiny);
 
   s = qtdCaracteres(arqEntradaVia);
-  name = alocarString(s);
-  fscanf(arqEntradaVia, "%s ", name);
-
-  s = qtdCaracteres(arqEntradaVia);
   cepRight = alocarString(s);
   fscanf(arqEntradaVia, "%s ", cepRight);
 
@@ -403,6 +399,10 @@ void executarViaE(Canvas canvas, FILE *arqEntradaVia){
   fscanf(arqEntradaVia, "%s ", cepLeft);
 
   fscanf(arqEntradaVia, "%lf %lf\n", &cmp, &vm);
+
+  s = qtdCaracteres(arqEntradaVia);
+  name = alocarString(s);
+  fscanf(arqEntradaVia, "%s ", name);
 
   rua = createStreet(name, cepRight, cepLeft, cmp, vm);
   if(rua != NULL){
