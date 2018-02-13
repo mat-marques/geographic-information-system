@@ -70,8 +70,73 @@ Dicionario configuraDicionario() {
   return dicionario;
 }
 
+SetOfRegisters configurarRegistradores(){
+  SetOfRegisters sor;
+  Register r;
+  Point p;
+  char name[] = "Registradores";
+  char r0[] = "R0";
+  char r1[] = "R1";
+  char r2[] = "R2";
+  char r3[] = "R3";
+  char r4[] = "R4";
+  char r5[] = "R5";
+  char r6[] = "R6";
+  char r7[] = "R7";
+  char r8[] = "R8";
+  char r9[] = "R9";
+  char r10[] = "R10";
+
+  sor = createSetOfRegisters(name, 11);
+
+  p = createPoint(1, 0, 0);
+  r = createRegister(r0, p);
+  insertRegister(sor, r);
+
+  p = createPoint(2, 0, 0);
+  r = createRegister(r1, p);
+  insertRegister(sor, r);
+
+  p = createPoint(3, 0, 0);
+  r = createRegister(r2, p);
+  insertRegister(sor, r);
+
+  p = createPoint(4, 0, 0);
+  r = createRegister(r3, p);
+  insertRegister(sor, r);
+
+  p = createPoint(5, 0, 0);
+  r = createRegister(r4, p);
+  insertRegister(sor, r);
+
+  p = createPoint(6, 0, 0);
+  r = createRegister(r5, p);
+  insertRegister(sor, r);
+
+  p = createPoint(7, 0, 0);
+  r = createRegister(r6, p);
+  insertRegister(sor, r);
+
+  p = createPoint(8, 0, 0);
+  r = createRegister(r7, p);
+  insertRegister(sor, r);
+
+  p = createPoint(9, 0, 0);
+  r = createRegister(r8, p);
+  insertRegister(sor, r);
+
+  p = createPoint(10, 0, 0);
+  r = createRegister(r9, p);
+  insertRegister(sor, r);
+
+  p = createPoint(11, 0, 0);
+  r = createRegister(r10, p);
+  insertRegister(sor, r);
+
+  return sor;
+}
+
 Cidade criaCidade(char *name) {
-  char r[] = "Registradores";
   City *city = NULL;
   city = (City *)malloc(sizeof(City));
   city->nome = name;
@@ -84,7 +149,7 @@ Cidade criaCidade(char *name) {
   city->listaMoradores = createL();
   city->listaEstabComerciais = createL();
   city->dicionario = configuraDicionario();
-  city->registradores = createSetOfRegisters(r, 11);
+  city->registradores = configurarRegistradores();
   city->grafo = NULL;
   return city;
 }
@@ -694,7 +759,7 @@ void eraseCidade(Cidade cidade) {
   eraseListaPessoas(cidade);
   eraseListaMoradores(cidade);
   eraseListaEstabC(cidade);
-  removeDicionario(cidade);
+  removeDicionario(city->dicionario);
   eraseRegistradores(cidade);
   eraseListaCrossRoad(cidade);
   eraseGraf(cidade);

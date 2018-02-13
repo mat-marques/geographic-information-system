@@ -36,6 +36,17 @@ Endereco getEndereco(Morador morador);
 void setEndereco(Morador morador, Endereco endereco);
 
 /*
+  A função retorna os dados de uma pessoa associada a morador.
+*/
+void* getPessoaM(Morador morador);
+
+/*
+  Define uma nova pessoa para o morador.
+*/
+void setPessoaM(Morador morador, void* pessoa);
+
+
+/*
    A função verifica se um morador tem o valor de seu cpf igual ao valor na variável cpf.
    Retorna 1 se forem iguais e 0 se forem diferentes.
  */

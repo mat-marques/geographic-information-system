@@ -310,77 +310,44 @@ List getElementsByRegion(QuadTree tree, Region region, compareToQt function) {
 }
 
 
-void nearest2(node *tree, double rx, double ry, double w, double h, List list){
-  char b;
+void nearest(node *tree, double *dist, node **item, double x, double y){
+  double d;
   if(tree != NULL){
-    b = pontoInternoR(w, h, rx, ry, tree->x, tree->y);
-    if(b == 'v'){
-      insertEndL(list, tree);
+    d = distanciaEntrePontos(x, y, tree->x, tree->y);
+
+    if(d < *dist){
+      *dist = d;
+      *item = tree;
     }
+
     /* SE */
-    if (rx <= tree->x && ry <= tree->y)
-      nearest2(tree->direction[0], rx, ry, w, h, list);
+    nearest(tree->direction[0], dist, item, x, y);
 
     /* SW */
-    if (rx > tree->x && ry < tree->y)
-      nearest2(tree->direction[1], rx, ry, w, h, list);
+    nearest(tree->direction[1], dist, item, x, y);
 
     /* NE */
-    if (rx < tree->x && ry > tree->y)
-      nearest2(tree->direction[2], rx, ry, w, h, list);
+    nearest(tree->direction[2], dist, item, x, y);
 
     /* NW */
-    if (rx >= tree->x && ry >= tree->y)
-      nearest2(tree->direction[3], rx, ry, w, h, list);
+    nearest(tree->direction[3], dist, item, x, y);
 
   }
 }
 
-node *extractN(List list, double x, double y){
-  node *best = NULL, *aux;
-  double d1, d2;
-  best = (node*) getBeginItemL(list);
-  removeBeginL(list, NULL);
-  if(lengthL(list) == 0){
-    return best;
-  }
-  d1 = distanciaEntrePontos(x, y, best->x, best->y);
-  while(lengthL(list) > 0){
-    aux = (node*) getBeginItemL(list);
-    removeBeginL(list, NULL);
-    d2 = distanciaEntrePontos(x, y, aux->x, aux->y);
-    if(d2 < d1){
-      d1 = d2;
-      best = aux;
-    }
-  }
-  return best;
-}
-
-ItemQt nearest1(node *tree, double x, double y){
-  ItemQt best = NULL;
-  List list = createL();
-  double rx = x - 2, ry = y - 2, w = 4, h = 4;
-  do {
-    nearest2(tree, rx, ry, w, h, list);
-    w = w * 2;
-    h = h * 2;
-    rx = rx - (w/2);
-    ry = ry - (h/2);
-  } while(lengthL(list) == 0);
-  best = extractN(list, x, y);
-  return best;
-}
 
 ItemQt getNearestPoint(QuadTree tree, double x, double y){
-  ItemQt item = NULL;
+  node *item = NULL;
   Base *base = (Base *)tree;
+  double dist;
   if (tree != NULL) {
     if (base->root != NULL) {
-      item = nearest1(base->root, x, y);
+      item = base->root;
+      dist = distanciaEntrePontos(x, y, base->root->x, base->root->y);
+      nearest(base->root, &dist, &item, x, y);
     }
   }
-  return item;
+  return item->info;
 }
 
 
@@ -426,7 +393,7 @@ ItemQt searchByCoordinate(node *tree, double x, double y) {
       info = aux->info;
       break;
     }
-    if (x < aux->x && y < aux->y) {
+    if (x <= aux->x && y <= aux->y) {
       aux = aux->direction[0];
     } else
         /* SW */
@@ -438,7 +405,7 @@ ItemQt searchByCoordinate(node *tree, double x, double y) {
       aux = aux->direction[2];
     } else {
       /* NW */
-      if (x > aux->x && y > aux->y) {
+      if (x >= aux->x && y >= aux->y) {
         aux = aux->direction[3];
       }
     }

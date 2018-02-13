@@ -13,38 +13,38 @@
    Armazena no registrador r a posição geográficao endereço onde o telefone fone
    foi conectado por último.
  */
-void executarQryF(FILE *arqEntradaQry, Canvas canvas);
+void executarQryF(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas);
 
 /*
    Armazena no registrador r a posição geográfica da residência do morador de cpf.
  */
-void executarQryM2(FILE *arqEntradaQry, Canvas canvas);
+void executarQryM2(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas);
 
 
 /*
    Armazena no registrador r a posição geográfica do endereço cep/face/num.
  */
-void executarQryE(FILE *arqEntradaQry, Canvas canvas);
+void executarQryE(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas);
 
 
 /*
    Armazena no registrador r a posição geográfica do equipamento urbano cujo
    identificador é id.
  */
-void executarQryG(FILE *arqEntradaQry, Canvas canvas);
+void executarQryG(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas);
 
 
 /*
    Armazena no registrador r a posição geográfica (x,y).
  */
-void executarQryXY(FILE *arqEntradaQry, Canvas canvas);
+void executarQryXY(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas);
 
 
 /*
    Armazena no registrador r1 o estabelecimento comercial mais próximo da
    posição armazenada no registrador r2.
  */
-void executarQryTP(FILE *arqEntradaQry, Canvas canvas);
+void executarQryTP(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas);
 
 
 /*

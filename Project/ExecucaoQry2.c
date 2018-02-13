@@ -346,12 +346,12 @@ void insertHtNumCel_x_Torre(Canvas canvas, Torre torre, Celular celular) {
 
 void executarQryMv(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
   int i;
-  char *opdest, *num, *var;
+  char *opdest, *num;
   char op1[] = "um", op2[] = "su";
-  Celular celular = NULL;
+  Celular celular = NULL, celular2 = NULL;
   Pessoa pessoa = NULL;
   Torre torre = NULL;
-  Quadra quadra = NULL;
+  void *var;
 
   i = qtdCaracteres(arqEntradaQry);
   opdest = alocarString(i);
@@ -377,27 +377,23 @@ void executarQryMv(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
                 "Numero de telefone nao existe na operadora de origem.\n");
       } else {
         /* Verifica na operadora de destino UELMobile */
-        celular = NULL;
-        celular = getOperadora_x_Celular(canvas, op1, num);
+        celular2 = NULL;
+        celular2 = getOperadora_x_Celular(canvas, op1, num);
         /* Verifica se celular esta na operadora de destino UELMobile */
 
-        if (celular != NULL) {
+        if (celular2 != NULL) {
           fprintf(*arqSaidaT,
                   "Numero de celular ja existe na operadora de destino.\n");
         } else {
           /* Conecta o celular na torre mais próxima */
-          celular = getOperadora_x_Celular(canvas, op2, num);
           pessoa = getDonoCelular(celular);
 
           if ((getIdTorreConexao(celular) != NULL) && (pessoa != NULL)) {
-            var = getCep(getEnderecoP(pessoa));
+            var = getEnderecoP(pessoa);
             if (var != NULL) {
-              quadra = getCep_x_Quadra(canvas, var);
-              if (quadra != NULL) {
-                torre = getTorreMaisProxima(canvas, op1, getXQ(quadra),
-                                            getYQ(quadra), NULL);
+                torre = getTorreMaisProxima(canvas, op1, getXEndereco(var),
+                                            getYEndereco(var), NULL);
                 setIdTorreConexao(celular, getIdT(torre));
-              }
             }
           }
 
@@ -420,25 +416,22 @@ void executarQryMv(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
                   "Numero de telefone nao existe na operadora de origem.\n");
         } else {
           /* Verifica na operadora de destino SercomtUEL  */
-          celular = NULL;
-          celular = getOperadora_x_Celular(canvas, op2, num);
+          celular2 = NULL;
+          celular2 = getOperadora_x_Celular(canvas, op2, num);
 
-          if (celular != NULL) {
+          if (celular2 != NULL) {
             fprintf(*arqSaidaT,
                     "Numero de celular ja existe na operadora de destino.\n");
           } else {
             /* Conecta o celular na torre mais próxima */
-            celular = getOperadora_x_Celular(canvas, op1, num);
             pessoa = getDonoCelular(celular);
+
             if ((getIdTorreConexao(celular) != NULL) && (pessoa != NULL)) {
-              var = getCep(getEnderecoP(pessoa));
+              var = getEnderecoP(pessoa);
               if (var != NULL) {
-                quadra = getCep_x_Quadra(canvas, var);
-                if (quadra != NULL) {
-                  torre = getTorreMaisProxima(canvas, op2, getXQ(quadra),
-                                              getYQ(quadra), NULL);
+                  torre = getTorreMaisProxima(canvas, op1, getXEndereco(var),
+                                              getYEndereco(var), NULL);
                   setIdTorreConexao(celular, getIdT(torre));
-                }
               }
             }
 
@@ -488,6 +481,7 @@ void executarQryM(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
     list = getHtList(hash, cep);
     l = lengthL(list);
     hash = getSecaoDicionario(dicionario, secao4);
+
     for (i = 1; i <= l; i++) {
       morador = getItemL(list, i);
       if (morador != NULL) {
@@ -539,7 +533,7 @@ void executarQryMr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
     hash = getSecaoDicionario(dicionario, secao6);
     fprintf(*arqSaidaT, "Comando mr?\n");
 
-    for (i = 1; i < l; i++) { /*Percorre lista das quadras*/
+    for (i = 1; i <= l; i++) { /*Percorre lista das quadras*/
       quadra = getItemL(list, i);
       cep = getCepQ(quadra);
       moradores = getHtList(hash, cep);
@@ -547,7 +541,7 @@ void executarQryMr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
       if (moradores != NULL) {
         k = lengthL(moradores);
 
-        for (j = 1; j < k; j++) { /*Percorre lista de moradores*/
+        for (j = 1; j <= k; j++) { /*Percorre lista de moradores*/
           morador = NULL;
           morador = getItemL(moradores, j);
           if (morador != NULL) {
@@ -567,7 +561,7 @@ void executarQryMr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
                           getNumCelular(celular), getNomeOperadora(celular));
                 }
               } else {
-                printf("Morador nao possui informacoes pessoais\n");
+                printf("Morador existe, mas nao possui informacoes pessoais.\n");
               }
             }
           }
@@ -584,10 +578,9 @@ void executarQryMr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
 void executarQryDm(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
   Pessoa pessoa = NULL;
   Endereco endereco = NULL;
-  Quadra quadra = NULL;
   Celular celular = NULL;
   int i;
-  char *cpf, *cep;
+  char *cpf;
   double x = 0, y = 0;
 
   i = qtdCaracteres(arqEntradaQry);
@@ -610,19 +603,14 @@ void executarQryDm(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
     }
     endereco = getEnderecoP(pessoa);
     if (endereco != NULL) {
-      cep = getCep(endereco);
-      if (cep != NULL) {
-        quadra = getCep_x_Quadra(canvas, cep);
-      }
-      if (quadra != NULL) {
-        calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x, &y);
+        x = getXEndereco(endereco);
+        y = getYEndereco(endereco);
+        fprintf(*arqSaidaT, "Coordenada x: %f e Coordenada y: %f\n", x, y);
         /* Insere um ponto no canvas */
         insertPointCanvas(canvas, createPoint(automaticId++, x, y));
         insertTextCanvas(canvas, createText(automaticId++, cpf, x, y));
-      } else {
-        printf("Região (Quadra) onde a pessoa mora nao existe na cidade.\n");
-      }
     }
+
   } else {
     printf("Pessoa com cpf fornecido não existe no banco de dados.\n");
   }
@@ -632,11 +620,9 @@ void executarQryDm(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
 
 void executarQryDe(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
   Endereco endereco = NULL;
-  Quadra quadra = NULL;
   EstabC estabC = NULL;
   int i;
   char *cnpj = NULL;
-  char *cep;
   double x, y;
   i = qtdCaracteres(arqEntradaQry);
   cnpj = alocarString(i);
@@ -648,13 +634,10 @@ void executarQryDe(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
   if (estabC != NULL) {
 
     endereco = getEnderecoEstabC(estabC);
-    cep = getCep(endereco);
-    if (cep != NULL) {
-      quadra = getCep_x_Quadra(canvas, cep);
-    }
-    if (quadra != NULL) {
-      calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x, &y);
-      fprintf(*arqSaidaT, "Comando de?\nCodt: %s, Descricao: %s, Cep: %s, "
+    x = getXEndereco(endereco);
+    y = getYEndereco(endereco);
+
+    fprintf(*arqSaidaT, "Comando de?\nCodt: %s, Descricao: %s, Cep: %s, "
                           "Face: %c, Num: %d, Cnpj: %s, Nome: %s, Coordenada: "
                           "%f %f",
               getCodt(estabC), getDescription(estabC), getCep(endereco),
@@ -663,11 +646,9 @@ void executarQryDe(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
 
       /* Insere um círculo na lista de figuras geométricas */
       insertPointCanvas(canvas, createPoint(automaticId++, x, y));
-    } else {
-      printf("Quadra nao existe.\n");
-    }
+
   } else {
-    printf("Pessoa com cpf fornecido não existe no banco de dados.\n");
+    fprintf(*arqSaidaT, "Comando de?\nEstabelecimento comercial fornecido não existe no banco de dados.\n");
   }
 
   free(cnpj);
@@ -693,11 +674,12 @@ void executarQryCon(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
   quadra = getCep_x_Quadra(canvas, cep);
 
   if (quadra != NULL) {
-    calculaCoordenadaM(quadra, num, face, &x, &y);
 
     celular = getNumcel_x_Celular(canvas, numC);
 
     if (celular != NULL) {
+
+      calculaCoordenadaM(quadra, num, face, &x, &y);
 
       torre = getTorreMaisProxima(canvas, getNomeOperadora(celular), x, y,
                                   &menorDistancia);
@@ -880,19 +862,19 @@ void executarQryRip(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
   cidade = getCidade(canvas);
   dicionario = getDicionario(cidade);
 
-  hash = getSecaoDicionario(dicionario, secao4);
 
   /* Remove os dados da secao4 - cpfXpessoa */
+  hash = getSecaoDicionario(dicionario, secao4);
   pessoa = itemIsInsideHT(hash, cpf, cpf, comparePessoas);
   if (pessoa != NULL) {
     fprintf(*arqSaidaT,
-            "Comando rip\n%s, portador do cpf %s, do sexo %s, nascido em %s\n",
+            "Comando rip\nFaleceu %s, portador do cpf %s, do sexo %s, nascido em %s\n",
             getNomeP(pessoa), getCpf(pessoa), getSexo(pessoa), getNasc(pessoa));
     celular = getCelular(pessoa);
     endereco = getEnderecoP(pessoa);
     removeHT(hash, cpf, cpf, comparePessoas);
   } else {
-    printf("Pessoa nao existe\n");
+    fprintf(*arqSaidaT, "Comando rip\nPessoa nao existe.\n");
   }
 
   if (celular != NULL) {
@@ -928,7 +910,8 @@ void executarQryRip(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
 
     if (quadra != NULL) {
       /* Insere um losango no svg */
-      calculaCoordenadaM(quadra, getNum(endereco), getFace(endereco), &x, &y);
+      x = getXEndereco(endereco);
+      y = getYEndereco(endereco);
       calcularCoordLosango(canvas, getFace(endereco), x, y);
     }
 
@@ -951,6 +934,7 @@ void executarQryRip(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
   free(cpf);
 }
 
+/* Parei aqui */
 void executarQryLk(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
   List list = NULL;
   Cidade cidade = NULL;
@@ -1123,7 +1107,7 @@ void executarQryLnr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
   List list = NULL, list2 = NULL;
   Cidade cidade = NULL;
   double x, y, w, h;
-  int i, j, n, k;
+  int i, j, n, k, aux=0;
   void *element, *element2;
   char *id, *var, letra, *op;
   cidade = getCidade(canvas);
@@ -1143,12 +1127,14 @@ void executarQryLnr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
       op = alocarString(i);
       fscanf(arqEntradaQry, "%s\n", op);
       fprintf(*arqSaidaT, "Comando lnr?\n");
+
       j = lengthL(list);
       for (i = 1; i <= j; i++) {
         element = getItemL(list, i);
         id = getIdT(element);
         if (getOperadora(element) != NULL) {
           if (strcmp(getOperadora(element), op) == 0) {
+            aux = 1;
             hash = getSecaoDicionario(dicionario, secao13);
             list2 = getHtList(hash, id);
             if (list2 != NULL) {
@@ -1166,13 +1152,17 @@ void executarQryLnr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
           }
         }
       }
-
+      if(aux == 0){
+        fprintf(*arqSaidaT,
+                "Nao existem celulares conectados as torres da regiao fornecida.");
+      }
       free(op);
     } else {
       fseek(arqEntradaQry, -1, SEEK_CUR);
       fgetc(arqEntradaQry);
       fprintf(*arqSaidaT, "Comando lnr?\n");
       j = lengthL(list);
+      /* Pega as torres */
       for (i = 1; i <= j; i++) {
         element = getItemL(list, i);
         id = getIdT(element);
@@ -1180,10 +1170,12 @@ void executarQryLnr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
         list2 = getHtList(hash, id);
         if (list2 != NULL) {
           n = lengthL(list2);
+          /* Pega os celulares */
           for (k = 1; k <= n; k++) {
             element2 = getItemL(list2, k);
             var = getIdTorreConexao(element2);
             if ((strcmp(id, var) == 0) && (getOperadora(element) != NULL)) {
+              aux = 1;
               fprintf(
                   *arqSaidaT,
                   "O celular de numero %s esta conectado a torre de id %s\n",
@@ -1192,6 +1184,10 @@ void executarQryLnr(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas) {
           }
         }
       }
+    }
+    if(aux == 0){
+      fprintf(*arqSaidaT,
+              "Nao existem celulares conectados as torres da regiao fornecida.");
     }
     eraseListL(list, NULL);
     eraseBase(list);

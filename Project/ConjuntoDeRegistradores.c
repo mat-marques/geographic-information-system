@@ -5,24 +5,34 @@
 #include "ConjuntoDeRegistradores.h"
 #include "StringO.h"
 
+typedef struct reg{
+    void *myRegister;
+} myReg;
+
 typedef struct mySetOfRegisters{
   char *name;
-  void **myRegisters;
+  myReg *myRegisters;
   int qtdRegistersT, qtdRegistersC;
 }newSetOfRegisters;
 
 SetOfRegisters createSetOfRegisters(char *name, int qtdRegisters){
   newSetOfRegisters *sor = NULL;
+  myReg *r;
   int i;
   sor = (newSetOfRegisters*) malloc(sizeof(newSetOfRegisters));
   if(sor != NULL){
     sor->name = criarString(name);
     sor->qtdRegistersC = 0;
     sor->qtdRegistersT = qtdRegisters;
-    sor->myRegisters = (void **) malloc(qtdRegisters * sizeof(void*));
-    /* Percorre o vetor insidindo null */
-    for(i=0; i<qtdRegisters; i++){
-      sor->myRegisters[i] = NULL;
+    r = ( myReg *) malloc(qtdRegisters * sizeof(myReg));
+    sor->myRegisters = NULL;
+    if(r != NULL){
+      sor->myRegisters = r;
+      r = sor->myRegisters;
+      /* Percorre o vetor insidindo null */
+      for(i=0; i<qtdRegisters; i++){
+        (r + i)->myRegister = NULL;
+      }
     }
   }
   return sor;
@@ -62,12 +72,14 @@ int getQtdRegistersCSetOfRegisters(SetOfRegisters setOfRegisters){
 
 void insertRegister(SetOfRegisters setOfRegisters, Register registerN){
   newSetOfRegisters *sor = (newSetOfRegisters*) setOfRegisters;
+  myReg *r;
   if(sor != NULL){
+    r = sor->myRegisters;
     if(sor->qtdRegistersC == 0){
-      *(sor->myRegisters) = registerN;
+      r->myRegister = registerN;
       sor->qtdRegistersC = sor->qtdRegistersC + 1;
     } else if(sor->qtdRegistersC < sor->qtdRegistersT){
-      *(sor->myRegisters + (sor->qtdRegistersC + 1)) = registerN;
+      (r + sor->qtdRegistersC)->myRegister = registerN;
       sor->qtdRegistersC = sor->qtdRegistersC + 1;
     }
   }
@@ -76,12 +88,15 @@ void insertRegister(SetOfRegisters setOfRegisters, Register registerN){
 
 Register getRegister(SetOfRegisters setOfRegisters, char *name){
   int i;
+  myReg *r;
   newSetOfRegisters *sor = (newSetOfRegisters*) setOfRegisters;
   Register registerN = NULL;
   if(sor != NULL){
+    r = sor->myRegisters;
     for(i=0; i<sor->qtdRegistersC; i++){
-      if(compareRegister(*(sor->myRegisters + i), name) == 1){
-        registerN = *(sor->myRegisters + i);
+      if(compareRegister((r + i)->myRegister, name) == 1){
+        registerN = (r + i)->myRegister;
+        break;
       }
     }
   }
@@ -91,14 +106,16 @@ Register getRegister(SetOfRegisters setOfRegisters, char *name){
 
 void removeSetOfRegisters(SetOfRegisters setOfRegisters,  void (removeRegInfo)(void *)){
   int i;
+  myReg *r;
   newSetOfRegisters *sor = (newSetOfRegisters*) setOfRegisters;
   if(sor != NULL){
+    r = sor->myRegisters;
     for(i=0; i<sor->qtdRegistersC; i++){
-      if(sor->myRegisters[i] != NULL){
+      if((r + i)->myRegister != NULL){
         if(removeRegInfo != NULL){
-          removeRegister(sor->myRegisters[i], removeRegInfo);
+          removeRegister((r + i)->myRegister, removeRegInfo);
         } else {
-          removeRegister(sor->myRegisters[i], NULL);
+          removeRegister((r + i)->myRegister, NULL);
         }
       }
     }

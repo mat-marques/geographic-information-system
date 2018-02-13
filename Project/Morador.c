@@ -7,6 +7,7 @@
 typedef struct novoMorador{
   char *cpf;
   Endereco endereco;
+  void *pessoa;
 }NovoMorador;
 
 Morador criaMorador(char *cpf, Endereco endereco){
@@ -15,6 +16,7 @@ Morador criaMorador(char *cpf, Endereco endereco){
 
   novoM->cpf = criarString(cpf);
   novoM->endereco = endereco;
+  novoM->pessoa = NULL;
   return novoM;
 }
 
@@ -47,6 +49,17 @@ void setEndereco(Morador morador, Endereco endereco){
     novoM->endereco = NULL;
   }
   novoM->endereco = endereco;
+}
+
+
+void* getPessoaM(Morador morador) {
+  NovoMorador *novoM = (NovoMorador*) morador;
+  return novoM->pessoa;
+}
+
+void setPessoaM(Morador morador, void* pessoa) {
+  NovoMorador *novoM = (NovoMorador*) morador;
+  novoM->pessoa = pessoa;
 }
 
 

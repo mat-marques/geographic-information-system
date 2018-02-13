@@ -355,7 +355,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
   FILE *arqSaidaT = NULL;
   long int cont = 0;
   path = concatenarElementos(dirPath, arqNome, extensao1);
-  path2 = concatenarStrings(dirPath, arqNome);
+  path2 = concatenarElementos2(dirPath, arqNome);
 
   if (arqEntradaQry != NULL) {
     arqSaidaT = createArqW(path);
@@ -370,7 +370,7 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
       if (fscanf(arqEntradaQry, "%s ", entradaA) < 0) {
         break;
       }
-      printf("%s\n", entradaA);
+
       if (strcmp(entradaA, "dq") == 0) {
         *qtdCompararacoesR =
             *qtdCompararacoesR + executardq(arqEntradaQry, &arqSaidaT, path,
@@ -447,17 +447,17 @@ long int executarComandosQry(FILE *arqEntradaQry, char *arqNome, char *dirPath,
       } else if (strcmp(entradaA, "dpr") == 0) {
         executarQryDpr(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "@f?") == 0) {
-        executarQryF(arqEntradaQry, canvas);
+        executarQryF(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "@m?") == 0) {
-        executarQryM2(arqEntradaQry, canvas);
+        executarQryM2(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "@e?") == 0) {
-        executarQryE(arqEntradaQry, canvas);
+        executarQryE(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "@g?") == 0) {
-        executarQryG(arqEntradaQry, canvas);
-      } else if (strcmp(entradaA, "@xy?") == 0) {
-        executarQryXY(arqEntradaQry, canvas);
+        executarQryG(arqEntradaQry, &arqSaidaT, canvas);
+      } else if (strcmp(entradaA, "@xy") == 0) {
+        executarQryXY(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "@tp?") == 0) {
-        executarQryTP(arqEntradaQry, canvas);
+        executarQryTP(arqEntradaQry, &arqSaidaT, canvas);
       } else if (strcmp(entradaA, "p?") == 0) {
         executarQryP(arqEntradaQry, &arqSaidaT, path2, canvas);
       } else {
@@ -578,14 +578,19 @@ void executarComandoVia(FILE *arqEntradaVia, Canvas canvas) {
           } while(lengthL(list) > 0);
           eraseListL(list, NULL);
           eraseBase(list);
-          printf("Passe aqui\n");
+          list = NULL;
         }
 
         executarViaE(canvas, arqEntradaVia);
 
-      } /*else {
+      } else {
         printf("Comando invalido em arquivo via.\n");
-      }*/
+      }
+    }
+
+    if(list != NULL){
+      eraseListL(list, NULL);
+      eraseBase(list);
     }
   }
 }

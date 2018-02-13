@@ -157,15 +157,16 @@ Edge getEdge(Graph graph, char *idOrigin, char *idDestiny) {
   newVertex *vertexN = NULL;
   newEdge *edgeN = NULL;
   int l;
-  char *id;
+  char *id, traco[] = "-";
   if (graphN != NULL) {
     vertexN = (newVertex *)itemIsInsideHT(graphN->hashVertex, idOrigin,
                                           idOrigin, compareVertex);
     if (vertexN != NULL) {
-      l = strlen(idOrigin) + strlen(idDestiny) + 2;
+      l = strlen(idOrigin) + strlen(idDestiny) + 3;
       id = (char *)malloc(l * sizeof(char));
-      id = strcat(idOrigin, "-");
-      id = strcat(id, idDestiny);
+      strcpy(id, idOrigin);
+      strcat(id, traco);
+      strcat(id, idDestiny);
       edgeN = (newEdge *)searchItemL(vertexN->listEdge, id, compareEdge);
       free(id);
       if (edgeN != NULL) {
@@ -215,16 +216,17 @@ List getListAdjacent(Graph graph, char *id) {
 int adjacent(Graph graph, char *idOrigin, char *idDestiny) {
   newGraph *graphN = (newGraph *)graph;
   int l;
-  char *id;
+  char *id, traco[] = "-";
   newVertex *vertex = NULL;
   newEdge *edge = NULL;
   vertex = (newVertex *)itemIsInsideHT(graphN->hashVertex, idOrigin, idOrigin,
                                        compareVertex);
   if (vertex != NULL) {
-    l = strlen(idOrigin) + strlen(idDestiny) + 2;
+    l = strlen(idOrigin) + strlen(idDestiny) + 3;
     id = (char *)malloc(l * sizeof(char));
-    id = strcat(idOrigin, "-");
-    id = strcat(id, idDestiny);
+    strcpy(id, idOrigin);
+    strcat(id, traco);
+    strcat(id, idDestiny);
     edge = (newEdge *)searchItemL(vertex->listEdge, id, compareEdge);
     free(id);
     if (edge != NULL) {
@@ -384,8 +386,11 @@ void relax(newVertex *u, newVertex *v, newEdge *w, int p_v) {
       v->u->p = u;
     }
   } else {
-    if ((u->u->dist + w->v) < v->u->dist) {
-      v->u->dist = u->u->dist + w->v;
+    if(w->v == 0){
+      w->v = 1;
+    }
+    if ((u->u->dist + (w->p/w->v)) < v->u->dist) {
+      v->u->dist = u->u->dist + (w->p/w->v);
       v->u->p = u;
     }
   }
@@ -475,15 +480,16 @@ Info removeEdgeGraph(Graph graph, char *idOrigin, char *idDestiny) {
   newGraph *graphN = (newGraph *)graph;
   Info info = NULL;
   int l;
-  char *id;
+  char *id, traco[] = "-";
   newVertex *vertex = NULL;
   vertex = (newVertex *)itemIsInsideHT(graphN->hashVertex, idOrigin, idOrigin,
                                        compareVertex);
   if (vertex != NULL) {
-    l = strlen(idOrigin) + strlen(idDestiny) + 2;
+    l = strlen(idOrigin) + strlen(idDestiny) + 3;
     id = (char *)malloc(l * sizeof(char));
-    id = strcat(idOrigin, "-");
-    id = strcat(id, idDestiny);
+    strcpy(id, idOrigin);
+    strcat(id, traco);
+    strcat(id, idDestiny);
     info = removeItemL2(vertex->listEdge, id, compareEdge);
     free(id);
   }

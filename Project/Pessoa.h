@@ -3,6 +3,7 @@
 
 #include "Endereco.h"
 #include "Celular.h"
+#include "Morador.h"
 
 typedef void* Pessoa;
 /*
@@ -83,6 +84,20 @@ void setEnderecoP(Pessoa pessoa, Endereco endereco);
    Retorna Null caso a pessoa não tenha celular.
  */
 Celular getCelular(Pessoa pessoa);
+
+
+/*
+  A função retorna a referência para os dados de Morador.
+*/
+Morador getMoradorP(Pessoa pessoa);
+
+
+/*
+  O procedimento define uma nova referência para os dados de Morador.
+*/
+void setMoradorP(Pessoa pessoa, Morador morador);
+
+
 
 /*
    O procedimento define o celular de uma pessoa.

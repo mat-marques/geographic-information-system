@@ -10,7 +10,7 @@ typedef struct novaPessoa {
   char *cpf, *nome, *sobrenome, *sexo, *nasc;
   Endereco endereco;
   Celular celular;
-
+  Morador morador;
 } NovaPessoa;
 
 Pessoa criaPessoa(char *cpf, char *nome, char *sobrenome, char *sexo,
@@ -25,6 +25,7 @@ Pessoa criaPessoa(char *cpf, char *nome, char *sobrenome, char *sexo,
   novaPessoa->sobrenome = criarString(sobrenome);
   novaPessoa->endereco = NULL;
   novaPessoa->celular = NULL;
+  novaPessoa->morador = NULL;
   return novaPessoa;
 }
 
@@ -127,6 +128,25 @@ void setCelular(Pessoa pessoa, Celular celular) {
     novaPessoa->celular = celular;
   } else {
     novaPessoa->celular = NULL;
+  }
+}
+
+
+Morador getMoradorP(Pessoa pessoa) {
+  NovaPessoa *novaPessoa = (NovaPessoa *)pessoa;
+  return novaPessoa->morador;
+}
+
+void setMoradorP(Pessoa pessoa, Morador morador) {
+  NovaPessoa *novaPessoa = (NovaPessoa *)pessoa;
+  if (novaPessoa->morador != NULL) {
+    removeMorador(novaPessoa->morador);
+    novaPessoa->morador = NULL;
+  }
+  if (morador != NULL) {
+    novaPessoa->morador = morador;
+  } else {
+    novaPessoa->morador = NULL;
   }
 }
 

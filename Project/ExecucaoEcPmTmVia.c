@@ -86,34 +86,33 @@ void executarEcE(Canvas canvas, FILE *arqEntradaEc){
   nome = alocarString(l);
   fscanf(arqEntradaEc, "%s\n", nome);
 
-  estabC = criaEstabC(codt, cep, face, num, cnpj, nome);
-
   cidade = getCidade(canvas);
-
-  insertEstabC(cidade, estabC);
 
   dicionario = getDicionario(cidade);
   hash = getSecaoDicionario(dicionario, secao5);
 
-  /* Coordenada geografica de onde fica o estabelecimento */
   quadra = itemIsInsideHT(hash, cep, cep, compareQ);
   if(quadra != NULL){
+    estabC = criaEstabC(codt, cep, face, num, cnpj, nome);
+
+    insertEstabC(cidade, estabC);
+
     calculaCoordenadaM(quadra, num, face, &x, &y);
     setXEndereco(getEnderecoEstabC(estabC), x);
     setYEndereco(getEnderecoEstabC(estabC), y);
+
+    /* Insere na secao3 - codtXestabC */
+    hash = getSecaoDicionario(dicionario, secao3);
+    insertHT(hash, codt, estabC);
+
+    /* Insere na secao8 - cnpjXestabC */
+    hash = getSecaoDicionario(dicionario, secao8);
+    insertHT(hash, cnpj, estabC);
+
+    /* Insere na secao10 - cepXestabC */
+    hash = getSecaoDicionario(dicionario, secao10);
+    insertHT(hash, cep, estabC);
   }
-
-  /* Insere na secao3 - codtXestabC */
-  hash = getSecaoDicionario(dicionario, secao3);
-  insertHT(hash, codt, estabC);
-
-  /* Insere na secao8 - cnpjXestabC */
-  hash = getSecaoDicionario(dicionario, secao8);
-  insertHT(hash, cnpj, estabC);
-
-  /* Insere na secao10 - cepXestabC */
-  hash = getSecaoDicionario(dicionario, secao10);
-  insertHT(hash, cep, estabC);
 
   desalocar(codt);
   desalocar(cep);
@@ -186,7 +185,7 @@ void executarPmM(Canvas canvas, FILE *arqEntradaPm){
   Endereco endereco;
   Morador morador;
   Quadra quadra = NULL;
-  double x, y;
+  double x = -1, y = -1;
   l = qtdCaracteres(arqEntradaPm);
   cpf = alocarString(l);
   fscanf(arqEntradaPm, "%s ", cpf);
@@ -209,19 +208,20 @@ void executarPmM(Canvas canvas, FILE *arqEntradaPm){
   hash = getSecaoDicionario(dicionario, secao4);
   pessoa = itemIsInsideHT(hash, cpf, cpf, comparePessoas);
 
-  if(pessoa != NULL){
+  hash = getSecaoDicionario(dicionario, secao5);
+  quadra = itemIsInsideHT(hash, cep, cep, compareQ);
+
+  if(pessoa != NULL && quadra != NULL){
     endereco = criaEndereco(cep, face, num, comp);
     setEnderecoP(pessoa, endereco);
     morador = criaMorador(cpf, endereco);
+    setMoradorP(pessoa, morador);
+    setPessoaM(morador, pessoa);
 
     /* Coordenada geografica de onde o morador mora */
-    hash = getSecaoDicionario(dicionario, secao5);
-    quadra = itemIsInsideHT(hash, cep, cep, compareQ);
-    if(quadra != NULL){
-      calculaCoordenadaM(quadra, num, face, &x, &y);
-      setXEndereco(endereco, x);
-      setYEndereco(endereco, y);
-    }
+    calculaCoordenadaM(quadra, num, face, &x, &y);
+    setXEndereco(endereco, x);
+    setYEndereco(endereco, y);
 
     /* Insere na secao1 - cpfXcep */
     hash = getSecaoDicionario(dicionario, secao1);
@@ -404,6 +404,10 @@ void executarViaE(Canvas canvas, FILE *arqEntradaVia){
   name = alocarString(s);
   fscanf(arqEntradaVia, "%s ", name);
 
+  if(vm == 0){
+    vm = 1;
+  }
+  
   rua = createStreet(name, cepRight, cepLeft, cmp, vm);
   if(rua != NULL){
     insertEdge(getGrafo(getCidade(canvas)), idOrigin, idDestiny, cmp, vm, rua);
