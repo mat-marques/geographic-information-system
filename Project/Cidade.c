@@ -339,6 +339,7 @@ void showQ(Quadra quadra) {
   double x, y, w, h;
   char *corP, *corB;
   char cor[] = "red";
+  char cor2[] = "black";
   char text[] = "Q";
   x = getXQ(quadra);
   y = getYQ(quadra);
@@ -348,6 +349,7 @@ void showQ(Quadra quadra) {
   corB = getCorbQ(quadra);
   tagRetangulo2(newArqCity, w, h, x, y, corP, corB);
   tagTexto2(newArqCity, text, cor, 5, x, y);
+  tagTexto2(newArqCity, getCepQ(quadra), cor2, 12, x+10, y+20);
 }
 
 void showH(Hidrante hidrante) {

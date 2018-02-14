@@ -55,6 +55,41 @@ double getYCelular(Celular celular);
 */
 void setYCelular(Celular celular, double y);
 
+
+/*
+  Retorna o cep da última quadra que o celular estava quando foi conectado a uma torre.
+*/
+char *getCepCelular(Celular celular);
+
+
+/*
+  Define um novo cep para a última quadra que o celular estava quando foi conectado a uma torre.
+*/
+void setCepCelular(Celular celular, char *cep);
+
+/*
+  Retorna a face da última conexão do celular.
+*/
+char getFaceCelular(Celular celular);
+
+
+/*
+  Define a face da última conexão do celular.
+*/
+void setFaceCelular(Celular celular, char face);
+
+
+/*
+  Retorna o número da residência da última conexão do celular.
+*/
+int getNumQCelular(Celular celular);
+
+
+/*
+  Define o número da residência da última conexão do celular.
+*/
+void setNumQCelular(Celular celular, int numQ);
+
 /*
   A função retorna o nome da operadora do celular.
 */

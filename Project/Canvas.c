@@ -1415,7 +1415,7 @@ int compareRC2(Circulo circulo, Region region) {
 int compareRQ2(Quadra quadra, Region region) {
   /* A função verifica se uma quadra esta inteira ou parcialmente dentro de uma
     região retangular.
-    Caso o quadra esteja dentro da região retangular retorna 1, caso não retorna
+    Caso a quadra esteja dentro da região retangular retorna 1, caso não retorna
     0.
   */
   double x, y, w, h;

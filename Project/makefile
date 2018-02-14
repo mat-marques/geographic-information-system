@@ -67,7 +67,7 @@ dependenciasEq2 = ExecucaoQry2.h ExecucaoQry2.c Canvas.h Canvas.c \
 				  List.h List.c StringO.h StringO.c
 
 dependenciasEq3 = ExecucaoQry3.h ExecucaoQry3.c Canvas.h Canvas.c \
-									StringO.h StringO.c Svg.h Svg.c
+									StringO.h StringO.c Svg.h Svg.c OperacoesF.h OperacoesF.c
 
 CFLAGS  = -g -ansi -pedantic
 

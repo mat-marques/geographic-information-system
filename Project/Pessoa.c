@@ -139,10 +139,7 @@ Morador getMoradorP(Pessoa pessoa) {
 
 void setMoradorP(Pessoa pessoa, Morador morador) {
   NovaPessoa *novaPessoa = (NovaPessoa *)pessoa;
-  if (novaPessoa->morador != NULL) {
-    removeMorador(novaPessoa->morador);
-    novaPessoa->morador = NULL;
-  }
+
   if (morador != NULL) {
     novaPessoa->morador = morador;
   } else {

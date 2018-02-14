@@ -10,6 +10,8 @@ typedef struct novoCelular {
   char *num, *idT, *operadora;
   Pessoa pessoa;
   double x, y;
+  char *cep, face;
+  int numQ;
 } NovoCelular;
 
 Celular criaCelular(char *num) {
@@ -18,9 +20,12 @@ Celular criaCelular(char *num) {
   novoC->idT = NULL;
   novoC->operadora = NULL;
   novoC->pessoa = NULL;
+  novoC->cep = NULL;
+  novoC->face = '0';
+  novoC->numQ = 0;
   novoC->num = criarString(num);
-  novoC->x = 0;
-  novoC->y = 0;
+  novoC->x = -1;
+  novoC->y = -1;
   return novoC;
 }
 
@@ -57,6 +62,43 @@ void setYCelular(Celular celular, double y){
   NovoCelular *novoC = (NovoCelular *)celular;
   novoC->y = y;
 }
+
+char *getCepCelular(Celular celular) {
+  NovoCelular *novoC = (NovoCelular *)celular;
+  return novoC->cep;
+}
+
+void setCepCelular(Celular celular, char *cep) {
+  NovoCelular *novoC = (NovoCelular *)celular;
+  if (novoC->cep != NULL) {
+    free(novoC->cep);
+    novoC->cep = NULL;
+  }
+  novoC->cep = criarString(cep);
+}
+
+
+char getFaceCelular(Celular celular){
+  NovoCelular *novoC = (NovoCelular *)celular;
+  return novoC->face;
+}
+
+void setFaceCelular(Celular celular, char face){
+  NovoCelular *novoC = (NovoCelular *)celular;
+  novoC->face = face;
+}
+
+
+int getNumQCelular(Celular celular){
+  NovoCelular *novoC = (NovoCelular *)celular;
+  return novoC->numQ;
+}
+
+void setNumQCelular(Celular celular, int numQ){
+  NovoCelular *novoC = (NovoCelular *)celular;
+  novoC->numQ = numQ;
+}
+
 
 char *getNomeOperadora(Celular celular) {
   NovoCelular *novoC = (NovoCelular *)celular;
@@ -120,6 +162,7 @@ void removeCelular(Celular celular) {
   if (novoC != NULL) {
     free(novoC->idT);
     free(novoC->num);
+    free(novoC->cep);
     free(novoC->operadora);
     novoC->pessoa = NULL;
   }

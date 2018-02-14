@@ -6,6 +6,7 @@
 #include "ExecucaoQry3.h"
 #include "StringO.h"
 #include "Svg.h"
+#include "OperacoesF.h"
 
 HashTable hash;
 Dicionario dicionario;
@@ -271,46 +272,27 @@ void executarQryTP(FILE *arqEntradaQry, FILE **arqSaidaT, Canvas canvas){
 
 
 void pitorico(Canvas canvas, List list, FILE *arqSaidaSvg, char *cor){
-  List quadras = NULL;
-  Quadra quadra;
+  Quadra quadra = NULL;
   int i, j;
-  Vertex v1, v2, v3;
-  Edge e1;
+  Vertex v1, v2;
   CrossRoad c1, c2;
   Cidade cidade;
-  Street s1;
-  char cor2[] = "black", *cep, semCep[] = "-";
-  char secao5[] = "cepXquadra";
-  double x0, y0, x1, y1, x2, y2, w0, h0, w1, h1;
+  Edge e;
+  Street s;
+  Graph g;
+  char cor2[] = "black";
+  char secao5[] = "cepXquadra", *cep;
+  double x1, y1, x2, y2;
 
   cidade = getCidade(canvas);
   dicionario = getDicionario(cidade);
   hash = getSecaoDicionario(dicionario, secao5);
-
-  v1 = getBeginItemL(list);
-  v2 = getEndItemL(list);
-  v3 = getItemL(list, 2);
-
-  /* Busca das quadras que compõem a vizinhança do caminho */
-  e1 = getEdge(getGrafo(cidade), getIdVertex(v1), getIdVertex(v3));
-  s1 = getInfoEdge(e1);
-  cep = getCepRight(s1);
-
-  if(strcmp(cep, semCep) == 0){
-    cep = getCepLeft(s1);
-  }
-
-  quadra = itemIsInsideHT(hash, cep, cep, compareQ);
-
-  if(quadra != NULL){
-    w1 = getLargQ(quadra) + 10;
-    h1 = getAltQ(quadra) + 10;
-  } else {
-    w1 = 100;
-    h1 = 100;
-  }
+  g = getGrafo(cidade);
 
   /* Obtenção dos vertices de origem e destino do grafo */
+  v1 = getBeginItemL(list);
+  v2 = getEndItemL(list);
+
   c1 = getInfoVertex(v1);
   c2 = getInfoVertex(v2);
 
@@ -319,41 +301,7 @@ void pitorico(Canvas canvas, List list, FILE *arqSaidaSvg, char *cor){
   x2 = getXCrossRoad(c2);
   y2 = getYCrossRoad(c2);
 
-  /* Coordenadas para o retângulo de busca */
-  w0 = fabs(x1 - x2);
-  h0 = fabs(y1 - y2);
-
-  if(x1 <= x2){
-    x0 = x1;
-  } else {
-    x0 = x2;
-  }
-
-  if(y1 <= y2){
-    y0 = y1;
-  } else {
-    y0 = y2;
-  }
-
-  /* Buscas das quadras que estão dentro do retângulo de busca */
-  quadras = getElementsListPartialInsideR(canvas, 1, (x0 - w1), (y0 - h1), (w0 + w1), (h0 + h1));
-  /* ----------------------------- */
-  /* Desenha as quadras */
-  tagAbertura(arqSaidaSvg, getWidth(canvas), getHeight(canvas));
-  if(quadras != NULL){
-    j = lengthL(list);
-    for(i=1; i<=j; i++){
-      quadra = getItemL(quadras, i);
-      if(quadra != NULL){
-        tagRetangulo2(arqSaidaSvg, getLargQ(quadra), getAltQ(quadra), getXQ(quadra),
-         getYQ(quadra), getCorpQ(quadra), getCorbQ(quadra));
-      }
-    }
-  }
-
-  eraseListL(quadras, NULL);
-  eraseBase(quadras);
-
+  tagAbertura(arqSaidaSvg, getWidth(canvas) + 50, getHeight(canvas) + 50);
   /* Desenha as coordenadas de origem e destino. */
   tagCirculo(arqSaidaSvg, 5, x1, y1, cor2);
   tagTexto2(arqSaidaSvg, getIdCrossRoad(c1), cor2, 10, x1, y1);
@@ -362,7 +310,35 @@ void pitorico(Canvas canvas, List list, FILE *arqSaidaSvg, char *cor){
 
   j = lengthL(list);
   defArrow(arqSaidaSvg, cor);
-  /* Desenha as arestas */
+  /* Desenha as quadras */
+  for(i=2; i<=j; i++){
+    v1 = getItemL(list, i-1);
+    v2 = getItemL(list, i);
+    if(v1 != NULL && v2 != NULL){
+      c1 = getInfoVertex(v1);
+      c2 = getInfoVertex(v2);
+      e = getEdge(g, getIdVertex(v1), getIdVertex(v2));
+      s = getInfoEdge(e);
+      quadra = NULL;
+      cep = NULL;
+      cep = getCepRight(s);
+      quadra = itemIsInsideHT(hash, cep, cep, compareQ);
+      if(quadra != NULL){
+        tagRetangulo2(arqSaidaSvg, getLargQ(quadra), getAltQ(quadra), getXQ(quadra), getYQ(quadra), getCorpQ(quadra), getCorbQ(quadra));
+        tagTexto2(arqSaidaSvg, getCepQ(quadra), cor2, 12, getXQ(quadra)+10, getYQ(quadra)+20);
+      }
+      quadra = NULL;
+      cep = NULL;
+      cep = getCepLeft(s);
+      quadra = itemIsInsideHT(hash, cep, cep, compareQ);
+      if(quadra != NULL){
+        tagRetangulo2(arqSaidaSvg, getLargQ(quadra), getAltQ(quadra), getXQ(quadra), getYQ(quadra), getCorpQ(quadra), getCorbQ(quadra));
+        tagTexto2(arqSaidaSvg, getCepQ(quadra), cor2, 12, getXQ(quadra)+10, getYQ(quadra)+20);
+      }
+
+    }
+  }
+  /* Desenhando as arestas */
   for(i=2; i<=j; i++){
     v1 = getItemL(list, i-1);
     v2 = getItemL(list, i);
@@ -546,8 +522,6 @@ void executarQryP(FILE *arqEntradaQry, FILE **arqSaidaT,  char *nameArq, Canvas 
     if(v1 == NULL){ /* Encontra o ponto mais próximo que esta na QuadTree */
       v1 = getNearestPoint(q, getXPoint(point), getYPoint(point));
     }
-    printf("Origem: %f %f\n", getXPoint(point), getYPoint(point));
-    printf("Origem Selecionado: %f %f\n", getXCrossRoad(v1), getYCrossRoad(v1));
 
 
     /* Verifica se o ponto está na QuadTree */
@@ -559,13 +533,9 @@ void executarQryP(FILE *arqEntradaQry, FILE **arqSaidaT,  char *nameArq, Canvas 
     }
 
     /* Busca os vertíces correspondentes no grafo */
-    printf("Destino: %f %f\n", getXPoint(point), getYPoint(point));
-    printf("Destino Selecionado: %f %f\n", getXCrossRoad(v2), getYCrossRoad(v2));
 
     v3 = getVertex(g, getIdCrossRoad(v1));
     v4 = getVertex(g, getIdCrossRoad(v2));
-
-    printf("ids Cruzamentos: %s %s\n", getIdCrossRoad(v1), getIdCrossRoad(v2));
 
      /* Vertíces que compõem o menor caminho e o valor do caminho */
     if(v4 != v3){
